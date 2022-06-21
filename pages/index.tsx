@@ -1,5 +1,5 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import type { NextPage } from "next";
+import Head from "next/head";
 
 const Home: NextPage = () => {
   return (
@@ -8,7 +8,7 @@ const Home: NextPage = () => {
         <title>Time Manager</title>
       </Head>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
