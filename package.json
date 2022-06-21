@@ -7,11 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint --fix",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "typecheck": "bash -c tsc --noEmit",
-    "stor ybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "lint:format": "eslint --ext .tsx,.ts,.js,.jsx --fix",
     "lint:format-style": "stylelint '**/*.scss' --fix"
