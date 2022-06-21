@@ -12,7 +12,7 @@
     "typecheck": "bash -c tsc --noEmit",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "lint:format": "eslint --ext .tsx,.ts,.js,.jsx --fix",
+    "lint:format": "eslint . --ext .tsx,.ts,.js,.jsx --fix",
     "lint:format-style": "stylelint '**/*.scss' --fix"
   },
   "dependencies": {
