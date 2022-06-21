@@ -7,4 +7,4 @@ const buildEslintCommand = (filenames) =>
 
 module.exports = {
   "*.{js,jsx,ts,tsx}": [buildEslintCommand, "yarn typecheck"],
-  "*.scss": "stylelint --fix",
+};
