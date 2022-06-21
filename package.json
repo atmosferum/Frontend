@@ -12,8 +12,7 @@
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "typecheck": "bash -c tsc --noEmit",
-    "lint:format": "eslint . --ext .tsx,.ts,.js,.jsx --fix",
-    "lint:format-style": "stylelint \"**/*.scss\" --fix"
+    "lint:format": "eslint . --ext .tsx,.ts,.js,.jsx --fix"
   },
   "dependencies": {
     "classnames": "^2.3.1",
@@ -46,14 +45,12 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.2",
+    "postcss-scss": "^4.0.4",
     "prettier": "^2.7.1",
     "sass": "^1.52.2",
     "sass-loader": "^13.0.0",
     "storybook-addon-sass-postcss": "^0.1.3",
     "style-loader": "^3.3.1",
-    "stylelint": "^14.9.1",
-    "stylelint-config-recommended": "^8.0.0",
-    "stylelint-scss": "^4.2.0",
     "typescript": "4.7.3"
   }
 }
