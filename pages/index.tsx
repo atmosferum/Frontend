@@ -8,15 +8,16 @@ import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
+import { Dialog } from '../components/Dialog';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
   const [myIntervals, setMyIntervals] = useState([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
+  const draggingElement = useRef(null);
   const isAdmin = false;
   const title = 'Название события';
-  const draggingElement = useRef(null);
 
   function previousWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
@@ -27,8 +28,11 @@ const Home: NextPage = () => {
   }
 
   function createEvent() {}
+
   function saveIntervals() {}
+
   function goToResults() {}
+
   function goToVoting() {}
 
   const Buttons = () => {
