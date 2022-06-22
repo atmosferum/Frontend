@@ -1,20 +1,18 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import React, { useRef, useState } from "react";
-import { Calendar } from "./Calendar";
-import { Interval } from "../../types";
-import Head from "next/head";
-import { getDateOfMonday } from "../../utils";
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React, { useRef, useState } from 'react';
+import { Calendar } from './Calendar';
+import { Interval } from '../../types';
+import Head from 'next/head';
+import { getDateOfMonday } from '../../utils';
 
 export default {
-  title: "COMPONENT/Calendar",
+  title: 'COMPONENT/Calendar',
   component: Calendar,
 } as ComponentMeta<typeof Calendar>;
 
 const Template: ComponentStory<typeof Calendar> = (args) => {
   const [intervals, setIntervals] = useState<Array<Interval>>([]);
-  const [adminIntervals, setAdminIntervals] = useState<Array<Interval>>(
-    args.adminIntervals
-  );
+  const [adminIntervals, setAdminIntervals] = useState<Array<Interval>>(args.adminIntervals);
   const draggingElement = useRef(null);
 
   return (

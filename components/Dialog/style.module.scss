@@ -1,0 +1,94 @@
+.overlay {
+  background: #0000007f;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &[data-state='open'] {
+    animation: overlayIn 300ms ease-out forwards;
+  }
+
+  &[data-state='closed'] {
+    animation: overlayOut 300ms ease-out forwards;
+  }
+}
+
+.content {
+  font-family: 'Inter';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background: var(--background);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  z-index: 1000;
+
+  &[data-state='open'] {
+    animation: contentIn 300ms ease-out forwards;
+  }
+
+  &[data-state='closed'] {
+    animation: contentOut 200ms ease-out forwards;
+  }
+}
+
+.close {
+  width: 1rem;
+  height: 1rem;
+  font-size: 10px;
+  display: flex;
+  padding: 0;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--gray-dark);
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes contentIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes contentOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+}

@@ -1,2 +1,2 @@
-import { Intervals } from "./Intervals";
+import { Intervals } from './Intervals';
 export { Intervals };

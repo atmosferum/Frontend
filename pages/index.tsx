@@ -7,6 +7,7 @@ import s from '../styles/index.module.scss';
 import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
+import { WeekSlider } from '../components/WeekSlider/WeekSlider';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
@@ -62,7 +63,7 @@ const Home: NextPage = () => {
         <title>Time Manager</title>
       </Head>
       <div className={s.header}>
-        <p>week slider</p>
+        <WeekSlider text="text" />
         {!isAdmin ? <h1>{title}</h1> : <Input placeholder="введите название события" />}
         <div>
           <Buttons />
