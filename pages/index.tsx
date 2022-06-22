@@ -63,7 +63,7 @@ const Home: NextPage = () => {
         <title>Time Manager</title>
       </Head>
       <div className={s.header}>
-        <WeekSlider text="text" />
+        <WeekSlider right={nextWeek} left={previousWeek} date={dateOfMonday} />
         {!isAdmin ? <h1>{title}</h1> : <Input placeholder="введите название события" />}
         <div>
           <Buttons />

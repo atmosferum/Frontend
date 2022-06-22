@@ -1,23 +1,26 @@
-import styles from './style.module.scss';
+import s from './style.module.scss';
 import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight } from 'react-feather';
+import { getWeekInterval } from './utils';
 
-const cx = classNames.bind(styles);
+const cx = classNames.bind(s);
 
 interface WeekSliderProps {
-  text?: string;
+  left: () => void;
+  right: () => void;
+  date: Date;
 }
 
 export function WeekSlider(props: WeekSliderProps) {
   return (
     <div className={cx('week-slider')}>
-      <button className={cx('slider slider--left')}>
+      <button onClick={props.left} className={cx('slider', 'slider--left')}>
         <ChevronLeft size="1rem" />
       </button>
       <div className={cx('date-div')}>
-        <span className={cx('date-span')}>{props.text}</span>
+        <span className={cx('date-span')}>{getWeekInterval(props.date)}</span>
       </div>
-      <button className={cx('slider slider--right')}>
+      <button onClick={props.right} className={cx('slider', 'slider--right')}>
         <ChevronRight size="1rem" />
       </button>
     </div>

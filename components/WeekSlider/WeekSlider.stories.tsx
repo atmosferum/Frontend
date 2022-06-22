@@ -14,5 +14,5 @@ export default {
 } as ComponentMeta<typeof WeekSlider>;
 
 export const Primary: ComponentStory<typeof WeekSlider> = (args) => {
-  return <WeekSlider text={args.text} />;
+  return <WeekSlider {...args} />;
 };
