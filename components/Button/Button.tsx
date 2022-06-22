@@ -6,7 +6,7 @@ import { Loader } from '../Loader';
 const cx = classNames.bind(styles);
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary';
+  variant?: "primary" | "secondary" | "ghost";
   loading?: boolean;
 }
 

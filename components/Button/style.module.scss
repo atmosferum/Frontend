@@ -28,6 +28,21 @@
       border-color: var(--gray-light);
     }
   }
+  &.button--ghost {
+    color: var(--primary);
+    background: transparent;
+    border: none;
+
+    &:hover:not(:disabled) {
+      color: var(--primary-dark);
+      background: transparent;
+    }
+
+    &:disabled {
+      color: var(--gray-dark);
+      background: transparent;
+    }
+  }
 
   &.button--secondary {
     color: var(--primary);

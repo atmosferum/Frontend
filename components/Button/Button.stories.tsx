@@ -7,8 +7,8 @@ export default {
   component: Button,
   argTypes: {
     variant: {
-      name: 'Variant',
-      options: ['primary', 'secondary'],
+      name: "Variant",
+      options: ["primary", "secondary", "ghost"],
       control: {
         type: 'select',
       },
