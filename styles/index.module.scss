@@ -1,0 +1,21 @@
+.window {
+  margin: 0 10px;
+}
+.header {
+  height: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  h1 {
+    margin: 0;
+  }
+
+  :nth-child(2) {
+    margin: 0 auto;
+  }
+  :last-child {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+  }
+}

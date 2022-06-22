@@ -1,5 +1,5 @@
 .calendar {
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
   overflow: hidden;
   border-bottom: var(--border);
   border-left: var(--border);
@@ -40,7 +40,7 @@
   }
 
   > div:last-child {
-    border-top-right-radius: var(--border-radius);
+    border-top-right-radius: var(--radius);
   }
 
   div > div {
@@ -67,7 +67,7 @@
     }
 
     .today::before {
-      content: "";
+      content: '';
       position: absolute;
       inset: -6px -5px -4px;
       background-color: var(--primary);
@@ -75,13 +75,12 @@
       border-radius: 1000px;
     }
   }
-
 }
 
 .timeLine {
   z-index: 10;
   display: flex;
-  height: 90vh;
+  height: calc(100vh - 100px);
   overflow-y: scroll;
 
   .clockFaces {
