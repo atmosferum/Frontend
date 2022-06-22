@@ -1,2 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-@import url('./variables.css');
+@import "variables.css";
+
+body {
+  font-family: Inter, "Roboto Light", sans-serif;
+  font-weight: normal;
+  box-sizing: border-box;
+}
+
+* {
+  user-select: none;
+}
+
+@media not handheld {
+  ::-webkit-scrollbar {
+    background-color: var(--gray-light);
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--gray);
+    border-radius: 5px;
+  }
+}
