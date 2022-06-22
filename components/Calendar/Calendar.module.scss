@@ -1,0 +1,117 @@
+.calendar {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  border-bottom: var(--border);
+  border-left: var(--border);
+}
+
+.topBar {
+  display: flex;
+
+  .monthAndYear {
+    background-color: var(--gray-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 100px;
+    color: var(--primary);
+    font-weight: bold;
+    border-right: var(--border);
+    border-bottom: var(--border);
+    font-size: 14px;
+  }
+}
+
+.daysLine::-webkit-scrollbar {
+  display: none;
+}
+
+.daysLine {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+
+  > div {
+    border-right: var(--border);
+    border-bottom: var(--border);
+    display: inline-block;
+    width: max((100% - 15px) / 7, 149px);
+  }
+
+  > div:last-child {
+    border-top-right-radius: var(--border-radius);
+  }
+
+  div > div {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gray-light);
+    position: relative;
+    z-index: -3;
+
+    > p {
+      margin: 0;
+    }
+
+    .date {
+      font-size: 20px;
+      margin-right: 5px;
+    }
+
+    .today {
+      position: relative;
+      color: var(--gray-light);
+    }
+
+    .today::before {
+      content: "";
+      position: absolute;
+      inset: -6px -5px -4px;
+      background-color: var(--primary);
+      z-index: -1;
+      border-radius: 1000px;
+    }
+  }
+
+}
+
+.timeLine {
+  z-index: 10;
+  display: flex;
+  height: 90vh;
+  overflow-y: scroll;
+
+  .clockFaces {
+    position: relative;
+    top: 0;
+    left: 0;
+
+    .clockFaceWrapper {
+      z-index: 100000;
+      background-color: var(--background);
+      border-right: var(--border);
+      border-bottom: 1px solid transparent;
+      width: 100px;
+      height: 79px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+
+      p {
+        margin-top: -8px;
+        font-size: 1rem;
+        float: right;
+        color: var(--gray-dark);
+      }
+    }
+
+    > div:first-child p {
+      position: relative;
+      top: 10px;
+    }
+  }
+}

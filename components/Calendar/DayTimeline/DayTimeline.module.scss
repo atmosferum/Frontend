@@ -1,0 +1,25 @@
+.column {
+  width: max(100% / 7 - 150px, 150px);
+  flex-grow: 1;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.cell {
+  border-bottom: var(--border);
+  border-right: var(--border);
+  height: 79px;
+  position: relative;
+  z-index: 2;
+}
+
+.inset0 {
+  position: absolute;
+  inset: 0;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+}

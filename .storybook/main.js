@@ -1,3 +1,4 @@
+const path = require("path");
 module.exports = {
   "stories": [
     "../components/**/*.stories.@(js|jsx|ts|tsx)"
@@ -12,4 +13,4 @@ module.exports = {
   "core": {
     "builder": "@storybook/builder-webpack5"
   }
-}
+};
