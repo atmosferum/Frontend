@@ -8,7 +8,6 @@ import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
-import { Dialog } from '../components/Dialog';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
@@ -44,8 +43,8 @@ const Home: NextPage = () => {
       } else {
         return (
           <>
-            <Button onClick={goToResults}>результаты</Button>
-            <Button onClick={saveIntervals}>сохранить</Button>
+            <Button onClick={goToResults}>Результаты</Button>
+            <Button onClick={saveIntervals}>Сохранить</Button>
           </>
         );
       }

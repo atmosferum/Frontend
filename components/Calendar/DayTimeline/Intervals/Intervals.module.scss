@@ -9,7 +9,7 @@
 
   .top {
     position: absolute;
-    inset: 0;
+    inset: 0 30px 0 0;
     height: 20px;
     z-index: 10;
     cursor: row-resize;
@@ -24,7 +24,19 @@
     cursor: row-resize;
     pointer-events: all;
   }
-
+  .cross {
+    position: absolute;
+    inset: 6px 10px auto auto;
+    height: 20px;
+    width: 20px;
+    cursor: pointer !important;
+    z-index: 10;
+    pointer-events: all;
+    opacity: 0.5;
+  }
+  .cross:hover {
+    opacity: 1;
+  }
   .clockFace p {
     user-select: none;
     position: relative;

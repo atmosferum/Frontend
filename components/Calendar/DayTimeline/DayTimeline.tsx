@@ -41,7 +41,9 @@ function DayTimeline(props: Props) {
   const myIntervalsToday = myIntervals.filter(isTodayIncludesInterval);
   const adminIntervalsToday = adminIntervals.filter(isTodayIncludesInterval);
   const changeableIntervals = isAdmin ? adminIntervals : myIntervals;
-
+  function deleteInterval(id: number) {
+    setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
+  }
   const mouseCellEnterHandler = (cellDate: Date) => {
     if (!draggingElement.current || isResults) return;
     const { id, part } = draggingElement.current;
@@ -100,6 +102,8 @@ function DayTimeline(props: Props) {
               <div key={id} className={cx('cell')}>
                 <div
                   className={cx('inset0')}
+                  onTouchStartCapture={() => onCellClickHandler(cellDate)}
+                  onTouchMoveCapture={() => onCellClickHandler(cellDate)}
                   onMouseEnter={() => mouseCellEnterHandler(cellDate)}
                   onMouseDown={() => onCellClickHandler(cellDate)}
                 />
@@ -110,6 +114,7 @@ function DayTimeline(props: Props) {
       <>
         <Intervals
           intervals={adminIntervalsToday}
+          deleteInterval={deleteInterval}
           draggable={!isResults && isAdmin}
           color={isResults ? 'var(--success-dark)' : 'var(--primary-light)'}
           margin={1}
@@ -118,6 +123,7 @@ function DayTimeline(props: Props) {
         />
         <Intervals
           intervals={myIntervalsToday}
+          deleteInterval={deleteInterval}
           draggable={!isAdmin}
           color="var(--success-light)"
           margin={3}
