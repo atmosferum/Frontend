@@ -6,6 +6,6 @@ export interface Interval {
 export interface DraggingElement {
   current: {
     id: number;
-    part: "start" | "end";
+    part: 'start' | 'end';
   } | null;
 }

@@ -1,10 +1,10 @@
-import React from "react";
-import { DraggingElement, Interval } from "../../../../types";
-import { getClockFace, isEqualDays } from "../../utils";
-import { HEIGHT_OF_CELL } from "../DayTimeline";
-import s from "./Intervals.module.scss";
-import classNames from "classnames/bind";
-import { months } from "../../consts";
+import React from 'react';
+import { DraggingElement, Interval } from '../../../../types';
+import { getClockFace, isEqualDays } from '../../utils';
+import { HEIGHT_OF_CELL } from '../DayTimeline';
+import s from './Intervals.module.scss';
+import classNames from 'classnames/bind';
+import { months } from '../../consts';
 
 const cx = classNames.bind(s);
 
@@ -43,22 +43,22 @@ const Intervals = (props: Props) => {
           margin,
         };
         return (
-          <div key={id} style={style} className={cx("interval")}>
-            <p className={cx("clockFace")}>{clockFace}</p>
+          <div key={id} style={style} className={cx('interval')}>
+            <p className={cx('clockFace')}>{clockFace}</p>
             {draggable && (
               <>
                 <div
-                  className={cx("top")}
+                  className={cx('top')}
                   onMouseDown={() => {
-                    document.body.style.cursor = "row-resize";
-                    draggingElement.current = { id, part: "start" };
+                    document.body.style.cursor = 'row-resize';
+                    draggingElement.current = { id, part: 'start' };
                   }}
                 />
                 <div
-                  className={cx("bottom")}
+                  className={cx('bottom')}
                   onMouseDown={() => {
-                    document.body.style.cursor = "row-resize";
-                    draggingElement.current = { id, part: "end" };
+                    document.body.style.cursor = 'row-resize';
+                    draggingElement.current = { id, part: 'end' };
                   }}
                 />
               </>

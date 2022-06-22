@@ -1,16 +1,16 @@
-import React, { SetStateAction } from "react";
-import s from "./DayTimeline.module.scss";
-import { DraggingElement, Interval } from "../../../types";
-import classNames from "classnames/bind";
+import React, { SetStateAction } from 'react';
+import s from './DayTimeline.module.scss';
+import { DraggingElement, Interval } from '../../../types';
+import classNames from 'classnames/bind';
 import {
   IntervalClass,
   isBefore,
   isInIntervals,
   isThereIntersections,
   isEqualDays,
-} from "../utils";
-import { Intervals } from "./Intervals";
-import { MS_IN_HOUR } from "../../../consts";
+} from '../utils';
+import { Intervals } from './Intervals';
+import { MS_IN_HOUR } from '../../../consts';
 
 const cx = classNames.bind(s);
 
@@ -31,15 +31,8 @@ export const HEIGHT_OF_CELL = 80;
 export const MILLISECONDS_IN_CELL = MS_IN_HOUR * HOURS_IN_CELL;
 
 function DayTimeline(props: Props) {
-  const {
-    adminIntervals,
-    myIntervals,
-    day,
-    draggingElement,
-    setIntervals,
-    isAdmin,
-    isResults,
-  } = props;
+  const { adminIntervals, myIntervals, day, draggingElement, setIntervals, isAdmin, isResults } =
+    props;
 
   const isTodayIncludesInterval = ({ start, end }: Interval) =>
     isEqualDays(start, day) ||
@@ -52,77 +45,61 @@ function DayTimeline(props: Props) {
   const mouseCellEnterHandler = (cellDate: Date) => {
     if (!draggingElement.current || isResults) return;
     const { id, part } = draggingElement.current;
-    const date = new Date(
-      cellDate.getTime() + (part === "end" ? MILLISECONDS_IN_CELL : 0)
-    );
+    const date = new Date(cellDate.getTime() + (part === 'end' ? MILLISECONDS_IN_CELL : 0));
     if (
       isInIntervals(
         changeableIntervals.filter((interval) => interval.id !== id),
-        cellDate
+        cellDate,
       ) ||
-      (!isAdmin &&
-        adminIntervals.length &&
-        !isInIntervals(adminIntervals, cellDate)) ||
+      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, cellDate)) ||
       !draggingElement ||
-      (part === "start" &&
-        changeableIntervals.find((el) => el.id === id)!.end.getTime() -
-          date.getTime() <
+      (part === 'start' &&
+        changeableIntervals.find((el) => el.id === id)!.end.getTime() - date.getTime() <
           MILLISECONDS_IN_CELL) ||
-      (part === "end" &&
-        date.getTime() -
-          changeableIntervals.find((el) => el.id === id)!.start.getTime() <
+      (part === 'end' &&
+        date.getTime() - changeableIntervals.find((el) => el.id === id)!.start.getTime() <
           MILLISECONDS_IN_CELL)
     )
       return;
     const copyOfIntervals = changeableIntervals.slice();
-    const interval = copyOfIntervals.find(
-      (interval: Interval) => interval.id === id
-    )!;
+    const interval = copyOfIntervals.find((interval: Interval) => interval.id === id)!;
     interval[part] = date;
     if (!isThereIntersections(copyOfIntervals, interval)) {
-      console.log("after");
+      console.log('after');
       setIntervals(copyOfIntervals);
     }
   };
   const onCellClickHandler = (cellDate: Date) => {
-    console.log("onMouseDown");
+    console.log('onMouseDown');
     if (
       isResults ||
       isInIntervals(changeableIntervals, cellDate) ||
-      (!isAdmin &&
-        adminIntervals.length &&
-        !isInIntervals(adminIntervals, cellDate))
+      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, cellDate))
     )
       return;
-    document.body.style.cursor = "row-resize";
+    document.body.style.cursor = 'row-resize';
     const newInterval = new IntervalClass(
       cellDate,
-      new Date(cellDate.getTime() + MILLISECONDS_IN_CELL)
+      new Date(cellDate.getTime() + MILLISECONDS_IN_CELL),
     );
-    draggingElement.current = { id: newInterval.id, part: "end" };
+    draggingElement.current = { id: newInterval.id, part: 'end' };
     changeableIntervals.push(newInterval);
     setIntervals([...changeableIntervals]);
   };
   const getCellDate = (id: number) =>
-    new Date(
-      day.getFullYear(),
-      day.getMonth(),
-      day.getDate(),
-      Math.floor(id / 2),
-      (id % 2) * 30
-    );
+    new Date(day.getFullYear(), day.getMonth(), day.getDate(), Math.floor(id / 2), (id % 2) * 30);
 
   return (
-    <div className={cx("column")}>
-      <div className={cx("inset0")}>
+    <div className={cx('column')}>
+      <div className={cx('inset0')}>
         {Array(AMOUNT_OF_CELLS)
           .fill(null)
           .map((_, id) => {
             const cellDate = getCellDate(id);
             return (
-              <div key={id} className={cx("cell")}>
+              <div key={id} className={cx('cell')}>
                 <div
-                  className={cx("inset0")}
+                  className={cx('inset0')}
                   onMouseEnter={() => mouseCellEnterHandler(cellDate)}
                   onMouseDown={() => onCellClickHandler(cellDate)}
                 />
@@ -134,7 +111,7 @@ function DayTimeline(props: Props) {
         <Intervals
           intervals={adminIntervalsToday}
           draggable={!isResults && isAdmin}
-          color={isResults ? "var(--success-dark)" : "var(--primary-light)"}
+          color={isResults ? 'var(--success-dark)' : 'var(--primary-light)'}
           margin={1}
           draggingElement={draggingElement}
           day={day}

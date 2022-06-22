@@ -67,7 +67,7 @@
     }
 
     .today::before {
-      content: "";
+      content: '';
       position: absolute;
       inset: -6px -5px -4px;
       background-color: var(--primary);
@@ -75,7 +75,6 @@
       border-radius: 1000px;
     }
   }
-
 }
 
 .timeLine {

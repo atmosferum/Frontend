@@ -1,4 +1,4 @@
-import { Interval } from "../../types";
+import { Interval } from '../../types';
 
 export function getWeek(monday: Date): Date[] {
   return Array(7)
@@ -9,15 +9,11 @@ export function getWeek(monday: Date): Date[] {
 }
 
 export function isToday(day: Date) {
-  return (
-    new Date().toString().substring(0, 15) === day.toString().substring(0, 15)
-  );
+  return new Date().toString().substring(0, 15) === day.toString().substring(0, 15);
 }
 
 export function isEqualDays(startOrEnd: Date, day: Date) {
-  return (
-    startOrEnd.toString().substring(0, 15) === day.toString().substring(0, 15)
-  );
+  return startOrEnd.toString().substring(0, 15) === day.toString().substring(0, 15);
 }
 
 export function isBefore(startOrEnd: Date, day: Date) {
@@ -29,15 +25,10 @@ export function isBefore(startOrEnd: Date, day: Date) {
 }
 
 export function isInIntervals(intervals: Interval[], date: Date) {
-  return intervals.some(
-    (interval) => interval.start <= date && date < interval.end
-  );
+  return intervals.some((interval) => interval.start <= date && date < interval.end);
 }
 
-export function isThereIntersections(
-  intervals: Interval[],
-  newInterval: Interval
-) {
+export function isThereIntersections(intervals: Interval[], newInterval: Interval) {
   return intervals.some((interval) => {
     return (
       newInterval.start.getTime() < interval.start.getTime() &&
@@ -47,7 +38,7 @@ export function isThereIntersections(
 }
 
 export const getClockFace = (hours: number) =>
-  `${Math.floor(hours)}:${Math.round((hours % 1) * 60)}${hours % 1 ? "" : "0"}`;
+  `${Math.floor(hours)}:${Math.round((hours % 1) * 60)}${hours % 1 ? '' : '0'}`;
 
 export class IntervalClass {
   start: Date;
