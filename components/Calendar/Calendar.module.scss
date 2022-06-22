@@ -1,5 +1,5 @@
 .calendar {
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
   overflow: hidden;
   border-bottom: var(--border);
   border-left: var(--border);
@@ -40,7 +40,7 @@
   }
 
   > div:last-child {
-    border-top-right-radius: var(--border-radius);
+    border-top-right-radius: var(--radius);
   }
 
   div > div {
