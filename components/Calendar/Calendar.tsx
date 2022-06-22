@@ -1,10 +1,10 @@
-import React, { SetStateAction, useEffect, useRef } from "react";
-import s from "./Calendar.module.scss";
-import { DayTimeline, HOURS_IN_CELL } from "./DayTimeline";
-import { daysOfWeek, months } from "./consts";
-import classNames from "classnames/bind";
-import { DraggingElement, Interval } from "../../types";
-import { getClockFace, getWeek, isToday } from "./utils";
+import React, { SetStateAction, useEffect, useRef } from 'react';
+import s from './Calendar.module.scss';
+import { DayTimeline, HOURS_IN_CELL } from './DayTimeline';
+import { daysOfWeek, months } from './consts';
+import classNames from 'classnames/bind';
+import { DraggingElement, Interval } from '../../types';
+import { getClockFace, getWeek, isToday } from './utils';
 
 const cx = classNames.bind(s);
 
@@ -25,9 +25,9 @@ function Calendar(props: Props) {
   const timeLineRef = useRef<HTMLInputElement | null>(null);
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
-    document.body.addEventListener("mouseup", () => {
+    document.body.addEventListener('mouseup', () => {
       draggingElement.current = null;
-      document.body.style.cursor = "auto";
+      document.body.style.cursor = 'auto';
     });
     // document.body.addEventListener('touchend', () => {// для мобилок
     // setDraggingElement(null)
@@ -36,25 +36,22 @@ function Calendar(props: Props) {
     timeLineRef.current!.onscroll = function () {
       // sync scroll
       daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft;
-      clockFacesRef.current!.style.left =
-        timeLineRef.current!.scrollLeft + "px";
+      clockFacesRef.current!.style.left = timeLineRef.current!.scrollLeft + 'px';
     };
   }, []);
   return (
-    <div className={cx("calendar")}>
+    <div className={cx('calendar')}>
       {/*daysOfWeek*/}
-      <div className={cx("topBar")}>
-        <div className={cx("monthAndYear")}>{`${
+      <div className={cx('topBar')}>
+        <div className={cx('monthAndYear')}>{`${
           months[week[0].getMonth()]
         } ${week[0].getFullYear()}`}</div>
-        <div className={cx("daysLine")} ref={daysLineRef}>
+        <div className={cx('daysLine')} ref={daysLineRef}>
           {week.map((day, id) => {
             return (
               <div key={id}>
                 <div>
-                  <p className={cx("date", isToday(day) && "today")}>
-                    {day.getDate()}
-                  </p>
+                  <p className={cx('date', isToday(day) && 'today')}>{day.getDate()}</p>
                   <p>{daysOfWeek[day.getDay()]}</p>
                 </div>
               </div>
@@ -63,14 +60,14 @@ function Calendar(props: Props) {
         </div>
       </div>
 
-      <div className={cx("timeLine")} ref={timeLineRef}>
+      <div className={cx('timeLine')} ref={timeLineRef}>
         {/*timeline*/}
-        <div className={cx("clockFaces")} ref={clockFacesRef}>
+        <div className={cx('clockFaces')} ref={clockFacesRef}>
           {Array(48)
-            .fill("")
+            .fill('')
             .map((_, id) => {
               return (
-                <div key={id} className={cx("clockFaceWrapper")}>
+                <div key={id} className={cx('clockFaceWrapper')}>
                   <p>{getClockFace(id * HOURS_IN_CELL)}</p>
                 </div>
               );
