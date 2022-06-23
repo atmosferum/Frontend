@@ -7,6 +7,7 @@ import {
   Title,
   Description,
   Close,
+  DialogProps as RadixDialogProps,
 } from '@radix-ui/react-dialog';
 import styles from './style.module.scss';
 import cn from 'classnames/bind';
@@ -14,25 +15,26 @@ import { ReactNode } from 'react';
 import { X } from 'react-feather';
 const cx = cn.bind(styles);
 
-interface DialogProps {
+interface DialogProps extends RadixDialogProps {
   children: ReactNode;
-  trigger: ReactNode;
+  trigger?: ReactNode;
+  close?: () => any;
 }
 
 export function Dialog(props: DialogProps) {
-  const { children, trigger } = props;
+  const { close, children, trigger, ...restProps } = props;
 
   return (
-    <Root>
+    <Root {...restProps}>
       <Trigger asChild>{trigger}</Trigger>
       <Portal>
         <Content className={cx('content')}>
           {children}
-          <Close className={cx('close')}>
+          <Close onClick={close} className={cx('close')}>
             <X />
           </Close>
         </Content>
-        <Overlay className={cx('overlay')} />
+        <Overlay onClick={close} className={cx('overlay')} />
       </Portal>
     </Root>
   );

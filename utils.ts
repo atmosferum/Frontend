@@ -43,14 +43,15 @@ export async function logoutGet() {
 }
 
 export async function eventsPost(params: { title: string; description: string }) {
-  const { data } = await axios.post(`${url}/login`, {
+  const { headers } = await axios.post(`${url}/events`, {
     title: params.title,
     description: params.description,
   });
-  return data;
+
+  return headers.location;
 }
 
-export async function eventsIdGet(id: number) {
+export async function eventsIdGet(id: string) {
   const { data } = await axios.get(`${url}/events/${id}`);
   return data;
 }
@@ -60,12 +61,12 @@ export async function eventsIntervalsPost(intervals: Interval[]) {
   return data;
 }
 
-export async function eventsIntervalsGet(id: number) {
+export async function eventsIntervalsGet(id: string) {
   const { data } = await axios.get(`${url}/events/${id}/intervals`);
   return convertIntervalToFrontend(data);
 }
 
-export async function eventsResultGet(id: number) {
+export async function eventsResultGet(id: string) {
   const { data } = await axios.get(`${url}/events/${id}/result`);
   return data;
 }

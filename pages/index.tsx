@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Calendar } from '../components/Calendar';
 import { useRef, useState } from 'react';
-import { getDateOfMonday } from '../utils';
+import { eventsPost, getDateOfMonday, loginPost } from '../utils';
 import s from '../styles/index.module.scss';
 import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
@@ -18,10 +18,13 @@ const Home: NextPage = () => {
   const [myIntervals, setMyIntervals] = useState([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
+  const [isInputModalOpen, setIsInputModalOpen] = useState(false);
+  // const [isTitleError, setIsTitleError] = useState(false);
+  // const [isNameError, setIsNameError] = useState(false);
   const name = useInput('');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
-  const isAdmin = false;
+  const isAdmin = true;
   function previousWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
   }
@@ -32,7 +35,14 @@ const Home: NextPage = () => {
 
   async function createEvent() {
     console.log(name.value);
-    if (!name.value) return;
+    // if (!name.value||!titleInput.value) return
+    loginPost({ name: name.value });
+    const event = await eventsPost({
+      title: titleInput.value,
+      description: '',
+    });
+    const locationArray = event.split('/');
+    console.log(locationArray[locationArray.length - 1]);
     setIsResults(true);
   }
 
@@ -76,6 +86,8 @@ const Home: NextPage = () => {
             goToResults={goToResults}
             saveIntervals={saveIntervals}
             createEvent={createEvent}
+            setIsInputModalOpen={setIsInputModalOpen}
+            isInputModalOpen={isInputModalOpen}
           />
         </div>
       </div>
@@ -91,11 +103,14 @@ const Buttons = ({
   goToVoting,
   goToResults,
   saveIntervals,
+  isInputModalOpen,
+  setIsInputModalOpen,
 }: any) => {
   if (isAdmin) {
     return (
       <div>
-        <Dialog trigger={<Button>создать событие</Button>}>
+        <Button onClick={() => setIsInputModalOpen(true)}>создать событие</Button>
+        <Dialog close={() => setIsInputModalOpen(false)} open={isInputModalOpen}>
           {!isResults ? (
             <>
               <br />
