@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Dialog } from './Dialog';
 import { Button } from '../Button';
+import { Input } from '../Input';
 
 export default {
   title: 'Dialog',
@@ -11,7 +12,11 @@ export default {
 export const DialogStory: ComponentStory<typeof Dialog> = (args) => {
   return (
     <>
-      <Dialog trigger={<Button>Открыть модальное окно</Button>}>hi</Dialog>
+      <Dialog trigger={<Button>Создать</Button>}>
+        <Input placeholder="введите имя"></Input>
+        <br />
+        <Button>Сохранить</Button>
+      </Dialog>
     </>
   );
 };

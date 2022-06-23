@@ -1,0 +1,23 @@
+.wrapper {
+  border: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  p {
+    margin: 0;
+  }
+  .url {
+    display: inline-block;
+    width: calc(100% - 91px);
+    padding: 10px;
+    border-right: var(--border);
+  }
+  .copyClick {
+    padding: 10px;
+    display: inline-block;
+    width: 50px;
+    cursor: pointer;
+  }
+  .copyClick:hover {
+    background-color: var(--gray-light);
+  }
+}

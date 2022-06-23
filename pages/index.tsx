@@ -8,16 +8,20 @@ import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
+import { Dialog } from '../components/Dialog';
+import { useInput } from '../customHooks';
+import { useCallback } from 'react';
+import { Copyboard } from '../components/Copyboard/Copyboard';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
   const [myIntervals, setMyIntervals] = useState([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
+  const name = useInput('');
+  const titleInput = useInput('');
   const draggingElement = useRef(null);
   const isAdmin = false;
-  const title = 'Название события';
-
   function previousWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
   }
@@ -26,30 +30,21 @@ const Home: NextPage = () => {
     setDateOfMonday(new Date(dateOfMonday.getTime() + MS_IN_DAY * 7));
   }
 
-  function createEvent() {}
+  async function createEvent() {
+    console.log(name.value);
+    if (!name.value) return;
+    setIsResults(true);
+  }
 
-  function saveIntervals() {}
+  async function saveIntervals() {}
 
-  function goToResults() {}
+  async function goToResults() {
+    setIsResults(true);
+  }
 
-  function goToVoting() {}
-
-  const Buttons = () => {
-    if (isAdmin) {
-      return <Button onClick={createEvent}>Создать событие</Button>;
-    } else {
-      if (isResults) {
-        return <Button onClick={goToVoting}>к голосованию</Button>;
-      } else {
-        return (
-          <>
-            <Button onClick={goToResults}>Результаты</Button>
-            <Button onClick={saveIntervals}>Сохранить</Button>
-          </>
-        );
-      }
-    }
-  };
+  async function goToVoting() {
+    setIsResults(false);
+  }
 
   const propsForCalendar = {
     adminIntervals,
@@ -67,14 +62,69 @@ const Home: NextPage = () => {
       </Head>
       <div className={s.header}>
         <WeekSlider right={nextWeek} left={previousWeek} date={dateOfMonday} />
-        {!isAdmin ? <h1>{title}</h1> : <Input placeholder="введите название события" />}
+        {!isAdmin ? (
+          <h1>{titleInput.value}</h1>
+        ) : (
+          <Input {...titleInput.bind} placeholder="введите название события" />
+        )}
         <div>
-          <Buttons />
+          <Buttons
+            isAdmin={isAdmin}
+            isResults={isResults}
+            name={name}
+            goToVoting={goToVoting}
+            goToResults={goToResults}
+            saveIntervals={saveIntervals}
+            createEvent={createEvent}
+          />
         </div>
       </div>
       <Calendar {...propsForCalendar} />
     </div>
   );
 };
-
+const Buttons = ({
+  isResults,
+  isAdmin,
+  name,
+  createEvent,
+  goToVoting,
+  goToResults,
+  saveIntervals,
+}: any) => {
+  if (isAdmin) {
+    return (
+      <div>
+        <Dialog trigger={<Button>создать событие</Button>}>
+          {!isResults ? (
+            <>
+              <br />
+              <Input style={{ width: '100%' }} {...name.bind} placeholder="введите имя" />
+              <br />
+              <Button onClick={createEvent} style={{ width: '100%' }}>
+                сохранить
+              </Button>
+            </>
+          ) : (
+            <>
+              <br />
+              <Copyboard url={'pornhub.com'} />
+            </>
+          )}
+        </Dialog>
+      </div>
+    );
+  } else {
+    if (isResults) {
+      return <Button onClick={goToVoting}>к голосованию</Button>;
+    } else {
+      return (
+        <>
+          <Button onClick={goToResults}>Результаты</Button>
+          <Button onClick={saveIntervals}>Сохранить</Button>
+        </>
+      );
+    }
+  }
+};
 export default Home;
