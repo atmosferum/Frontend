@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Calendar } from '../components/Calendar';
 import { useEffect, useRef, useState } from 'react';
 import {
+  convertIntervalToFrontend,
   currentUserGet,
   eventsIdGet,
   eventsIntervalsGet,
@@ -81,7 +82,7 @@ const Home: NextPage = () => {
   }
   async function setResults() {
     const { intervals, participants } = await eventsResultGet(eventId);
-    setResultsIntervals(intervals);
+    setResultsIntervals(convertIntervalToFrontend(intervals) as any);
     setParticipants(participants);
   }
   async function createEvent() {
