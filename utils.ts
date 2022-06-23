@@ -55,11 +55,14 @@ export async function eventsIdGet(id: number) {
   return data;
 }
 
-export async function eventsIntervalsPost(intervals: Interval[]) {}
+export async function eventsIntervalsPost(intervals: Interval[]) {
+  const { data } = await axios.post(`${url}/login`, convertIntervalToBackend(intervals));
+  return data;
+}
 
 export async function eventsIntervalsGet(id: number) {
   const { data } = await axios.get(`${url}/events/${id}/intervals`);
-  return data;
+  return convertIntervalToFrontend(data);
 }
 
 export async function eventsResultGet(id: number) {
