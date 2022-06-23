@@ -9,6 +9,7 @@ import { getClockFace, getWeek, isToday } from './utils';
 const cx = classNames.bind(s);
 
 interface Props {
+  resultsIntervals: Interval[];
   adminIntervals: Interval[];
   myIntervals: Interval[];
   dateOfMonday: Date;

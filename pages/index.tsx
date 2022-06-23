@@ -16,6 +16,7 @@ import { Copyboard } from '../components/Copyboard/Copyboard';
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
   const [myIntervals, setMyIntervals] = useState([]);
+  const [resultsIntervals, setResultsIntervals] = useState([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
@@ -57,6 +58,7 @@ const Home: NextPage = () => {
   }
 
   const propsForCalendar = {
+    resultsIntervals,
     adminIntervals,
     myIntervals,
     draggingElement,
