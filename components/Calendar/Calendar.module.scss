@@ -89,7 +89,7 @@
     left: 0;
 
     .clockFaceWrapper {
-      z-index: 100000;
+      z-index: 10;
       background-color: var(--background);
       border-right: var(--border);
       border-bottom: 1px solid transparent;

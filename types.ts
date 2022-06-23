@@ -9,3 +9,8 @@ export interface DraggingElement {
     part: 'start' | 'end';
   } | null;
 }
+export interface BackendInterval {
+  id: number;
+  startTime: number;
+  endTime: number;
+}
