@@ -2,7 +2,13 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Calendar } from '../components/Calendar';
 import { useEffect, useRef, useState } from 'react';
-import { eventsIntervalsPost, eventsPost, getDateOfMonday, loginPost } from '../utils';
+import {
+  eventsIntervalsPost,
+  eventsPost,
+  eventsResultGet,
+  getDateOfMonday,
+  loginPost,
+} from '../utils';
 import s from '../styles/index.module.scss';
 import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
@@ -18,6 +24,7 @@ const Home: NextPage = () => {
   const [myIntervals, setMyIntervals] = useState([]);
   const [resultsIntervals, setResultsIntervals] = useState([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
+  const [participants, setParticipants] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -37,7 +44,11 @@ const Home: NextPage = () => {
   function nextWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() + MS_IN_DAY * 7));
   }
-
+  async function setResults() {
+    const { intervals, participants } = await eventsResultGet(eventId);
+    setResultsIntervals(intervals);
+    setParticipants(participants);
+  }
   async function createEvent() {
     console.log(name.value);
     // if (!name.value||!titleInput.value) return
