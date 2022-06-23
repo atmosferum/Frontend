@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Calendar } from '../components/Calendar';
-import { useRef, useState } from 'react';
-import { eventsPost, getDateOfMonday, loginPost } from '../utils';
+import { useEffect, useRef, useState } from 'react';
+import { eventsIntervalsPost, eventsPost, getDateOfMonday, loginPost } from '../utils';
 import s from '../styles/index.module.scss';
 import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
@@ -19,12 +19,16 @@ const Home: NextPage = () => {
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [eventId, setEventId] = useState('');
   // const [isTitleError, setIsTitleError] = useState(false);
   // const [isNameError, setIsNameError] = useState(false);
   const name = useInput('');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
-  const isAdmin = true;
+
+  useEffect(() => {});
+
   function previousWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
   }
@@ -41,12 +45,15 @@ const Home: NextPage = () => {
       title: titleInput.value,
       description: '',
     });
-    const locationArray = event.split('/');
-    console.log(locationArray[locationArray.length - 1]);
+    const eventIdCreated = event.split('/')[event.split('/').length - 1];
+    setEventId(eventIdCreated);
+    eventsIntervalsPost(adminIntervals, eventIdCreated);
     setIsResults(true);
   }
 
-  async function saveIntervals() {}
+  async function saveIntervals() {
+    eventsIntervalsPost(myIntervals, eventId);
+  }
 
   async function goToResults() {
     setIsResults(true);
@@ -88,6 +95,7 @@ const Home: NextPage = () => {
             createEvent={createEvent}
             setIsInputModalOpen={setIsInputModalOpen}
             isInputModalOpen={isInputModalOpen}
+            eventId={eventId}
           />
         </div>
       </div>
@@ -105,7 +113,9 @@ const Buttons = ({
   saveIntervals,
   isInputModalOpen,
   setIsInputModalOpen,
+  eventId,
 }: any) => {
+  const prevUrl = 'http://localhost:3000/';
   if (isAdmin) {
     return (
       <div>
@@ -123,7 +133,7 @@ const Buttons = ({
           ) : (
             <>
               <br />
-              <Copyboard url={'pornhub.com'} />
+              <Copyboard url={prevUrl + '#' + eventId} />
             </>
           )}
         </Dialog>

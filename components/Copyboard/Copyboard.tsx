@@ -7,7 +7,7 @@ function Copyboard({ url }: { url: string }) {
   }
   return (
     <div className={s.wrapper}>
-      <div className={s.url}>
+      <div className={s.urlWrapper}>
         <p>{url}</p>
       </div>
       <div onClick={copyHandler} className={s.copyClick}>
