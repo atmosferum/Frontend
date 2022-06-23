@@ -8,6 +8,7 @@ import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
+import { Dialog } from '../components/Dialog';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
@@ -15,7 +16,7 @@ const Home: NextPage = () => {
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
   const draggingElement = useRef(null);
-  const isAdmin = false;
+  const isAdmin = true;
   const title = 'Название события';
 
   function previousWeek() {
@@ -36,7 +37,18 @@ const Home: NextPage = () => {
 
   const Buttons = () => {
     if (isAdmin) {
-      return <Button onClick={createEvent}>Создать событие</Button>;
+      return (
+        <Dialog trigger={<Button>Создать</Button>}>
+          <div>
+            <br />
+            <Input style={{ width: '100%' }} placeholder="введите имя"></Input>
+            <br />
+            <Button style={{ width: '100%' }} onClick={createEvent}>
+              Создать
+            </Button>
+          </div>
+        </Dialog>
+      );
     } else {
       if (isResults) {
         return <Button onClick={goToVoting}>к голосованию</Button>;
