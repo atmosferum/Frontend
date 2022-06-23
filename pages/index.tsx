@@ -11,6 +11,7 @@ import { WeekSlider } from '../components/WeekSlider/WeekSlider';
 import { Dialog } from '../components/Dialog';
 import { useInput } from '../customHooks';
 import { useCallback } from 'react';
+import { Copyboard } from '../components/Copyboard/Copyboard';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
@@ -18,9 +19,9 @@ const Home: NextPage = () => {
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [isResults, setIsResults] = useState(false);
   const name = useInput('');
-  const title = useInput('');
+  const titleInput = useInput('');
   const draggingElement = useRef(null);
-  const isAdmin = true;
+  const isAdmin = false;
   function previousWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
   }
@@ -29,15 +30,21 @@ const Home: NextPage = () => {
     setDateOfMonday(new Date(dateOfMonday.getTime() + MS_IN_DAY * 7));
   }
 
-  function createEvent() {
+  async function createEvent() {
     console.log(name.value);
+    if (!name.value) return;
+    setIsResults(true);
   }
 
-  function saveIntervals() {}
+  async function saveIntervals() {}
 
-  function goToResults() {}
+  async function goToResults() {
+    setIsResults(true);
+  }
 
-  function goToVoting() {}
+  async function goToVoting() {
+    setIsResults(false);
+  }
 
   const propsForCalendar = {
     adminIntervals,
@@ -56,9 +63,9 @@ const Home: NextPage = () => {
       <div className={s.header}>
         <WeekSlider right={nextWeek} left={previousWeek} date={dateOfMonday} />
         {!isAdmin ? (
-          <h1>{title.value}</h1>
+          <h1>{titleInput.value}</h1>
         ) : (
-          <Input {...title.bind} placeholder="введите название события" />
+          <Input {...titleInput.bind} placeholder="введите название события" />
         )}
         <div>
           <Buttons
@@ -77,8 +84,8 @@ const Home: NextPage = () => {
   );
 };
 const Buttons = ({
-  isAdmin,
   isResults,
+  isAdmin,
   name,
   createEvent,
   goToVoting,
@@ -89,10 +96,21 @@ const Buttons = ({
     return (
       <div>
         <Dialog trigger={<Button>создать событие</Button>}>
-          <Input style={{ width: '100%' }} {...name.bind} placeholder="введите имя" />
-          <Button onClick={createEvent} style={{ width: '100%' }}>
-            сохранить
-          </Button>
+          {!isResults ? (
+            <>
+              <br />
+              <Input style={{ width: '100%' }} {...name.bind} placeholder="введите имя" />
+              <br />
+              <Button onClick={createEvent} style={{ width: '100%' }}>
+                сохранить
+              </Button>
+            </>
+          ) : (
+            <>
+              <br />
+              <Copyboard url={'pornhub.com'} />
+            </>
+          )}
         </Dialog>
       </div>
     );
