@@ -48,6 +48,7 @@ function DayTimeline(props: Props) {
     if (!draggingElement.current || isResults) return;
     const { id, part } = draggingElement.current;
     const date = new Date(cellDate.getTime() + (part === 'end' ? MILLISECONDS_IN_CELL : 0));
+
     if (
       isInIntervals(
         changeableIntervals.filter((interval) => interval.id !== id),
@@ -63,6 +64,7 @@ function DayTimeline(props: Props) {
           MILLISECONDS_IN_CELL)
     )
       return;
+
     const copyOfIntervals = changeableIntervals.slice();
     const interval = copyOfIntervals.find((interval: Interval) => interval.id === id)!;
     interval[part] = date;
