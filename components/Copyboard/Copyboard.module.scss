@@ -4,8 +4,10 @@
   overflow: hidden;
   p {
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
   }
-  .url {
+  .urlWrapper {
     display: inline-block;
     width: calc(100% - 91px);
     padding: 10px;

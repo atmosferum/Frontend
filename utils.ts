@@ -56,8 +56,11 @@ export async function eventsIdGet(id: string) {
   return data;
 }
 
-export async function eventsIntervalsPost(intervals: Interval[]) {
-  const { data } = await axios.post(`${url}/login`, convertIntervalToBackend(intervals));
+export async function eventsIntervalsPost(intervals: Interval[], eventId: string) {
+  const { data } = await axios.post(
+    `${url}/events/${eventId}/intervals`,
+    convertIntervalToBackend(intervals),
+  );
   return data;
 }
 
