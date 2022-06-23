@@ -8,7 +8,6 @@ import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
-import { loginPost } from '../utils';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
@@ -46,11 +45,6 @@ const Home: NextPage = () => {
           <>
             <Button onClick={goToResults}>Результаты</Button>
             <Button onClick={saveIntervals}>Сохранить</Button>
-            <Button
-              onClick={() => {
-                loginPost({ name: 'makar' }).then(console.log);
-              }}
-            ></Button>
           </>
         );
       }
