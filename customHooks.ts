@@ -13,5 +13,6 @@ export function useInput(initialValue: string) {
     bind: { value, onChange },
     value,
     clear,
+    setValue,
   };
 }

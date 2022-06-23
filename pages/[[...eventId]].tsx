@@ -3,6 +3,9 @@ import Head from 'next/head';
 import { Calendar } from '../components/Calendar';
 import { useEffect, useRef, useState } from 'react';
 import {
+  currentUserGet,
+  eventsIdGet,
+  eventsIntervalsGet,
   eventsIntervalsPost,
   eventsPost,
   eventsResultGet,
@@ -18,6 +21,8 @@ import { Dialog } from '../components/Dialog';
 import { useInput } from '../customHooks';
 import { useCallback } from 'react';
 import { Copyboard } from '../components/Copyboard/Copyboard';
+import internal from 'stream';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
@@ -35,7 +40,37 @@ const Home: NextPage = () => {
   const titleInput = useInput('');
   const draggingElement = useRef(null);
 
-  useEffect(() => {});
+  const router = useRouter();
+  const queryEventId = router.query.eventId;
+  useEffect(() => {
+    const func = async () => {
+      if (!router.isReady) return;
+      const queryEventId = router.query.eventId?.[0];
+      console.log(queryEventId);
+      if (queryEventId) {
+        console.log('enter11');
+        setEventId(queryEventId);
+        const adminIntervalsGet = await eventsIntervalsGet(queryEventId);
+        console.log(adminIntervalsGet);
+        // @ts-ignore
+        setAdminIntervals(adminIntervalsGet);
+        const { owner, title } = await eventsIdGet(queryEventId);
+        titleInput.setValue(title);
+        const user = await currentUserGet().catch(() => {
+          console.log('err');
+          setIsInputModalOpen(true);
+        });
+        if (owner.id === user?.id) {
+          console.log('enter111');
+          setIsAdmin(true);
+          setIsResults(true);
+        }
+      } else {
+        setIsAdmin(true);
+      }
+    };
+    func();
+  }, [router.isReady]);
 
   function previousWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
@@ -51,7 +86,6 @@ const Home: NextPage = () => {
   }
   async function createEvent() {
     console.log(name.value);
-    // if (!name.value||!titleInput.value) return
     loginPost({ name: name.value });
     const event = await eventsPost({
       title: titleInput.value,
@@ -64,10 +98,11 @@ const Home: NextPage = () => {
   }
 
   async function saveIntervals() {
-    eventsIntervalsPost(myIntervals, eventId);
+    await eventsIntervalsPost(myIntervals, eventId);
   }
 
   async function goToResults() {
+    await setResults();
     setIsResults(true);
   }
 
@@ -109,6 +144,9 @@ const Home: NextPage = () => {
             setIsInputModalOpen={setIsInputModalOpen}
             isInputModalOpen={isInputModalOpen}
             eventId={eventId}
+            titleInput={titleInput}
+            adminIntervals={adminIntervals}
+            myIntervals={myIntervals}
           />
         </div>
       </div>
@@ -127,26 +165,34 @@ const Buttons = ({
   isInputModalOpen,
   setIsInputModalOpen,
   eventId,
+  titleInput,
+  adminIntervals,
+  myIntervals,
 }: any) => {
   const prevUrl = 'http://localhost:3000/';
   if (isAdmin) {
     return (
       <div>
-        <Button onClick={() => setIsInputModalOpen(true)}>создать событие</Button>
+        <Button
+          disabled={!titleInput.value || !adminIntervals.length}
+          onClick={() => setIsInputModalOpen(true)}
+        >
+          Создать событие
+        </Button>
         <Dialog close={() => setIsInputModalOpen(false)} open={isInputModalOpen}>
           {!isResults ? (
             <>
               <br />
               <Input style={{ width: '100%' }} {...name.bind} placeholder="введите имя" />
               <br />
-              <Button onClick={createEvent} style={{ width: '100%' }}>
-                сохранить
+              <Button onClick={createEvent} disabled={!name.value} style={{ width: '100%' }}>
+                Сохранить
               </Button>
             </>
           ) : (
             <>
               <br />
-              <Copyboard url={prevUrl + '#' + eventId} />
+              <Copyboard url={prevUrl + eventId} />
             </>
           )}
         </Dialog>
@@ -154,12 +200,29 @@ const Buttons = ({
     );
   } else {
     if (isResults) {
-      return <Button onClick={goToVoting}>к голосованию</Button>;
+      return <Button onClick={goToVoting}>К голосованию</Button>;
     } else {
       return (
         <>
           <Button onClick={goToResults}>Результаты</Button>
-          <Button onClick={saveIntervals}>Сохранить</Button>
+          <Button disabled={!myIntervals.length} onClick={saveIntervals}>
+            Сохранить
+          </Button>
+          <Dialog close={() => setIsInputModalOpen(false)} open={isInputModalOpen}>
+            <br />
+            <Input style={{ width: '100%' }} {...name.bind} placeholder="введите имя" />
+            <br />
+            <Button
+              onClick={() => {
+                loginPost({ name: name.value });
+                setIsInputModalOpen(false);
+              }}
+              disabled={!name.value}
+              style={{ width: '100%' }}
+            >
+              Сохранить
+            </Button>
+          </Dialog>
         </>
       );
     }
