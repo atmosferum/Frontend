@@ -11,7 +11,7 @@ function Copyboard({ url }: { url: string }) {
         <p>{url}</p>
       </div>
       <div onClick={copyHandler} className={s.copyClick}>
-        <p>copy</p>
+        <p>Copy</p>
       </div>
     </div>
   );
