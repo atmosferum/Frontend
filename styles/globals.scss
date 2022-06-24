@@ -8,7 +8,10 @@ html {
 *:after {
   box-sizing: inherit;
 }
-
+a {
+  text-decoration: none;
+  color: white;
+}
 body {
   font-family: 'Inter', sans-serif;
   font-weight: normal;

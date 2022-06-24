@@ -25,7 +25,9 @@ import { Copyboard } from '../components/Copyboard/Copyboard';
 import internal from 'stream';
 import { useRouter } from 'next/router';
 import * as Icon from 'react-feather';
-
+import Link from 'next/link';
+//TODO добавить кнопку загрузки актуальных интервалов
+//TODO сделать кнопку учасников во всех состояниях
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
   const [myIntervals, setMyIntervals] = useState<Interval[]>([]);
@@ -245,6 +247,16 @@ const Buttons = ({
             <>
               <br />
               <Copyboard url={getHost() + eventId} />
+              <br />
+              <Button
+                style={{ width: '100%' }}
+                onClick={() => {
+                  goToResults();
+                  setIsInputModalOpen(false);
+                }}
+              >
+                <Link href={eventId}>Посмотреть результаты</Link>
+              </Button>
             </>
           )}
         </Dialog>
