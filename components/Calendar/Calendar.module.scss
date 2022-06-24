@@ -1,5 +1,5 @@
 .calendar {
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
   overflow: hidden;
   border-bottom: var(--border);
   border-left: var(--border);
@@ -40,7 +40,7 @@
   }
 
   > div:last-child {
-    border-top-right-radius: var(--border-radius);
+    border-top-right-radius: var(--radius);
   }
 
   div > div {
@@ -80,7 +80,7 @@
 .timeLine {
   z-index: 10;
   display: flex;
-  height: 90vh;
+  height: calc(100vh - 100px);
   overflow-y: scroll;
 
   .clockFaces {
@@ -89,7 +89,7 @@
     left: 0;
 
     .clockFaceWrapper {
-      z-index: 100000;
+      z-index: 10;
       background-color: var(--background);
       border-right: var(--border);
       border-bottom: 1px solid transparent;

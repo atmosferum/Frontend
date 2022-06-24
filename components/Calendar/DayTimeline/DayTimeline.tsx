@@ -15,6 +15,7 @@ import { MS_IN_HOUR } from '../../../consts';
 const cx = classNames.bind(s);
 
 interface Props {
+  resultsIntervals: Interval[];
   adminIntervals: Interval[];
   myIntervals: Interval[];
   day: Date;
@@ -31,8 +32,16 @@ export const HEIGHT_OF_CELL = 80;
 export const MILLISECONDS_IN_CELL = MS_IN_HOUR * HOURS_IN_CELL;
 
 function DayTimeline(props: Props) {
-  const { adminIntervals, myIntervals, day, draggingElement, setIntervals, isAdmin, isResults } =
-    props;
+  const {
+    adminIntervals,
+    myIntervals,
+    day,
+    draggingElement,
+    setIntervals,
+    isAdmin,
+    isResults,
+    resultsIntervals,
+  } = props;
 
   const isTodayIncludesInterval = ({ start, end }: Interval) =>
     isEqualDays(start, day) ||
@@ -40,12 +49,16 @@ function DayTimeline(props: Props) {
     (!isBefore(end, day) && isBefore(start, day));
   const myIntervalsToday = myIntervals.filter(isTodayIncludesInterval);
   const adminIntervalsToday = adminIntervals.filter(isTodayIncludesInterval);
+  const resultsIntervalsToday = resultsIntervals.filter(isTodayIncludesInterval);
   const changeableIntervals = isAdmin ? adminIntervals : myIntervals;
-
+  function deleteInterval(id: number) {
+    setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
+  }
   const mouseCellEnterHandler = (cellDate: Date) => {
     if (!draggingElement.current || isResults) return;
     const { id, part } = draggingElement.current;
     const date = new Date(cellDate.getTime() + (part === 'end' ? MILLISECONDS_IN_CELL : 0));
+
     if (
       isInIntervals(
         changeableIntervals.filter((interval) => interval.id !== id),
@@ -61,6 +74,7 @@ function DayTimeline(props: Props) {
           MILLISECONDS_IN_CELL)
     )
       return;
+
     const copyOfIntervals = changeableIntervals.slice();
     const interval = copyOfIntervals.find((interval: Interval) => interval.id === id)!;
     interval[part] = date;
@@ -100,6 +114,8 @@ function DayTimeline(props: Props) {
               <div key={id} className={cx('cell')}>
                 <div
                   className={cx('inset0')}
+                  onTouchStartCapture={() => onCellClickHandler(cellDate)}
+                  onTouchMoveCapture={() => onCellClickHandler(cellDate)}
                   onMouseEnter={() => mouseCellEnterHandler(cellDate)}
                   onMouseDown={() => onCellClickHandler(cellDate)}
                 />
@@ -107,24 +123,37 @@ function DayTimeline(props: Props) {
             );
           })}
       </div>
-      <>
+
+      {isResults ? (
         <Intervals
-          intervals={adminIntervalsToday}
-          draggable={!isResults && isAdmin}
-          color={isResults ? 'var(--success-dark)' : 'var(--primary-light)'}
+          intervals={resultsIntervalsToday}
+          color={'var(--success-dark)'}
           margin={1}
           draggingElement={draggingElement}
           day={day}
         />
-        <Intervals
-          intervals={myIntervalsToday}
-          draggable={!isAdmin}
-          color="var(--success-light)"
-          margin={3}
-          draggingElement={draggingElement}
-          day={day}
-        />
-      </>
+      ) : (
+        <>
+          <Intervals
+            intervals={adminIntervalsToday}
+            deleteInterval={deleteInterval}
+            draggable={!isResults && isAdmin}
+            color={'var(--primary-light)'}
+            margin={1}
+            draggingElement={draggingElement}
+            day={day}
+          />
+          <Intervals
+            intervals={myIntervalsToday}
+            deleteInterval={deleteInterval}
+            draggable={!isAdmin}
+            color="var(--success-light)"
+            margin={3}
+            draggingElement={draggingElement}
+            day={day}
+          />
+        </>
+      )}
     </div>
   );
 }

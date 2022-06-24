@@ -3,13 +3,13 @@
   position: absolute;
   inset: auto 0;
   z-index: 3;
-  border-radius: var(--border-radius);
+  border-radius: var(--radius);
   color: var(--background);
   transition: ease-in-out 0.1s;
 
   .top {
     position: absolute;
-    inset: 0;
+    inset: 0 30px 0 0;
     height: 20px;
     z-index: 10;
     cursor: row-resize;
@@ -24,11 +24,23 @@
     cursor: row-resize;
     pointer-events: all;
   }
-
-  .clockFace {
+  .cross {
+    position: absolute;
+    inset: 6px 10px auto auto;
+    height: 20px;
+    width: 20px;
+    cursor: pointer !important;
+    z-index: 10;
+    pointer-events: all;
+    opacity: 0.5;
+  }
+  .cross:hover {
+    opacity: 1;
+  }
+  .clockFace p {
     user-select: none;
     position: relative;
-    margin: 5px;
+    margin: 8px;
     font-size: 16px;
   }
 
