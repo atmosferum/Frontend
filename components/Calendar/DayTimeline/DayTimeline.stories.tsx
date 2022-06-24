@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import DayTimeline from './DayTimeline';
+import { DayTimeline } from './DayTimeline';
 
 export default {
   title: 'COMPONENT/DayTimeline',
@@ -18,29 +18,3 @@ const Template: ComponentStory<typeof DayTimeline> = (args) => {
   );
 };
 export const Primary = Template.bind({});
-Primary.args = {
-  adminIntervals: [
-    {
-      fromHour: 6,
-      toHour: 11,
-    },
-    {
-      fromHour: 14,
-      toHour: 18,
-    },
-  ],
-  myIntervals: [
-    {
-      fromHour: 7,
-      toHour: 9,
-    },
-    {
-      fromHour: 10,
-      toHour: 11,
-    },
-    {
-      fromHour: 15,
-      toHour: 18,
-    },
-  ],
-};

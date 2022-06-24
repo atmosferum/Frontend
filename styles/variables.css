@@ -17,6 +17,6 @@
     --gray-dark: #919CA3;
     --foreground: #000;
 
-    --border-radius: 8px;
+    --radius: 8px;
     --border:1px solid rgba(123, 123, 123, 0.18);
 }
