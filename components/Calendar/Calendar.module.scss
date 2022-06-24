@@ -10,6 +10,7 @@
 
   .monthAndYear {
     background-color: var(--gray-light);
+    flex-direction: column;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,7 +19,7 @@
     font-weight: bold;
     border-right: var(--border);
     border-bottom: var(--border);
-    font-size: 14px;
+    font-size: 12px;
   }
 }
 

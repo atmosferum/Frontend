@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Calendar } from '../components/Calendar';
+import { Calendar, Interval } from '../components/Calendar';
 import { useEffect, useRef, useState } from 'react';
 import {
   convertIntervalToFrontend,
@@ -27,7 +27,7 @@ import { useRouter } from 'next/router';
 import * as Icon from 'react-feather';
 
 const Home: NextPage = () => {
-  const [adminIntervals, setAdminIntervals] = useState([]);
+  const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
   const [myIntervals, setMyIntervals] = useState([]);
   const [resultsIntervals, setResultsIntervals] = useState([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
@@ -53,16 +53,21 @@ const Home: NextPage = () => {
         console.log('enter11');
         await setResults(queryEventId);
         setEventId(queryEventId);
-        const adminIntervalsGet = await eventsIntervalsGet(queryEventId);
-        console.log(adminIntervalsGet);
-        // @ts-ignore
-        setAdminIntervals(adminIntervalsGet);
+        const eventIntervals = await eventsIntervalsGet(queryEventId);
         const { owner, title } = await eventsIdGet(queryEventId);
         titleInput.setValue(title);
         const user = await currentUserGet().catch(() => {
           console.log('err');
-          setIsInputModalOpen(true);
         });
+        console.log(eventIntervals, user);
+        // @ts-ignore
+        setAdminIntervals(
+          convertIntervalToFrontend(
+            eventIntervals.filter(
+              (interval: { owner: { id: any } }) => interval.owner.id === owner.id,
+            ),
+          ),
+        );
         if (owner.id === user?.id) {
           console.log('enter111');
           setIsAdmin(true);
@@ -88,8 +93,7 @@ const Home: NextPage = () => {
     setParticipants(participants);
   }
   async function createEvent() {
-    console.log(name.value);
-    loginPost({ name: name.value });
+    await loginPost({ name: name.value });
     const event = await eventsPost({
       title: titleInput.value,
       description: '',
@@ -101,6 +105,10 @@ const Home: NextPage = () => {
   }
 
   async function saveIntervals() {
+    await currentUserGet().catch(() => {
+      console.log('err');
+      setIsInputModalOpen(true);
+    });
     await eventsIntervalsPost(myIntervals, eventId);
   }
 
@@ -133,7 +141,7 @@ const Home: NextPage = () => {
         {!isAdmin ? (
           <h1>{titleInput.value}</h1>
         ) : (
-          <Input {...titleInput.bind} placeholder="введите название события" />
+          <Input {...titleInput.bind} placeholder="Название события" />
         )}
         <div>
           {Boolean(participants.length) && (
@@ -189,7 +197,13 @@ const Buttons = ({
   adminIntervals,
   myIntervals,
 }: any) => {
-  const prevUrl = 'http://localhost:3000/';
+  const getHost = () => {
+    if (typeof window !== 'undefined') {
+      return `${window.location.protocol}//${window.location.host}/`;
+    }
+    return '';
+  };
+
   if (isAdmin) {
     return (
       <div>
@@ -212,7 +226,7 @@ const Buttons = ({
           ) : (
             <>
               <br />
-              <Copyboard url={prevUrl + eventId} />
+              <Copyboard url={getHost() + eventId} />
             </>
           )}
         </Dialog>
