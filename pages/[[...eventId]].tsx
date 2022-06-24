@@ -24,13 +24,14 @@ import { useCallback } from 'react';
 import { Copyboard } from '../components/Copyboard/Copyboard';
 import internal from 'stream';
 import { useRouter } from 'next/router';
+import * as Icon from 'react-feather';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState([]);
   const [myIntervals, setMyIntervals] = useState([]);
   const [resultsIntervals, setResultsIntervals] = useState([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
-  const [participants, setParticipants] = useState(getDateOfMonday(new Date()));
+  const [participants, setParticipants] = useState<any[]>([]);
   const [isResults, setIsResults] = useState(false);
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -50,6 +51,7 @@ const Home: NextPage = () => {
       console.log(queryEventId);
       if (queryEventId) {
         console.log('enter11');
+        await setResults(queryEventId);
         setEventId(queryEventId);
         const adminIntervalsGet = await eventsIntervalsGet(queryEventId);
         console.log(adminIntervalsGet);
@@ -80,7 +82,7 @@ const Home: NextPage = () => {
   function nextWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() + MS_IN_DAY * 7));
   }
-  async function setResults() {
+  async function setResults(eventId: string) {
     const { intervals, participants } = await eventsResultGet(eventId);
     setResultsIntervals(convertIntervalToFrontend(intervals) as any);
     setParticipants(participants);
@@ -103,7 +105,7 @@ const Home: NextPage = () => {
   }
 
   async function goToResults() {
-    await setResults();
+    await setResults(eventId);
     setIsResults(true);
   }
 
@@ -134,6 +136,23 @@ const Home: NextPage = () => {
           <Input {...titleInput.bind} placeholder="введите название события" />
         )}
         <div>
+          {Boolean(participants.length) && (
+            <Dialog
+              trigger={
+                <Button>
+                  <Icon.Users />
+                </Button>
+              }
+            >
+              {participants.map((participant) => (
+                <>
+                  <p className={s.user} key={participant.id}>
+                    {participant.name}
+                  </p>
+                </>
+              ))}
+            </Dialog>
+          )}
           <Buttons
             isAdmin={isAdmin}
             isResults={isResults}

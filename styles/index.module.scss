@@ -32,3 +32,14 @@
     gap: 10px;
   }
 }
+.user {
+  width: 90%;
+  padding: 10px;
+  border-radius: var(--radius);
+  list-style: none;
+  transition: 0.5s;
+  margin: 0;
+  &:hover {
+    background-color: var(--gray-light);
+  }
+}
