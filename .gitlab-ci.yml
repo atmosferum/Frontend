@@ -27,7 +27,7 @@ Update in K8s:
   stage: deploy
   only:
     - develop
-  when: manual
+  # when: manual
   services:
     - docker:dind
   before_script:
