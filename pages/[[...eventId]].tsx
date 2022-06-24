@@ -151,13 +151,17 @@ const Home: NextPage = () => {
         )}
         <div>
           {participants.length > 0 && (
-            <Dialog title="Участники" open={isParticipantsModalOpen}>
+            <Dialog
+              title="Участники"
+              open={isParticipantsModalOpen}
+              close={() => setIsParticipantsModalOpen(false)}
+            >
               <div className={s.participantsModalContent}>
                 {participants.map((participant) => (
                   <p className={s.user} key={participant.id}>
                     {participant.name}{' '}
                     <span style={{ color: 'var(--success-dark)' }}>
-                      {participant.isAdmin && 'admin'}
+                      {participant.isAdmin && 'Организатор'}
                     </span>
                   </p>
                 ))}

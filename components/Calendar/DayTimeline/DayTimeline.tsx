@@ -127,7 +127,7 @@ function DayTimeline(props: Props) {
       {isResults ? (
         <Intervals
           intervals={resultsIntervalsToday}
-          color={'var(--success-dark)'}
+          color={'#c39bd3'}
           margin={1}
           draggingElement={draggingElement}
           day={day}
