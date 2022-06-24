@@ -36,6 +36,7 @@ const Home: NextPage = () => {
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [eventId, setEventId] = useState('');
+  const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
   // const [isTitleError, setIsTitleError] = useState(false);
   // const [isNameError, setIsNameError] = useState(false);
   const name = useInput('');
@@ -114,7 +115,6 @@ const Home: NextPage = () => {
       console.log('err');
       setIsInputModalOpen(true);
     });
-    await eventsIntervalsPost(myIntervals, eventId);
   }
 
   async function goToResults() {
@@ -136,6 +136,7 @@ const Home: NextPage = () => {
     isAdmin,
     isResults,
   };
+
   return (
     <div className={s.window}>
       <Head>
@@ -146,27 +147,21 @@ const Home: NextPage = () => {
         {!isAdmin ? (
           <h1>{titleInput.value}</h1>
         ) : (
-          <Input {...titleInput.bind} placeholder="Название события" />
+          <input {...titleInput.bind} placeholder="Название события" className={s.eventNameInput} />
         )}
         <div>
-          {Boolean(participants.length) && (
-            <Dialog
-              trigger={
-                <Button>
-                  <Icon.Users />
-                </Button>
-              }
-            >
-              {participants.map((participant) => (
-                <>
+          {participants.length > 0 && (
+            <Dialog title="Участники" open={isParticipantsModalOpen}>
+              <div className={s.participantsModalContent}>
+                {participants.map((participant) => (
                   <p className={s.user} key={participant.id}>
                     {participant.name}{' '}
                     <span style={{ color: 'var(--success-dark)' }}>
                       {participant.isAdmin && 'admin'}
                     </span>
                   </p>
-                </>
-              ))}
+                ))}
+              </div>
             </Dialog>
           )}
           <Buttons
@@ -183,6 +178,9 @@ const Home: NextPage = () => {
             titleInput={titleInput}
             adminIntervals={adminIntervals}
             myIntervals={myIntervals}
+            showParticipantsModal={() => {
+              setIsParticipantsModalOpen(true);
+            }}
           />
         </div>
       </div>
@@ -204,6 +202,7 @@ const Buttons = ({
   titleInput,
   adminIntervals,
   myIntervals,
+  showParticipantsModal,
 }: any) => {
   const getHost = () => {
     if (typeof window !== 'undefined') {
@@ -221,14 +220,18 @@ const Buttons = ({
         >
           {isResults ? 'Копировать ссылку' : 'Создать событие'}
         </Button>
-        <Dialog close={() => setIsInputModalOpen(false)} open={isInputModalOpen}>
+        <Dialog
+          close={() => setIsInputModalOpen(false)}
+          open={isInputModalOpen}
+          title={isResults ? 'Событие создано' : 'Введите имя'}
+        >
           {!isResults ? (
             <>
               <br />
-              <Input style={{ width: '100%' }} {...name.bind} placeholder="введите имя" />
+              <Input style={{ width: '100%' }} {...name.bind} placeholder="Иван Иванов" />
               <br />
               <Button onClick={createEvent} disabled={!name.value} style={{ width: '100%' }}>
-                Сохранить
+                Создать
               </Button>
             </>
           ) : (
@@ -246,17 +249,30 @@ const Buttons = ({
     } else {
       return (
         <>
-          <Button onClick={goToResults}>Результаты</Button>
-          <Button disabled={!myIntervals.length} onClick={saveIntervals}>
-            Сохранить
-          </Button>
-          <Dialog close={() => setIsInputModalOpen(false)} open={isInputModalOpen}>
+          <div className={s.headerControls}>
+            <Button onClick={goToResults} variant="ghost">
+              Результаты
+            </Button>
+            <Button variant="secondary" onClick={showParticipantsModal}>
+              <Icon.Users />
+            </Button>
+            <Button disabled={!myIntervals.length} onClick={saveIntervals}>
+              Сохранить
+            </Button>
+          </div>
+          <Dialog
+            title="Введите имя"
+            close={() => setIsInputModalOpen(false)}
+            open={isInputModalOpen}
+          >
             <br />
-            <Input style={{ width: '100%' }} {...name.bind} placeholder="введите имя" />
+            <Input style={{ width: '100%' }} {...name.bind} placeholder="Иван Иванов" />
             <br />
             <Button
-              onClick={() => {
-                loginPost({ name: name.value });
+              onClick={async () => {
+                await loginPost({ name: name.value });
+                await eventsIntervalsPost(myIntervals, eventId);
+
                 setIsInputModalOpen(false);
               }}
               disabled={!name.value}

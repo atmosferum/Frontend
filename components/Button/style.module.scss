@@ -10,6 +10,11 @@
   font-size: 0.875rem;
   transition-duration: 0.2s;
   justify-content: center;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 
   &.button--primary {
     color: white;
@@ -32,6 +37,8 @@
     color: var(--primary);
     background: transparent;
     border: none;
+    padding-left: 0;
+    padding-right: 0;
 
     &:hover:not(:disabled) {
       color: var(--primary-dark);

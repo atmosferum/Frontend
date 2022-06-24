@@ -3,6 +3,9 @@
   overflow: hidden;
   border-bottom: var(--border);
   border-left: var(--border);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .topBar {
@@ -32,12 +35,14 @@
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
 
   > div {
     border-right: var(--border);
     border-bottom: var(--border);
     display: inline-block;
-    width: max((100% - 15px) / 7, 149px);
+    width: 100%;
   }
 
   > div:last-child {
@@ -81,8 +86,9 @@
 .timeLine {
   z-index: 10;
   display: flex;
-  height: calc(100vh - 100px);
+  height: 100%;
   overflow-y: scroll;
+  flex: 1;
 
   .clockFaces {
     position: relative;
