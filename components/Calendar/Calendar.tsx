@@ -9,6 +9,7 @@ import { getClockFace, getWeek, isToday } from './utils';
 const cx = classNames.bind(s);
 
 interface Props {
+  resultsIntervals: Interval[];
   adminIntervals: Interval[];
   myIntervals: Interval[];
   dateOfMonday: Date;
@@ -29,9 +30,10 @@ function Calendar(props: Props) {
       draggingElement.current = null;
       document.body.style.cursor = 'auto';
     });
-    // document.body.addEventListener('touchend', () => {// для мобилок
-    // setDraggingElement(null)
-    // })
+    document.body.addEventListener('touchend', () => {
+      // для мобилок
+      draggingElement.current = null;
+    });
     timeLineRef.current!.scrollTop = 1200; //auto scroll to 8 hour
     timeLineRef.current!.onscroll = function () {
       // sync scroll
