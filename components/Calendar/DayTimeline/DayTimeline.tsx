@@ -8,6 +8,7 @@ import {
   isInIntervals,
   isThereIntersections,
   isEqualDays,
+  isNextToOrInIntervals,
 } from '../utils';
 import { Intervals } from './Intervals';
 import { MS_IN_HOUR } from '../../../consts';
@@ -60,7 +61,7 @@ function DayTimeline(props: Props) {
     const date = new Date(cellDate.getTime() + (part === 'end' ? MILLISECONDS_IN_CELL : 0));
 
     if (
-      isInIntervals(
+      isNextToOrInIntervals(
         changeableIntervals.filter((interval) => interval.id !== id),
         cellDate,
       ) ||
@@ -87,7 +88,7 @@ function DayTimeline(props: Props) {
     console.log('onMouseDown');
     if (
       isResults ||
-      isInIntervals(changeableIntervals, cellDate) ||
+      isNextToOrInIntervals(changeableIntervals, cellDate) ||
       (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, cellDate))
     )
       return;

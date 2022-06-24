@@ -1,4 +1,6 @@
+import { MS_IN_HOUR } from '../../consts';
 import { Interval } from '../../types';
+import { HOURS_IN_CELL } from './DayTimeline';
 
 export function getWeek(monday: Date): Date[] {
   return Array(7)
@@ -26,6 +28,13 @@ export function isBefore(startOrEnd: Date, day: Date) {
 
 export function isInIntervals(intervals: Interval[], date: Date) {
   return intervals.some((interval) => interval.start <= date && date < interval.end);
+}
+export function isNextToOrInIntervals(intervals: Interval[], date: Date) {
+  return intervals.some(
+    (interval) =>
+      interval.start.getTime() - date.getTime() <= MS_IN_HOUR * HOURS_IN_CELL &&
+      date.getTime() - interval.end.getTime() < MS_IN_HOUR * HOURS_IN_CELL,
+  );
 }
 
 export function isThereIntersections(intervals: Interval[], newInterval: Interval) {

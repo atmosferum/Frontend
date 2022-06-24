@@ -28,8 +28,8 @@ import * as Icon from 'react-feather';
 
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
-  const [myIntervals, setMyIntervals] = useState([]);
-  const [resultsIntervals, setResultsIntervals] = useState([]);
+  const [myIntervals, setMyIntervals] = useState<Interval[]>([]);
+  const [resultsIntervals, setResultsIntervals] = useState<Interval[]>([]);
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [participants, setParticipants] = useState<any[]>([]);
   const [isResults, setIsResults] = useState(false);
@@ -37,8 +37,7 @@ const Home: NextPage = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [eventId, setEventId] = useState('');
   const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
-  // const [isTitleError, setIsTitleError] = useState(false);
-  // const [isNameError, setIsNameError] = useState(false);
+
   const name = useInput('');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
@@ -57,15 +56,18 @@ const Home: NextPage = () => {
         const eventIntervals = await eventsIntervalsGet(queryEventId);
         const { owner, title } = await eventsIdGet(queryEventId);
         titleInput.setValue(title);
-        const user = await currentUserGet().catch(() => {
-          console.log('err');
-        });
-        console.log(eventIntervals, user);
-        // @ts-ignore
+        const user = await currentUserGet().catch(console.log);
         setAdminIntervals(
           convertIntervalToFrontend(
             eventIntervals.filter(
               (interval: { owner: { id: any } }) => interval.owner.id === owner.id,
+            ),
+          ),
+        );
+        setMyIntervals(
+          convertIntervalToFrontend(
+            eventIntervals.filter(
+              (interval: { owner: { id: any } }) => interval.owner.id === user.id,
             ),
           ),
         );
@@ -106,15 +108,16 @@ const Home: NextPage = () => {
     });
     const eventIdCreated = event.split('/')[event.split('/').length - 1];
     setEventId(eventIdCreated);
-    eventsIntervalsPost(adminIntervals, eventIdCreated);
+    await eventsIntervalsPost(adminIntervals, eventIdCreated);
+    setResults(eventId);
     setIsResults(true);
   }
 
   async function saveIntervals() {
     await currentUserGet().catch(() => {
-      console.log('err');
       setIsInputModalOpen(true);
     });
+    eventsIntervalsPost(myIntervals, eventId);
   }
 
   async function goToResults() {
@@ -276,7 +279,6 @@ const Buttons = ({
               onClick={async () => {
                 await loginPost({ name: name.value });
                 await eventsIntervalsPost(myIntervals, eventId);
-
                 setIsInputModalOpen(false);
               }}
               disabled={!name.value}
