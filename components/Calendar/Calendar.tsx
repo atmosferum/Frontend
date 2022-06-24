@@ -41,13 +41,15 @@ function Calendar(props: Props) {
       clockFacesRef.current!.style.left = timeLineRef.current!.scrollLeft + 'px';
     };
   }, []);
+
   return (
     <div className={cx('calendar')}>
       {/*daysOfWeek*/}
       <div className={cx('topBar')}>
-        <div className={cx('monthAndYear')}>{`${
-          months[week[0].getMonth()]
-        } ${week[0].getFullYear()}`}</div>
+        <div className={cx('monthAndYear')}>
+          <div>{months[week[0].getMonth()]}</div>
+          <div>{week[0].getFullYear()}</div>
+        </div>
         <div className={cx('daysLine')} ref={daysLineRef}>
           {week.map((day, id) => {
             return (

@@ -6,7 +6,7 @@ export function getDateOfMonday(date: Date): Date {
   return new Date(date.getTime() - MS_IN_DAY * (date.getDay() ? date.getDay() - 1 : 6));
 }
 
-const url = 'http://localhost:3000/api';
+const API_PATH = '/api/v1';
 
 export function convertIntervalToBackend(intervals: Interval[]): BackendInterval[] {
   const backendIntervals = intervals.map(({ start, end, id }) => ({
@@ -26,24 +26,24 @@ export function convertIntervalToFrontend(intervals: BackendInterval[]): Interva
 }
 
 export async function loginPost(params: { name: string }) {
-  const { data } = await axios.post(`${url}/login`, {
+  const { data } = await axios.post(`${API_PATH}/login`, {
     name: params.name,
   });
   return data;
 }
 
 export async function currentUserGet() {
-  const { data } = await axios.get(`${url}/currentUser`);
+  const { data } = await axios.get(`${API_PATH}/currentUser`);
   return data;
 }
 
 export async function logoutGet() {
-  const { data } = await axios.get(`${url}/logout`);
+  const { data } = await axios.get(`${API_PATH}/logout`);
   return data;
 }
 
 export async function eventsPost(params: { title: string; description: string }) {
-  const { headers } = await axios.post(`${url}/events`, {
+  const { headers } = await axios.post(`${API_PATH}/events`, {
     title: params.title,
     description: params.description,
   });
@@ -52,24 +52,24 @@ export async function eventsPost(params: { title: string; description: string })
 }
 
 export async function eventsIdGet(id: string) {
-  const { data } = await axios.get(`${url}/events/${id}`);
+  const { data } = await axios.get(`${API_PATH}/events/${id}`);
   return data;
 }
 
 export async function eventsIntervalsPost(intervals: Interval[], eventId: string) {
   const { data } = await axios.post(
-    `${url}/events/${eventId}/intervals`,
+    `${API_PATH}/events/${eventId}/intervals`,
     convertIntervalToBackend(intervals),
   );
   return data;
 }
 
 export async function eventsIntervalsGet(id: string) {
-  const { data } = await axios.get(`${url}/events/${id}/intervals`);
+  const { data } = await axios.get(`${API_PATH}/events/${id}/intervals`);
   return convertIntervalToFrontend(data);
 }
 
 export async function eventsResultGet(id: string) {
-  const { data } = await axios.get(`${url}/events/${id}/result`);
+  const { data } = await axios.get(`${API_PATH}/events/${id}/result`);
   return data;
 }

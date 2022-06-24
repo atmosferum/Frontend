@@ -88,8 +88,7 @@ const Home: NextPage = () => {
     setParticipants(participants);
   }
   async function createEvent() {
-    console.log(name.value);
-    loginPost({ name: name.value });
+    await loginPost({ name: name.value });
     const event = await eventsPost({
       title: titleInput.value,
       description: '',
@@ -133,7 +132,7 @@ const Home: NextPage = () => {
         {!isAdmin ? (
           <h1>{titleInput.value}</h1>
         ) : (
-          <Input {...titleInput.bind} placeholder="введите название события" />
+          <Input {...titleInput.bind} placeholder="Название события" />
         )}
         <div>
           {Boolean(participants.length) && (
@@ -189,7 +188,13 @@ const Buttons = ({
   adminIntervals,
   myIntervals,
 }: any) => {
-  const prevUrl = 'http://localhost:3000/';
+  const getHost = () => {
+    if (typeof window !== 'undefined') {
+      return `${window.location.protocol}//${window.location.host}/`;
+    }
+    return '';
+  };
+
   if (isAdmin) {
     return (
       <div>
@@ -212,7 +217,7 @@ const Buttons = ({
           ) : (
             <>
               <br />
-              <Copyboard url={prevUrl + eventId} />
+              <Copyboard url={getHost() + eventId} />
             </>
           )}
         </Dialog>
