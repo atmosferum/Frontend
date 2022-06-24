@@ -88,9 +88,14 @@ const Home: NextPage = () => {
     setDateOfMonday(new Date(dateOfMonday.getTime() + MS_IN_DAY * 7));
   }
   async function setResults(eventId: string) {
-    const { intervals, participants } = await eventsResultGet(eventId);
+    const { intervals, participants, event } = await eventsResultGet(eventId);
     setResultsIntervals(convertIntervalToFrontend(intervals) as any);
-    setParticipants(participants);
+    setParticipants(
+      participants.map((user: { id: any }) => ({
+        ...user,
+        isAdmin: user.id === event.owner.id,
+      })),
+    );
   }
   async function createEvent() {
     await loginPost({ name: name.value });
@@ -155,7 +160,10 @@ const Home: NextPage = () => {
               {participants.map((participant) => (
                 <>
                   <p className={s.user} key={participant.id}>
-                    {participant.name}
+                    {participant.name}{' '}
+                    <span style={{ color: 'var(--success-dark)' }}>
+                      {participant.isAdmin && 'admin'}
+                    </span>
                   </p>
                 </>
               ))}
@@ -211,7 +219,7 @@ const Buttons = ({
           disabled={!titleInput.value || !adminIntervals.length}
           onClick={() => setIsInputModalOpen(true)}
         >
-          Создать событие
+          {isResults ? 'Копировать ссылку' : 'Создать событие'}
         </Button>
         <Dialog close={() => setIsInputModalOpen(false)} open={isInputModalOpen}>
           {!isResults ? (
