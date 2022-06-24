@@ -53,6 +53,10 @@
   color: var(--gray-dark);
 }
 
+.modalTitle {
+  text-align: center;
+}
+
 @keyframes overlayIn {
   from {
     opacity: 0;

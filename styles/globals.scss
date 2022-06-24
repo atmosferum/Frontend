@@ -1,14 +1,19 @@
 @import 'variables.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   font-weight: normal;
   box-sizing: border-box;
   margin: 0;
-}
-
-* {
-  user-select: none;
 }
 
 @media not handheld {

@@ -19,16 +19,18 @@ interface DialogProps extends RadixDialogProps {
   children: ReactNode;
   trigger?: ReactNode;
   close?: () => any;
+  title?: string;
 }
 
 export function Dialog(props: DialogProps) {
-  const { close, children, trigger, ...restProps } = props;
+  const { close, children, trigger, title, ...restProps } = props;
 
   return (
     <Root {...restProps}>
       <Trigger asChild>{trigger}</Trigger>
       <Portal>
         <Content className={cx('content')}>
+          {title && <div className={cx('modalTitle')}>{title}</div>}
           {children}
           <Close onClick={close} className={cx('close')}>
             <X />

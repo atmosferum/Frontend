@@ -28,7 +28,7 @@ interface Props {
 export const HOURS_IN_CELL = 0.5;
 export const HOURS_IN_DAY = 24;
 export const AMOUNT_OF_CELLS = Math.round(HOURS_IN_DAY / HOURS_IN_CELL);
-export const HEIGHT_OF_CELL = 80;
+export const HEIGHT_OF_CELL = 79;
 export const MILLISECONDS_IN_CELL = MS_IN_HOUR * HOURS_IN_CELL;
 
 function DayTimeline(props: Props) {
