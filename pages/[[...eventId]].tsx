@@ -28,6 +28,7 @@ import * as Icon from 'react-feather';
 import Link from 'next/link';
 //TODO добавить кнопку загрузки актуальных интервалов
 //TODO сделать кнопку учасников во всех состояниях
+
 const Home: NextPage = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
   const [myIntervals, setMyIntervals] = useState<Interval[]>([]);
@@ -92,6 +93,7 @@ const Home: NextPage = () => {
   function nextWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() + MS_IN_DAY * 7));
   }
+
   async function setResults(eventId: string) {
     const { intervals, participants, event } = await eventsResultGet(eventId);
     setResultsIntervals(convertIntervalToFrontend(intervals) as any);
@@ -102,8 +104,11 @@ const Home: NextPage = () => {
       })),
     );
   }
+
   async function createEvent() {
-    await loginPost({ name: name.value });
+    setIsInputModalOpen(true);
+    const { name } = await currentUserGet();
+    if (!name) return;
     const event = await eventsPost({
       title: titleInput.value,
       description: '',
@@ -111,7 +116,7 @@ const Home: NextPage = () => {
     const eventIdCreated = event.split('/')[event.split('/').length - 1];
     setEventId(eventIdCreated);
     await eventsIntervalsPost(adminIntervals, eventIdCreated);
-    setResults(eventId);
+    await setResultsIntervals(adminIntervals);
     setIsResults(true);
   }
 
@@ -119,7 +124,7 @@ const Home: NextPage = () => {
     await currentUserGet().catch(() => {
       setIsInputModalOpen(true);
     });
-    eventsIntervalsPost(myIntervals, eventId);
+    await eventsIntervalsPost(myIntervals, eventId);
   }
 
   async function goToResults() {
@@ -223,10 +228,7 @@ const Buttons = ({
   if (isAdmin) {
     return (
       <div>
-        <Button
-          disabled={!titleInput.value || !adminIntervals.length}
-          onClick={() => setIsInputModalOpen(true)}
-        >
+        <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
           {isResults ? 'Копировать ссылку' : 'Создать событие'}
         </Button>
         <Dialog
@@ -239,7 +241,13 @@ const Buttons = ({
               <br />
               <Input style={{ width: '100%' }} {...name.bind} placeholder="Иван Иванов" />
               <br />
-              <Button onClick={createEvent} disabled={!name.value} style={{ width: '100%' }}>
+              <Button
+                onClick={() => {
+                  loginPost({ name: name.value }).then(() => createEvent());
+                }}
+                disabled={!name.value}
+                style={{ width: '100%' }}
+              >
                 Создать
               </Button>
             </>
