@@ -1,5 +1,3 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
 import { Calendar, Interval } from '../components/Calendar';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -13,7 +11,7 @@ import {
   getDateOfMonday,
   loginPost,
 } from '../utils';
-import s from '../styles/index.module.scss';
+import s from "../styles/index.module.scss";
 import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
@@ -23,13 +21,11 @@ import { useInput } from '../customHooks';
 import { useCallback } from 'react';
 import { Copyboard } from '../components/Copyboard/Copyboard';
 import internal from 'stream';
-import { useRouter } from 'next/router';
 import * as Icon from 'react-feather';
-import Link from 'next/link';
 //TODO добавить кнопку загрузки актуальных интервалов
 //TODO сделать кнопку учасников во всех состояниях
 
-const Home: NextPage = () => {
+export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
   const [myIntervals, setMyIntervals] = useState<Interval[]>([]);
   const [resultsIntervals, setResultsIntervals] = useState<Interval[]>([]);
@@ -45,15 +41,10 @@ const Home: NextPage = () => {
   const titleInput = useInput('');
   const draggingElement = useRef(null);
 
-  const router = useRouter();
-  const queryEventId = router.query.eventId;
+  const queryEventId = location.pathname.substring(1)
   useEffect(() => {
     const func = async () => {
-      if (!router.isReady) return;
-      const queryEventId = router.query.eventId?.[0];
-      console.log(queryEventId);
       if (queryEventId) {
-        console.log('enter11');
         await setResults(queryEventId);
         setEventId(queryEventId);
         const eventIntervals = await eventsIntervalsGet(queryEventId);
@@ -84,7 +75,7 @@ const Home: NextPage = () => {
       }
     };
     func();
-  }, [router.isReady]);
+  }, []);
 
   function previousWeek() {
     setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
@@ -149,9 +140,6 @@ const Home: NextPage = () => {
 
   return (
     <div className={s.window}>
-      <Head>
-        <title>Time Manager</title>
-      </Head>
       <div className={s.header}>
         <WeekSlider right={nextWeek} left={previousWeek} date={dateOfMonday} />
         {!isAdmin ? (
@@ -263,7 +251,7 @@ const Buttons = ({
                   setIsInputModalOpen(false);
                 }}
               >
-                <Link href={eventId}>Посмотреть результаты</Link>
+                <a href={eventId}>Посмотреть результаты</a>
               </Button>
             </>
           )}
@@ -312,4 +300,4 @@ const Buttons = ({
     }
   }
 };
-export default Home;
+

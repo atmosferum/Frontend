@@ -2,7 +2,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useRef, useState } from 'react';
 import { Calendar } from './Calendar';
 import { Interval } from '../../types';
-import Head from 'next/head';
 import { getDateOfMonday } from '../../utils';
 
 export default {
@@ -17,9 +16,6 @@ const Template: ComponentStory<typeof Calendar> = (args) => {
 
   return (
     <>
-      <Head>
-        <title>Time Manager</title>
-      </Head>
       <Calendar
         {...args}
         adminIntervals={adminIntervals}

@@ -5,8 +5,6 @@ import { HEIGHT_OF_CELL } from '../DayTimeline';
 import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
 import { months } from '../../consts';
-// import Cross from './cross.tsx'
-import Image from 'next/image';
 import { Cross } from './cross';
 
 const cx = classNames.bind(s);
