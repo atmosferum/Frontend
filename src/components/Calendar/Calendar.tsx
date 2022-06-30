@@ -27,13 +27,16 @@ function Calendar(props: Props) {
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     document.body.addEventListener('mouseup', () => {
-      draggingElement.current = null;
-      document.body.style.cursor = 'auto';
+      if(window.innerWidth > 1000){
+        console.log('clear')
+        draggingElement.current = null;
+        document.body.style.cursor = 'auto';
+      }
     });
-    document.body.addEventListener('touchend', () => {
-      // для мобилок
-      draggingElement.current = null;
-    });
+    // document.body.addEventListener('touchend', () => {
+    //   // для мобилок
+    //   draggingElement.current = null;
+    // });
     timeLineRef.current!.scrollTop = 1200; //auto scroll to 8 hour
     timeLineRef.current!.onscroll = function () {
       // sync scroll

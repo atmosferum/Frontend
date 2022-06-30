@@ -56,6 +56,7 @@ function DayTimeline(props: Props) {
     setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
   }
   const mouseCellEnterHandler = (cellDate: Date) => {
+    console.log('enter')
     if (!draggingElement.current || isResults) return;
     const { id, part } = draggingElement.current;
     const date = new Date(cellDate.getTime() + (part === 'end' ? MILLISECONDS_IN_CELL : 0));
@@ -85,7 +86,7 @@ function DayTimeline(props: Props) {
     }
   };
   const onCellClickHandler = (cellDate: Date) => {
-    console.log('onMouseDown');
+    console.log('onMouseDown...');
     if (
       isResults ||
       isNextToOrInIntervals(changeableIntervals, cellDate) ||
@@ -115,10 +116,15 @@ function DayTimeline(props: Props) {
               <div key={id} className={cx('cell')}>
                 <div
                   className={cx('inset0')}
-                  onTouchStartCapture={() => onCellClickHandler(cellDate)}
-                  onTouchMoveCapture={() => onCellClickHandler(cellDate)}
+                  onTouchStart={()=>{
+                    mouseCellEnterHandler(cellDate)
+                    draggingElement.current = null;
+
+                  }}
                   onMouseEnter={() => mouseCellEnterHandler(cellDate)}
-                  onMouseDown={() => onCellClickHandler(cellDate)}
+                  onMouseDown={() => {
+                    onCellClickHandler(cellDate)
+                  }}
                 />
               </div>
             );

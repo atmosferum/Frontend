@@ -11,9 +11,10 @@
     position: absolute;
     inset: 0 30px 0 0;
     height: 20px;
-    z-index: 10;
+    z-index: 20;
     cursor: row-resize;
     pointer-events: all;
+    //touch-action: none;
   }
 
   .bottom {
@@ -23,6 +24,7 @@
     z-index: 15;
     cursor: row-resize;
     pointer-events: all;
+    //touch-action: none;
   }
   .cross {
     position: absolute;

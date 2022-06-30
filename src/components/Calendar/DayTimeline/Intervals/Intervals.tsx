@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import { DraggingElement, Interval } from '../../../../types';
 import { getClockFace, isEqualDays } from '../../utils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
@@ -22,7 +22,12 @@ interface Props {
 const Intervals = (props: Props) => {
   const { intervals, color, margin, draggingElement, day, draggable, deleteInterval } = props;
   const intervalRef = useRef<HTMLInputElement | null>(null);
-
+  useEffect(()=>{
+    if(!intervalRef.current)return
+    intervalRef.current!.addEventListener("touchmove", e=>{
+      e.preventDefault()
+    })
+    },[])
   return (
     <>
       {intervals.map(({ start, end, id }) => {
@@ -66,17 +71,28 @@ const Intervals = (props: Props) => {
             {draggable && (
               <>
                 <div
+                  draggable
                   className={cx('top')}
-                  onMouseDown={() => {
-                    // intervalRef.current!.style.pointerEvents = "none"
+                  onMouseDown={e=>{
+                    draggingElement.current = { id, part: 'start' }
+
+                  }}
+                  onDragStart={e => {
+                    e.preventDefault()
+                    console.log(e)
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'start' };
                   }}
                 />
                 <div
+                  draggable
                   className={cx('bottom')}
-                  onMouseDown={() => {
-                    // intervalRef.current!.style.pointerEvents = "none"
+                  onMouseDown={e=>{
+                    draggingElement.current = { id, part: 'end' }
+                  }}
+                  onDragStart={e => {
+                    e.preventDefault()
+                    console.log(e)
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'end' };
                   }}
