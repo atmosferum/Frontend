@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from 'react';
 import styles from './style.module.scss';
 import classNames from 'classnames/bind';
 import { Loader } from '../Loader';
-
+const a = 1;
 const cx = classNames.bind(styles);
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
