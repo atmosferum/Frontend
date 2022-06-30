@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './style.module.scss';
 import cn from 'classnames/bind';
 const cx = cn.bind(styles);

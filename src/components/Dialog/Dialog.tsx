@@ -4,14 +4,12 @@ import {
   Portal,
   Overlay,
   Content,
-  Title,
-  Description,
   Close,
   DialogProps as RadixDialogProps,
 } from '@radix-ui/react-dialog';
 import styles from './style.module.scss';
 import cn from 'classnames/bind';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { X } from 'react-feather';
 const cx = cn.bind(styles);
 
