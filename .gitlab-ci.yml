@@ -12,7 +12,7 @@ Build image:
     - develop
   image:
     name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [ "" ]
+    entrypoint: ['']
   before_script:
     - *docker_login
   script:

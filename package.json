@@ -28,7 +28,8 @@
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "typecheck": "bash -c tsc --noEmit",
-    "lint:format": "eslint . --ext .tsx,.ts,.js,.jsx --fix"
+    "lint:format": "eslint . --ext .tsx,.ts,.js,.jsx --fix",
+    "style": "prettier -w"
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",
