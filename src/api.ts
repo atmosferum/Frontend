@@ -16,10 +16,10 @@ export function convertIntervalToBackend(intervals: Interval[]): BackendInterval
   return backendIntervals;
 }
 export function convertIntervalToFrontend(intervals: BackendInterval[]): Interval[] {
-  const frontendIntervals = intervals.map(({ startTime, endTime, id }) => ({
+  const frontendIntervals = intervals.map(({ startTime, endTime, ...rest }) => ({
     start: new Date(startTime * 1000),
     end: new Date(endTime * 1000),
-    id,
+    ...rest,
   }));
   return frontendIntervals;
 }
@@ -31,7 +31,7 @@ export async function loginPost(params: { name: string }) {
   return data;
 }
 
-export async function currentUserGet() {
+export async function currentUserGet(): Promise<{ name: string; id: number }> {
   const { data } = await axios.get(`${API_PATH}/currentUser`);
   return data;
 }

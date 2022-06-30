@@ -10,10 +10,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function Button(props: ButtonProps) {
-  const { variant = 'primary', loading = false, children, ...restProps } = props;
+  const { variant = 'primary', loading = false, children, className, ...restProps } = props;
 
   return (
-    <button className={cx('button', `button--${variant}`)} {...restProps}>
+    <button className={cx('button', `button--${variant}`, className)} {...restProps}>
       {!loading ? children : <Loader />}
     </button>
   );

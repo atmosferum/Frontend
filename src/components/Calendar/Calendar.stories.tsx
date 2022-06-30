@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useRef, useState } from 'react';
 import { Calendar } from './Calendar';
 import { Interval } from '../../types';
-import { getDateOfMonday } from '../../utils';
+import { getDateOfMonday } from '../../api';
 
 export default {
   title: 'COMPONENT/Calendar',
