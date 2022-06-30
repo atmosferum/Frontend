@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { start } from 'repl';
 import { MS_IN_DAY } from './consts';
 import { BackendInterval, Interval } from './types';
 export function getDateOfMonday(date: Date): Date {

@@ -1,5 +1,5 @@
+import React, { ButtonHTMLAttributes } from 'react';
 import styles from './style.module.scss';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
 import classNames from 'classnames/bind';
 import { Loader } from '../Loader';
 

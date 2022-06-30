@@ -1,5 +1,5 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, Interval } from '../components/Calendar';
-import { useEffect, useRef, useState } from 'react';
 import {
   convertIntervalToFrontend,
   currentUserGet,
@@ -11,19 +11,17 @@ import {
   getDateOfMonday,
   loginPost,
 } from '../utils';
-import s from "../styles/index.module.scss";
+import s from '../styles/index.module.scss';
 import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
 import { Dialog } from '../components/Dialog';
 import { useInput } from '../customHooks';
-import { useCallback } from 'react';
 import { Copyboard } from '../components/Copyboard/Copyboard';
-import internal from 'stream';
 import * as Icon from 'react-feather';
-//TODO добавить кнопку загрузки актуальных интервалов
-//TODO сделать кнопку учасников во всех состояниях
+// TODO добавить кнопку загрузки актуальных интервалов
+// TODO сделать кнопку учасников во всех состояниях
 
 export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -41,7 +39,7 @@ export const App = () => {
   const titleInput = useInput('');
   const draggingElement = useRef(null);
 
-  const queryEventId = location.pathname.substring(1)
+  const queryEventId = location.pathname.substring(1);
   useEffect(() => {
     const func = async () => {
       if (queryEventId) {
@@ -300,4 +298,3 @@ const Buttons = ({
     }
   }
 };
-

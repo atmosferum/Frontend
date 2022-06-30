@@ -1,3 +1,4 @@
+import React from 'react';
 import s from './style.module.scss';
 import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight } from 'react-feather';

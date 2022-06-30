@@ -1,9 +1,9 @@
 const path = require("path");
 
 const buildEslintCommand = (filenames) =>
-  `next lint --fix --file ${filenames
+  `yarn eslint ${filenames
     .map((f) => path.relative(process.cwd(), f))
-    .join(" --file ")} `;
+    .join(" --fix ")} `;
 
 module.exports = {
   "*.{js,jsx,ts,tsx}": [buildEslintCommand, "yarn typecheck"],
