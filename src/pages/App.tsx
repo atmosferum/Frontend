@@ -34,7 +34,6 @@ export const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [eventId, setEventId] = useState('');
   const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
-  const a = 1;
   const name = useInput('');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
