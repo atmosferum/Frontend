@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { MS_IN_DAY } from './consts';
-import { BackendInterval, Interval } from './types';
+import { BackendInterval, Interval, Results, Event } from './types';
+
 export function getDateOfMonday(date: Date): Date {
   return new Date(date.getTime() - MS_IN_DAY * (date.getDay() ? date.getDay() - 1 : 6));
 }
@@ -8,40 +9,38 @@ export function getDateOfMonday(date: Date): Date {
 const API_PATH = '/api/v1';
 
 export function convertIntervalToBackend(intervals: Interval[]): BackendInterval[] {
-  const backendIntervals = intervals.map(({ start, end, id }) => ({
+  return intervals.map(({ start, end, id }) => ({
     startTime: start.getTime() / 1000,
     endTime: end.getTime() / 1000,
     id,
   }));
-  return backendIntervals;
 }
 export function convertIntervalToFrontend(intervals: BackendInterval[]): Interval[] {
-  const frontendIntervals = intervals.map(({ startTime, endTime, ...rest }) => ({
+  return intervals.map(({ startTime, endTime, ...rest }) => ({
     start: new Date(startTime * 1000),
     end: new Date(endTime * 1000),
     ...rest,
   }));
-  return frontendIntervals;
 }
 
-export async function loginPost(params: { name: string }) {
+export async function postLogin(params: { name: string }) {
   const { data } = await axios.post(`${API_PATH}/login`, {
     name: params.name,
   });
   return data;
 }
 
-export async function currentUserGet(): Promise<{ name: string; id: number }> {
+export async function getCurrentUser(): Promise<{ name: string; id: string }> {
   const { data } = await axios.get(`${API_PATH}/currentUser`);
   return data;
 }
 
-export async function logoutGet() {
+export async function getLogout(): Promise<void> {
   const { data } = await axios.get(`${API_PATH}/logout`);
   return data;
 }
 
-export async function eventsPost(params: { title: string; description: string }) {
+export async function postEvent(params: { title: string; description: string }): Promise<string> {
   const { headers } = await axios.post(`${API_PATH}/events`, {
     title: params.title,
     description: params.description,
@@ -50,12 +49,12 @@ export async function eventsPost(params: { title: string; description: string })
   return headers.location;
 }
 
-export async function eventsIdGet(id: string) {
+export async function getEventById(id: string): Promise<Event> {
   const { data } = await axios.get(`${API_PATH}/events/${id}`);
   return data;
 }
 
-export async function eventsIntervalsPost(intervals: Interval[], eventId: string) {
+export async function postIntervals(intervals: Interval[], eventId: string) {
   const { data } = await axios.post(
     `${API_PATH}/events/${eventId}/intervals`,
     convertIntervalToBackend(intervals),
@@ -63,12 +62,12 @@ export async function eventsIntervalsPost(intervals: Interval[], eventId: string
   return data;
 }
 
-export async function eventsIntervalsGet(id: string) {
+export async function getAllIntervals(id: string) {
   const { data } = await axios.get(`${API_PATH}/events/${id}/intervals`);
   return data;
 }
 
-export async function eventsResultGet(id: string) {
+export async function getResult(id: string): Promise<Results> {
   const { data } = await axios.get(`${API_PATH}/events/${id}/result`);
   return data;
 }

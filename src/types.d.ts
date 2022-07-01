@@ -1,5 +1,5 @@
 export interface User {
-  id: number;
+  id: string;
   name: string;
 }
 export interface Participant extends User {
@@ -22,4 +22,16 @@ export interface BackendInterval {
   id: number;
   startTime: number;
   endTime: number;
+}
+export interface Event {
+  id: string;
+  title: string;
+  description: string;
+  owner: User;
+  createdAt: number;
+}
+export interface Results {
+  event: Event;
+  intervals: BackendInterval[];
+  participants: User[];
 }

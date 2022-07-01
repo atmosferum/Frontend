@@ -2,16 +2,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, Interval } from '../components/Calendar';
 import {
   convertIntervalToFrontend,
-  currentUserGet,
-  eventsIdGet,
-  eventsIntervalsGet,
-  eventsIntervalsPost,
-  eventsPost,
-  eventsResultGet,
+  getCurrentUser,
+  getEventById,
+  getAllIntervals,
+  postIntervals,
+  postEvent,
+  getResult,
   getDateOfMonday,
-  loginPost,
+  postLogin,
 } from '../api';
-import s from '../styles/index.module.scss';
+import s from '../styles/App.module.scss';
 import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
 import { Input } from '../components/Input';
@@ -21,6 +21,8 @@ import { useInput } from '../customHooks';
 import { Copyboard } from '../components/Copyboard/Copyboard';
 import * as Icon from 'react-feather';
 import { Participant, User } from '../types';
+import { LoginModal } from '../components/LoginModal/LoginModal';
+import { ParticipantsModal } from '../components/ParticipantsModal/ParticipantsModal';
 // TODO добавить кнопку загрузки актуальных интервалов
 // TODO сделать кнопку учасников во всех состояниях
 
@@ -55,8 +57,8 @@ export const App = () => {
       return;
     }
     setEventId(queryEventId);
-    const { owner, title } = await eventsIdGet(queryEventId);
-    const user = await currentUserGet().catch(console.log);
+    const { owner, title } = await getEventById(queryEventId);
+    const user = await getCurrentUser().catch(console.log);
     console.log({ user, title, owner });
     titleInput.setValue(title);
     setCurrentUser(user ?? null);
@@ -70,7 +72,7 @@ export const App = () => {
   }
 
   async function setIntervals(ownerOfEvent: User, user: User | void) {
-    const eventIntervals = await eventsIntervalsGet(queryEventId);
+    const eventIntervals = await getAllIntervals(queryEventId);
     const allIntervals = convertIntervalToFrontend(eventIntervals);
     console.log({ allIntervals, ownerOfEvent });
     setAdminIntervals(allIntervals.filter((interval) => interval.owner!.id === ownerOfEvent.id));
@@ -86,10 +88,10 @@ export const App = () => {
   }
 
   async function setResults(eventId: string) {
-    const { intervals, participants, event } = await eventsResultGet(eventId);
+    const { intervals, participants, event } = await getResult(eventId);
     setResultsIntervals(convertIntervalToFrontend(intervals) as any);
     setParticipants(
-      participants.map((participant: { id: any }) => ({
+      participants.map((participant: User) => ({
         ...participant,
         isAdmin: participant.id === event.owner.id,
         isCurrentUser: participant.id === currentUser?.id,
@@ -99,14 +101,14 @@ export const App = () => {
 
   async function createEvent() {
     setIsLoginModalOpen(true);
-    await currentUserGet();
-    const event = await eventsPost({
+    await getCurrentUser();
+    const event = await postEvent({
       title: titleInput.value,
       description: '',
     });
     const eventIdCreated = event.split('/')[event.split('/').length - 1];
     setEventId(eventIdCreated);
-    await eventsIntervalsPost(adminIntervals, eventIdCreated);
+    await postIntervals(adminIntervals, eventIdCreated);
     await setResultsIntervals(adminIntervals);
     setIsResults(true);
   }
@@ -115,7 +117,7 @@ export const App = () => {
     if (!currentUser) {
       setIsLoginModalOpen(true);
     } else {
-      await eventsIntervalsPost(myIntervals, eventId);
+      await postIntervals(myIntervals, eventId);
     }
   }
 
@@ -128,15 +130,15 @@ export const App = () => {
     setIsResults(false);
   }
   async function login(name: string) {
-    await loginPost({ name });
-    const user = await currentUserGet();
+    await postLogin({ name });
+    const user = await getCurrentUser();
     console.log(user);
     setCurrentUser(user);
     return user;
   }
   async function loginAndSaveIntervals(name: string) {
     await login(name);
-    await eventsIntervalsPost(myIntervals, eventId);
+    await postIntervals(myIntervals, eventId);
     setIsLoginModalOpen(false);
   }
   const propsForCalendar = {
@@ -222,9 +224,6 @@ const Buttons = ({
   if (isAdmin) {
     return (
       <div>
-        <Button variant="secondary" onClick={showParticipantsModal}>
-          <Icon.Users />
-        </Button>
         <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
           {isResults ? 'Копировать ссылку' : 'Создать событие'}
         </Button>
@@ -302,41 +301,3 @@ const Buttons = ({
     }
   }
 };
-function LoginModal(props: any) {
-  const { close, isLoginModalOpen, name, loginAndSaveIntervals } = props;
-  return (
-    <Dialog title="Введите имя" close={close} open={isLoginModalOpen}>
-      <br />
-      <Input className={s.stretch} {...name.bind} placeholder="Иван Иванов" />
-      <br />
-      <Button onClick={loginAndSaveIntervals} disabled={!name.value} className={s.stretch}>
-        Сохранить
-      </Button>
-    </Dialog>
-  );
-}
-function ParticipantsModal(props: any) {
-  const { participants, isParticipantsModalOpen, setIsParticipantsModalOpen } = props;
-  if (participants.length > 0) {
-    return (
-      <Dialog
-        title="Участники"
-        open={isParticipantsModalOpen}
-        close={() => setIsParticipantsModalOpen(false)}
-      >
-        <div className={s.participantsModalContent}>
-          {participants.map((participant: Participant) => (
-            <p className={s.user} key={participant.id}>
-              {participant.name}{' '}
-              <span style={{ color: 'var(--success-dark)' }}>
-                {participant.isAdmin && 'Организатор '}
-                {participant.isCurrentUser && 'Вы'}
-              </span>
-            </p>
-          ))}
-        </div>
-      </Dialog>
-    );
-  }
-  return null;
-}

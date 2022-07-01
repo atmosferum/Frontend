@@ -27,8 +27,8 @@ function Calendar(props: Props) {
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     document.body.addEventListener('mouseup', () => {
-      if(window.innerWidth > 1000){
-        console.log('clear')
+      if (window.innerWidth > 1000) {
+        console.log('clear');
         draggingElement.current = null;
         document.body.style.cursor = 'auto';
       }
@@ -37,7 +37,7 @@ function Calendar(props: Props) {
     //   // для мобилок
     //   draggingElement.current = null;
     // });
-    timeLineRef.current!.scrollTop = 1200; //auto scroll to 8 hour
+    timeLineRef.current!.scrollTop = 1200; // auto scroll to 8 hour
     timeLineRef.current!.onscroll = function () {
       // sync scroll
       daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft;
@@ -47,7 +47,7 @@ function Calendar(props: Props) {
 
   return (
     <div className={cx('calendar')}>
-      {/*daysOfWeek*/}
+      {/* daysOfWeek */}
       <div className={cx('topBar')}>
         <div className={cx('monthAndYear')}>
           <div>{months[week[0].getMonth()]}</div>
@@ -68,7 +68,7 @@ function Calendar(props: Props) {
       </div>
 
       <div className={cx('timeLine')} ref={timeLineRef}>
-        {/*timeline*/}
+        {/* timeline */}
         <div className={cx('clockFaces')} ref={clockFacesRef}>
           {Array(48)
             .fill('')
@@ -80,7 +80,7 @@ function Calendar(props: Props) {
               );
             })}
         </div>
-        {/*columns of cells*/}
+        {/* columns of cells */}
         {week.map((day, id) => {
           return (
             <DayTimeline
