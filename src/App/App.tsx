@@ -12,29 +12,18 @@ import {
   postLogin,
 } from '../api';
 import s from '../styles/App.module.scss';
-import { Button } from '../components/Button';
 import { MS_IN_DAY } from '../consts';
-import { Input } from '../components/Input';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
-import { Dialog } from '../components/Dialog';
 import { useInput } from '../customHooks';
-import { Copyboard } from '../components/Copyboard/Copyboard';
-import * as Icon from 'react-feather';
 import { Participant, User } from '../types';
-import { LoginModal } from '../components/LoginModal/LoginModal';
-import { ParticipantsModal } from '../components/ParticipantsModal/ParticipantsModal';
+import { ParticipantsModal } from './ParticipantsModal/ParticipantsModal';
+import { Buttons } from './Buttons/Buttons';
 // TODO добавить кнопку загрузки актуальных интервалов
-// TODO сделать кнопку учасников во всех состояниях
-
-// refactor
-// изменить имена api функций
-// разнести useEffect по функциям
 
 export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
   const [myIntervals, setMyIntervals] = useState<Interval[]>([]);
   const [resultsIntervals, setResultsIntervals] = useState<Interval[]>([]);
-
   const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [isResults, setIsResults] = useState(false);
@@ -111,6 +100,8 @@ export const App = () => {
     await postIntervals(adminIntervals, eventIdCreated);
     await setResultsIntervals(adminIntervals);
     setIsResults(true);
+    console.log({ eventIdCreated }, 'createEvent');
+    window.history.pushState('data', 'Time manager', '/' + eventIdCreated);
   }
 
   async function saveIntervals() {
@@ -136,8 +127,8 @@ export const App = () => {
     setCurrentUser(user);
     return user;
   }
-  async function loginAndSaveIntervals(name: string) {
-    await login(name);
+  async function loginAndSaveIntervals() {
+    await login(name.value);
     await postIntervals(myIntervals, eventId);
     setIsLoginModalOpen(false);
   }
@@ -194,110 +185,4 @@ export const App = () => {
       />
     </div>
   );
-};
-
-const Buttons = ({
-  login,
-  isResults,
-  isAdmin,
-  name,
-  createEvent,
-  goToVoting,
-  goToResults,
-  saveIntervals,
-  setIsLoginModalOpen,
-  isLoginModalOpen,
-  eventId,
-  titleInput,
-  adminIntervals,
-  myIntervals,
-  showParticipantsModal,
-  loginAndSaveIntervals,
-}: any) => {
-  const getHost = () => {
-    if (typeof window !== 'undefined') {
-      return `${window.location.protocol}//${window.location.host}/`;
-    }
-    return '';
-  };
-
-  if (isAdmin) {
-    return (
-      <div>
-        <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
-          {isResults ? 'Копировать ссылку' : 'Создать событие'}
-        </Button>
-        <Dialog
-          close={() => setIsLoginModalOpen(false)}
-          open={isLoginModalOpen}
-          title={isResults ? 'Событие создано' : 'Введите имя'}
-        >
-          {!isResults ? (
-            <div>
-              <br />
-              <Input className={s.stretch} {...name.bind} placeholder="Иван Иванов" />
-              <br />
-              <Button
-                onClick={() => login(name.value).then(createEvent)}
-                disabled={!name.value}
-                className={s.stretch}
-              >
-                Создать
-              </Button>
-            </div>
-          ) : (
-            <div>
-              <br />
-              <Copyboard url={getHost() + eventId} />
-              <br />
-              <Button
-                className={s.stretch}
-                onClick={() => {
-                  goToResults();
-                  setIsLoginModalOpen(false);
-                }}
-              >
-                <a onClick={() => false} href={eventId}>
-                  Посмотреть результаты
-                </a>
-              </Button>
-            </div>
-          )}
-        </Dialog>
-      </div>
-    );
-  } else {
-    if (isResults) {
-      return (
-        <div>
-          <Button variant="secondary" onClick={showParticipantsModal}>
-            <Icon.Users />
-          </Button>
-          <Button onClick={goToVoting}>К голосованию</Button>;
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <div className={s.headerControls}>
-            <Button onClick={goToResults} variant="ghost">
-              Результаты
-            </Button>
-            <Button variant="secondary" onClick={showParticipantsModal}>
-              <Icon.Users />
-            </Button>
-            <Button disabled={!myIntervals.length} onClick={saveIntervals}>
-              Сохранить
-            </Button>
-          </div>
-          <LoginModal
-            close={() => setIsLoginModalOpen(false)}
-            isLoginModalOpen={isLoginModalOpen}
-            name={name}
-            loginAndSaveIntervals={loginAndSaveIntervals}
-          />
-        </div>
-      );
-    }
-  }
 };

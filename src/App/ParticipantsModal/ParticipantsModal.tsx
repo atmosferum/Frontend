@@ -1,4 +1,4 @@
-import { Dialog } from '../Dialog';
+import { Dialog } from '../../components/Dialog';
 import s from '../../styles/App.module.scss';
 import { Participant } from '../../types';
 import React from 'react';
