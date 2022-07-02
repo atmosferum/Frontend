@@ -36,9 +36,13 @@ export function Buttons(props: any) {
   if (isAdmin) {
     return (
       <>
-        <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
-          {isResults ? 'Копировать ссылку' : 'Создать событие'}
-        </Button>
+        {isResults ? (
+          <Button onClick={() => setIsLoginModalOpen(true)}>Копировать ссылку</Button>
+        ) : (
+          <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
+            Создать событие
+          </Button>
+        )}
         <Dialog
           close={() => setIsLoginModalOpen(false)}
           open={isLoginModalOpen}
@@ -77,7 +81,7 @@ export function Buttons(props: any) {
         <Button variant="secondary" onClick={showParticipantsModal}>
           <Icon.Users />
         </Button>
-        <Button onClick={goToVoting}>К голосованию</Button>;
+        <Button onClick={goToVoting}>К голосованию</Button>
       </>
     );
   } else {

@@ -22,20 +22,23 @@ interface DialogProps extends RadixDialogProps {
 
 export function Dialog(props: DialogProps) {
   const { close, children, trigger, title, ...restProps } = props;
-
   return (
-    <Root {...restProps}>
-      <Trigger asChild>{trigger}</Trigger>
-      <Portal>
-        <Content className={cx('content')}>
-          {title && <div className={cx('modalTitle')}>{title}</div>}
-          {children}
-          <Close onClick={close} className={cx('close')}>
-            <X />
-          </Close>
-        </Content>
-        <Overlay onClick={close} className={cx('overlay')} />
-      </Portal>
-    </Root>
+    <>
+      {restProps.open && (
+        <Root {...restProps}>
+          <Trigger asChild>{trigger}</Trigger>
+          <Portal>
+            <Content className={cx('content')}>
+              {title && <div className={cx('modalTitle')}>{title}</div>}
+              {children}
+              <Close onClick={close} className={cx('close')}>
+                <X />
+              </Close>
+            </Content>
+            <Overlay onClick={close} className={cx('overlay')} />
+          </Portal>
+        </Root>
+      )}
+    </>
   );
 }
