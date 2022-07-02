@@ -142,7 +142,24 @@ export const App = () => {
     isAdmin,
     isResults,
   };
-
+  const propsForButtons = {
+    login,
+    isAdmin,
+    isResults,
+    name,
+    goToVoting,
+    goToResults,
+    saveIntervals,
+    createEvent,
+    setIsLoginModalOpen,
+    isLoginModalOpen,
+    eventId,
+    titleInput,
+    adminIntervals,
+    myIntervals,
+    showParticipantsModal: () => setIsParticipantsModalOpen(true),
+    loginAndSaveIntervals,
+  };
   return (
     <div className={s.window}>
       <div className={s.header}>
@@ -153,26 +170,7 @@ export const App = () => {
           <input {...titleInput.bind} placeholder="Название события" className={s.eventNameInput} />
         )}
         <div>
-          <Buttons
-            login={login}
-            isAdmin={isAdmin}
-            isResults={isResults}
-            name={name}
-            goToVoting={goToVoting}
-            goToResults={goToResults}
-            saveIntervals={saveIntervals}
-            createEvent={createEvent}
-            setIsLoginModalOpen={setIsLoginModalOpen}
-            isLoginModalOpen={isLoginModalOpen}
-            eventId={eventId}
-            titleInput={titleInput}
-            adminIntervals={adminIntervals}
-            myIntervals={myIntervals}
-            showParticipantsModal={() => {
-              setIsParticipantsModalOpen(true);
-            }}
-            loginAndSaveIntervals={loginAndSaveIntervals}
-          />
+          <Buttons {...propsForButtons} />
         </div>
       </div>
 
