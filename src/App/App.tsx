@@ -18,7 +18,7 @@ import { useInput } from '../customHooks';
 import { Participant, User } from '../types';
 import { ParticipantsModal } from './ParticipantsModal/ParticipantsModal';
 import { Buttons } from './Buttons/Buttons';
-// TODO добавить кнопку загрузки актуальных интервалов
+import ReloadButton from '../components/ReloadButton/ReloadButton';
 
 export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -32,6 +32,7 @@ export const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [eventId, setEventId] = useState('');
   const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
+  const [isResultsLoading, setIsResultsLoading] = useState(false);
   const name = useInput('');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
@@ -77,6 +78,7 @@ export const App = () => {
   }
 
   async function setResults(eventId: string) {
+    setIsResultsLoading(true);
     const { intervals, participants, event } = await getResult(eventId);
     setResultsIntervals(convertIntervalToFrontend(intervals) as any);
     setParticipants(
@@ -86,6 +88,7 @@ export const App = () => {
         isCurrentUser: participant.id === currentUser?.id,
       })),
     );
+    setIsResultsLoading(false);
   }
 
   async function createEvent() {
@@ -170,6 +173,7 @@ export const App = () => {
           <input {...titleInput.bind} placeholder="Название события" className={s.eventNameInput} />
         )}
         <div>
+          <ReloadButton onClick={() => setResults(eventId)} isLoading={isResultsLoading} />
           <Buttons {...propsForButtons} />
         </div>
       </div>
