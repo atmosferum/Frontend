@@ -4,7 +4,7 @@ import { DayTimeline, HOURS_IN_CELL } from './DayTimeline';
 import { daysOfWeek, months } from './consts';
 import classNames from 'classnames/bind';
 import { DraggingElement, Interval } from '../../types';
-import { getClockFace, getWeek, isToday } from './utils';
+import { getClockFace, getWeek, isBefore, isToday } from './utils';
 
 const cx = classNames.bind(s);
 
@@ -28,7 +28,7 @@ function Calendar(props: Props) {
   useEffect(() => {
     document.body.addEventListener('mouseup', () => {
       if (window.innerWidth > 1000) {
-        console.log('clear');
+        console.log('clear draggingElement');
         draggingElement.current = null;
         document.body.style.cursor = 'auto';
       }
@@ -37,7 +37,7 @@ function Calendar(props: Props) {
     //   // для мобилок
     //   draggingElement.current = null;
     // });
-    timeLineRef.current!.scrollTop = 1200; // auto scroll to 8 hour
+    timeLineRef.current!.scrollTop = 400; // auto scroll to 8 hour
     timeLineRef.current!.onscroll = function () {
       // sync scroll
       daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft;
@@ -58,7 +58,15 @@ function Calendar(props: Props) {
             return (
               <div key={id}>
                 <div>
-                  <p className={cx('date', isToday(day) && 'today')}>{day.getDate()}</p>
+                  <p
+                    className={cx(
+                      'date',
+                      isToday(day) && 'today',
+                      isBefore(day, new Date()) && 'before',
+                    )}
+                  >
+                    {day.getDate()}
+                  </p>
                   <p>{daysOfWeek[day.getDay()]}</p>
                 </div>
               </div>
@@ -70,12 +78,12 @@ function Calendar(props: Props) {
       <div className={cx('timeLine')} ref={timeLineRef}>
         {/* timeline */}
         <div className={cx('clockFaces')} ref={clockFacesRef}>
-          {Array(48)
+          {Array(24)
             .fill('')
             .map((_, id) => {
               return (
                 <div key={id} className={cx('clockFaceWrapper')}>
-                  <p>{getClockFace(id * HOURS_IN_CELL)}</p>
+                  <p>{getClockFace(id)}</p>
                 </div>
               );
             })}
