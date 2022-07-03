@@ -80,7 +80,10 @@ function DayTimeline(props: Props) {
     const copyOfIntervals = changeableIntervals.slice();
     const interval = copyOfIntervals.find((interval: Interval) => interval.id === id)!;
     interval[part] = date;
-    if (!isThereIntersections(copyOfIntervals, interval)) {
+    if (
+      !isThereIntersections(copyOfIntervals, interval) &&
+      isEqualDays(interval.start, interval.end)
+    ) {
       console.log('after');
       setIntervals(copyOfIntervals);
     }

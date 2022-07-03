@@ -6,7 +6,7 @@ import classnames from 'classnames/bind';
 const cx = classnames.bind(s);
 interface Props {
   className?: string;
-  onClick: () => any;
+  onClick?: () => any;
   isLoading: boolean;
 }
 function ReloadButton(props: Props) {
