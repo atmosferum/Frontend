@@ -11,7 +11,7 @@ function Copyboard({ url }: { url: string }) {
     <div className={s.wrapper}>
       <input
         type="text"
-        value={url}
+        defaultValue={url}
         style={{ height: 0, position: 'absolute', left: 100000000 }}
         ref={ref}
       />
