@@ -32,7 +32,7 @@ export const App = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [eventId, setEventId] = useState('');
   const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
-  const [isResultsLoading, setIsResultsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const name = useInput('');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
@@ -78,7 +78,7 @@ export const App = () => {
   }
 
   async function setResults(eventId: string) {
-    setIsResultsLoading(true);
+    setIsLoading(true);
     const { intervals, participants, event } = await getResult(eventId);
     setResultsIntervals(convertIntervalToFrontend(intervals) as any);
     setParticipants(
@@ -88,35 +88,45 @@ export const App = () => {
         isCurrentUser: participant.id === currentUser?.id,
       })),
     );
-    setIsResultsLoading(false);
+    setIsLoading(false);
   }
 
   async function createEvent() {
-    setIsLoginModalOpen(true);
-    await getCurrentUser();
-    const event = await postEvent({
-      title: titleInput.value,
-      description: '',
-    });
-    const eventIdCreated = event.split('/')[event.split('/').length - 1];
-    setEventId(eventIdCreated);
-    await postIntervals(adminIntervals, eventIdCreated);
-    await setResultsIntervals(adminIntervals);
-    setIsResults(true);
-    console.log({ eventIdCreated }, 'createEvent');
-    window.history.pushState('data', 'Time manager', '/' + eventIdCreated);
+    try {
+      setIsLoading(true);
+      const event = await postEvent({
+        title: titleInput.value,
+        description: '',
+      });
+      setIsLoginModalOpen(true);
+      const eventIdCreated = event!.split('/')[event!.split('/').length - 1];
+      setEventId(eventIdCreated);
+      await postIntervals(adminIntervals, eventIdCreated);
+      await setResultsIntervals(adminIntervals);
+      setIsResults(true);
+      await setResults(eventIdCreated);
+      console.log({ eventIdCreated }, 'createEvent');
+      window.history.pushState('data', 'Time manager', '/' + eventIdCreated);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoginModalOpen(true);
+      setIsLoading(false);
+    }
   }
 
   async function saveIntervals() {
     if (!currentUser) {
       setIsLoginModalOpen(true);
     } else {
+      setIsLoading(true);
       await postIntervals(myIntervals, eventId);
+      await goToResults();
+      setIsLoading(false);
     }
   }
 
   async function goToResults() {
-    await setResults(eventId);
+    setResults(eventId);
     setIsResults(true);
   }
 
@@ -132,7 +142,7 @@ export const App = () => {
   }
   async function loginAndSaveIntervals() {
     await login(name.value);
-    await postIntervals(myIntervals, eventId);
+    saveIntervals();
     setIsLoginModalOpen(false);
   }
   const propsForCalendar = {
@@ -162,6 +172,8 @@ export const App = () => {
     myIntervals,
     showParticipantsModal: () => setIsParticipantsModalOpen(true),
     loginAndSaveIntervals,
+    isLoading,
+    setResults,
   };
   return (
     <div className={s.window}>
@@ -173,7 +185,6 @@ export const App = () => {
           <input {...titleInput.bind} placeholder="Название события" className={s.eventNameInput} />
         )}
         <div>
-          <ReloadButton onClick={() => setResults(eventId)} isLoading={isResultsLoading} />
           <Buttons {...propsForButtons} />
         </div>
       </div>

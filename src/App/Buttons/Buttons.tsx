@@ -6,6 +6,7 @@ import { Copyboard } from '../../components/Copyboard/Copyboard';
 import * as Icon from 'react-feather';
 import { LoginModal } from '../LoginModal/LoginModal';
 import React from 'react';
+import ReloadButton from '../../components/ReloadButton/ReloadButton';
 
 export function Buttons(props: any) {
   const {
@@ -25,6 +26,8 @@ export function Buttons(props: any) {
     myIntervals,
     showParticipantsModal,
     loginAndSaveIntervals,
+    isLoading,
+    setResults,
   } = props;
   const getHost = () => {
     if (typeof window !== 'undefined') {
@@ -37,11 +40,20 @@ export function Buttons(props: any) {
     return (
       <>
         {isResults ? (
-          <Button onClick={() => setIsLoginModalOpen(true)}>Копировать ссылку</Button>
+          <>
+            <ReloadButton onClick={() => setResults(eventId)} isLoading={isLoading} />
+            <Button variant="secondary" onClick={showParticipantsModal}>
+              <Icon.Users />
+            </Button>
+            <Button onClick={() => setIsLoginModalOpen(true)}>Копировать ссылку</Button>
+          </>
         ) : (
-          <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
-            Создать событие
-          </Button>
+          <>
+            <ReloadButton isLoading={isLoading} />
+            <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
+              Создать событие
+            </Button>
+          </>
         )}
         <Dialog
           close={() => setIsLoginModalOpen(false)}
@@ -78,6 +90,7 @@ export function Buttons(props: any) {
   if (isResults) {
     return (
       <>
+        <ReloadButton onClick={() => setResults(eventId)} isLoading={isLoading} />
         <Button variant="secondary" onClick={showParticipantsModal}>
           <Icon.Users />
         </Button>
