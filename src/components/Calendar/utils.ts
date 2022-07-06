@@ -61,3 +61,9 @@ export class IntervalClass {
     this.id = IntervalClass.staticId++;
   }
 }
+
+export function isTouchEnabled() {
+  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+    window.navigator.userAgent.toLowerCase(),
+  );
+}
