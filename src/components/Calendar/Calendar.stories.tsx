@@ -9,6 +9,15 @@ export default {
   component: Calendar,
 } as ComponentMeta<typeof Calendar>;
 
+// resultsIntervals: Interval[];
+// adminIntervals: Interval[];
+// myIntervals: Interval[];
+// dateOfMonday: Date;
+// draggingElement: DraggingElement;
+// setIntervals: SetStateAction<any>;
+// isAdmin?: boolean;
+// isResults?: boolean;
+
 const Template: ComponentStory<typeof Calendar> = (args) => {
   const [intervals, setIntervals] = useState<Array<Interval>>([]);
   const [adminIntervals, setAdminIntervals] = useState<Array<Interval>>(args.adminIntervals);
@@ -33,5 +42,6 @@ Primary.args = {
   dateOfMonday: now,
   adminIntervals: [],
   myIntervals: [],
+  resultsIntervals: [],
   isAdmin: true,
 };
