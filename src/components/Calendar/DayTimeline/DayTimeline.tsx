@@ -29,7 +29,7 @@ interface Props {
 export const HOURS_IN_CELL = 0.5;
 export const HOURS_IN_DAY = 24;
 export const AMOUNT_OF_CELLS = Math.round(HOURS_IN_DAY / HOURS_IN_CELL);
-export const HEIGHT_OF_CELL = 79;
+export const HEIGHT_OF_CELL = 30;
 export const MILLISECONDS_IN_CELL = MS_IN_HOUR * HOURS_IN_CELL;
 
 function DayTimeline(props: Props) {
@@ -56,7 +56,7 @@ function DayTimeline(props: Props) {
     setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
   }
   const mouseCellEnterHandler = (cellDate: Date) => {
-    console.log('enter')
+    console.log('enter');
     if (!draggingElement.current || isResults) return;
     const { id, part } = draggingElement.current;
     const date = new Date(cellDate.getTime() + (part === 'end' ? MILLISECONDS_IN_CELL : 0));
@@ -80,7 +80,10 @@ function DayTimeline(props: Props) {
     const copyOfIntervals = changeableIntervals.slice();
     const interval = copyOfIntervals.find((interval: Interval) => interval.id === id)!;
     interval[part] = date;
-    if (!isThereIntersections(copyOfIntervals, interval)) {
+    if (
+      !isThereIntersections(copyOfIntervals, interval) &&
+      isEqualDays(interval.start, interval.end)
+    ) {
       console.log('after');
       setIntervals(copyOfIntervals);
     }
@@ -96,7 +99,7 @@ function DayTimeline(props: Props) {
     document.body.style.cursor = 'row-resize';
     const newInterval = new IntervalClass(
       cellDate,
-      new Date(cellDate.getTime() + MILLISECONDS_IN_CELL),
+      new Date(cellDate.getTime() + MILLISECONDS_IN_CELL * 2),
     );
     draggingElement.current = { id: newInterval.id, part: 'end' };
     changeableIntervals.push(newInterval);
@@ -116,14 +119,13 @@ function DayTimeline(props: Props) {
               <div key={id} className={cx('cell')}>
                 <div
                   className={cx('inset0')}
-                  onTouchStart={()=>{
-                    mouseCellEnterHandler(cellDate)
+                  onTouchStart={() => {
+                    mouseCellEnterHandler(cellDate);
                     draggingElement.current = null;
-
                   }}
                   onMouseEnter={() => mouseCellEnterHandler(cellDate)}
                   onMouseDown={() => {
-                    onCellClickHandler(cellDate)
+                    onCellClickHandler(cellDate);
                   }}
                 />
               </div>

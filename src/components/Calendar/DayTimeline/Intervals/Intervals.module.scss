@@ -11,7 +11,7 @@
     position: absolute;
     inset: 0 30px 0 0;
     height: 20px;
-    z-index: 20;
+    z-index: 14;
     cursor: row-resize;
     pointer-events: all;
     //touch-action: none;
@@ -32,7 +32,7 @@
     height: 20px;
     width: 20px;
     cursor: pointer !important;
-    z-index: 10;
+    z-index: 20;
     pointer-events: all;
     opacity: 0.5;
   }

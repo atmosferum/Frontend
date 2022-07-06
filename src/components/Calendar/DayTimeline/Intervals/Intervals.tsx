@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import { DraggingElement, Interval } from '../../../../types';
 import { getClockFace, isEqualDays } from '../../utils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
@@ -21,15 +21,9 @@ interface Props {
 
 const Intervals = (props: Props) => {
   const { intervals, color, margin, draggingElement, day, draggable, deleteInterval } = props;
-  const intervalRef = useRef<HTMLInputElement | null>(null);
-  useEffect(()=>{
-    if(!intervalRef.current)return
-    intervalRef.current!.addEventListener("touchmove", e=>{
-      e.preventDefault()
-    })
-    },[])
+  const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
-    <>
+    <div ref={intervalsRef}>
       {intervals.map(({ start, end, id }) => {
         const isStartToday = isEqualDays(start, day);
         const isEndToday = isEqualDays(end, day);
@@ -62,7 +56,6 @@ const Intervals = (props: Props) => {
           <div
             key={id}
             style={style}
-            ref={intervalRef}
             className={cx('interval')}
             // onMouseUp={()=>{intervalRef.current!.style.pointerEvents = "auto"}}
           >
@@ -71,28 +64,21 @@ const Intervals = (props: Props) => {
             {draggable && (
               <>
                 <div
-                  draggable
+                  // draggable
                   className={cx('top')}
-                  onMouseDown={e=>{
-                    draggingElement.current = { id, part: 'start' }
-
-                  }}
-                  onDragStart={e => {
-                    e.preventDefault()
-                    console.log(e)
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    console.log(e);
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'start' };
                   }}
                 />
                 <div
-                  draggable
+                  // draggable
                   className={cx('bottom')}
-                  onMouseDown={e=>{
-                    draggingElement.current = { id, part: 'end' }
-                  }}
-                  onDragStart={e => {
-                    e.preventDefault()
-                    console.log(e)
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    console.log(e);
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'end' };
                   }}
@@ -102,7 +88,7 @@ const Intervals = (props: Props) => {
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 
