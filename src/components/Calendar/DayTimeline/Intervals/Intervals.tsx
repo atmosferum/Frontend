@@ -18,10 +18,12 @@ interface Props {
   day: Date;
   draggable?: boolean;
   deleteInterval?: any;
+  isResults?: boolean;
 }
 
 const Intervals = (props: Props) => {
-  const { intervals, color, margin, draggingElement, day, draggable, deleteInterval } = props;
+  const { intervals, color, margin, draggingElement, day, draggable, deleteInterval, isResults } =
+    props;
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   const [y, setY] = useState(0);
   function mouseEnterHandler(e: any) {
@@ -69,6 +71,14 @@ const Intervals = (props: Props) => {
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
+            {isResults && (
+              <Popover y={y}>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci aliquam
+                aspernatur aut debitis deserunt dignissimos distinctio, dolores ex exercitationem
+                laudantium libero molestias nemo nobis pariatur repellendus, totam veritatis
+                voluptates?
+              </Popover>
+            )}
             {draggable && (
               <>
                 <div
@@ -80,12 +90,6 @@ const Intervals = (props: Props) => {
                     draggingElement.current = { id, part: 'start' };
                   }}
                 />
-                <Popover y={y}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci
-                  aliquam aspernatur aut debitis deserunt dignissimos distinctio, dolores ex
-                  exercitationem laudantium libero molestias nemo nobis pariatur repellendus, totam
-                  veritatis voluptates?
-                </Popover>
                 <div
                   // draggable
                   className={cx('bottom')}

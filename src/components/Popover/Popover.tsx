@@ -1,20 +1,30 @@
 import React, { ReactNode } from 'react';
 import s from './style.module.scss';
-import cn from 'classnames/bind';
-import { X } from 'react-feather';
-
-const cx = cn.bind(s);
 
 interface PopoverProps {
   children?: ReactNode;
-  y: number;
+  y?: number;
+  maxHeight?: number;
+  position?: 'left' | 'middle' | 'right';
 }
 
 export function Popover(props: PopoverProps) {
-  const { children, y } = props;
-
+  const { children, y, maxHeight, position = 'middle' } = props;
+  const positions = {
+    right: '102%',
+    left: '-102%',
+    middle: '0',
+  };
   return (
-    <div style={{ top: y }} className={s.popover}>
+    <div
+      className={s.popover}
+      style={{
+        top: y,
+        position: 'absolute',
+        transform: `translate(${positions[position]}, -64px)`,
+        maxHeight,
+      }}
+    >
       {children}
     </div>
   );

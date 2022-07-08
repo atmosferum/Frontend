@@ -19,3 +19,6 @@
   visibility: visible;
   opacity: 1;
 }
+.trigger:hover {
+  z-index: 100000000;
+}

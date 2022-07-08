@@ -140,6 +140,7 @@ function DayTimeline(props: Props) {
           margin={1}
           draggingElement={draggingElement}
           day={day}
+          isResults
         />
       ) : (
         <>
