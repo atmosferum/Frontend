@@ -8,38 +8,54 @@ const cx = cn.bind(styles);
 interface PopoverProps {
   children?: ReactNode;
   open?: boolean;
-  x?: number;
-  y?: boolean;
+  x?: string;
+  y?: string;
+  width?: string;
+  maxHeight?: number;
+  closeButton?: boolean;
+  position?: 'left' | 'middle' | 'right';
   close?: () => void;
   leaveMouse?: (e: any) => void;
 }
 
 export function Popover(props: PopoverProps) {
-  const { children, x, y, close, leaveMouse } = props;
+  const { children, x, y, width, maxHeight, close, leaveMouse } = props;
   const open = props.open;
+  const closeButton = props.closeButton ?? false;
+  const position = props.position ?? 'middle';
+  if (position === 'right') {
+    var transX = '102%';
+  } else if (position === 'left') {
+    transX = '-102%';
+  } else {
+    transX = '0';
+  }
+  console.log(children);
   // const [open, setOpen] = useState(props.open);
   const styles = {
-    display: open ?? false ? 'block' : 'none',
-    top: '200px',
-    left: '200px',
-    width: '200px',
+    display: open ? 'block' : 'none',
+    top: x,
+    left: y,
+    width,
   };
   return (
     <div
-      style={{ position: 'absolute', ...styles }}
-      className={cx('content')}
+      style={{
+        position: 'absolute',
+        transform: `translate(${transX}, -64px)`,
+        maxHeight,
+        ...styles,
+      }}
+      className={cx('popoverContent')}
       onMouseEnter={() => console.log('pop enter')}
       onMouseLeave={leaveMouse}
     >
-      <div className={cx('close')}>
-        <X onClick={close} />
-      </div>
-      <div>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur sunt sint iste modi
-        aliquam fugiat nihil excepturi natus cumque hic corrupti esse officia blanditiis impedit, in
-        voluptatibus odio itaque non?
-        {children}
-      </div>
+      {closeButton ? (
+        <div className={cx('close')}>
+          <X onClick={close} />
+        </div>
+      ) : undefined}
+      {children}
     </div>
   );
 }

@@ -151,6 +151,7 @@ function DayTimeline(props: Props) {
             margin={1}
             draggingElement={draggingElement}
             day={day}
+            isResults={true}
           />
           <Intervals
             intervals={myIntervalsToday}

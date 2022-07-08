@@ -22,7 +22,13 @@ export const PopoverStory: ComponentStory<typeof Popover> = (args) => {
   return (
     <>
       <div style={{ background: 'coral', width: '200px', height: '500px' }}></div>
-      <Popover x={popoverX} y={popoverY} open={popoverOpen}></Popover>
+      <Popover x={popoverX} y={popoverY} open={popoverOpen}>
+        <div>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur sunt sint iste modi
+          aliquam fugiat nihil excepturi natus cumque hic corrupti esse officia blanditiis impedit,
+          in voluptatibus odio itaque non?
+        </div>
+      </Popover>
     </>
   );
 };
