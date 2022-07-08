@@ -1,12 +1,15 @@
-.content {
-  background: rgba(255, 255, 255, 0.8);
+.popoverContent {
+  background: rgba(14, 75, 230, 0.6);
   padding: 1.5rem;
   padding-top: 2rem;
-  border-radius: var(--radius);
+  border-radius: 15px;
   z-index: 1000001;
   border: var(--border);
+  overflow: auto;
 }
-
+.popoverContent::-webkit-scrollbar {
+  width: 0;
+}
 .close {
   width: 1rem;
   height: 1rem;
