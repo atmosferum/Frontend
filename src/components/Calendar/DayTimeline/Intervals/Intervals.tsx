@@ -72,7 +72,6 @@ const Intervals = (props: Props) => {
             {draggable && (
               <>
                 <div
-                  // draggable
                   className={cx('top')}
                   onMouseDown={(e) => {
                     e.preventDefault();
