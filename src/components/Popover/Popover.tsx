@@ -7,10 +7,15 @@ const cx = cn.bind(s);
 
 interface PopoverProps {
   children?: ReactNode;
+  y: number;
 }
 
 export function Popover(props: PopoverProps) {
-  const { children } = props;
+  const { children, y } = props;
 
-  return <div className={s.popover}>{children}</div>;
+  return (
+    <div style={{ top: y }} className={s.popover}>
+      {children}
+    </div>
+  );
 }
