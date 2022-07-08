@@ -1,28 +1,25 @@
 import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Popover } from './Popover';
-
+import popoverStyles from './style.module.scss';
 export default {
   title: 'RadixPopover',
   component: Popover,
 } as ComponentMeta<typeof Popover>;
 
 export const PopoverStory: ComponentStory<typeof Popover> = (args) => {
-  const [popoverX, setPopoverX] = useState();
-  const [popoverY, setPopoverY] = useState();
-  const [popoverOpen, setPopoverOpen] = useState(true);
-
-  function openPopover(e: any) {
-    setPopoverX(e.clientX);
-    setPopoverY(e.clientY);
-    setPopoverOpen(true);
-    console.log(e.clientX + ' ' + e.clientY);
-  }
-
   return (
     <>
-      <div style={{ background: 'coral', width: '200px', height: '500px' }}></div>
-      <Popover x={popoverX} y={popoverY} open={popoverOpen}></Popover>
+      <div
+        className={popoverStyles.trigger}
+        style={{ background: 'coral', width: '200px', height: '500px', position: 'relative' }}
+      >
+        <Popover>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur delectus impedit
+          maxime nostrum temporibus voluptates. Corporis ea ex exercitationem facere harum hic,
+          illum impedit molestias neque omnis quam temporibus! Architecto.
+        </Popover>
+      </div>
     </>
   );
 };
