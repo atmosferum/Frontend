@@ -42,7 +42,7 @@ export function Popover(props: PopoverProps) {
     <div
       style={{
         position: 'absolute',
-        transform: `translate(${transX}, -64px)`,
+        transform: `translate(${transX}, -34px)`,
         maxHeight,
         ...styles,
       }}
