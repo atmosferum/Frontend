@@ -19,11 +19,21 @@ interface Props {
   draggable?: boolean;
   deleteInterval?: any;
   isResults?: boolean;
+  touchMoveHandler: (e: any) => void;
 }
 
 const Intervals = (props: Props) => {
-  const { intervals, color, margin, draggingElement, day, draggable, deleteInterval, isResults } =
-    props;
+  const {
+    intervals,
+    color,
+    margin,
+    draggingElement,
+    day,
+    draggable,
+    deleteInterval,
+    isResults,
+    touchMoveHandler,
+  } = props;
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   const [y, setY] = useState(0);
   function mouseEnterHandler(e: any) {
@@ -89,6 +99,10 @@ const Intervals = (props: Props) => {
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'start' };
                   }}
+                  onTouchStart={() => {
+                    draggingElement.current = { id, part: 'start' };
+                  }}
+                  onTouchMove={touchMoveHandler}
                 />
                 <div
                   // draggable
@@ -99,6 +113,10 @@ const Intervals = (props: Props) => {
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'end' };
                   }}
+                  onTouchStart={() => {
+                    draggingElement.current = { id, part: 'end' };
+                  }}
+                  onTouchMove={touchMoveHandler}
                 />
               </>
             )}

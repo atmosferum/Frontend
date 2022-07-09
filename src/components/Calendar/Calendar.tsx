@@ -34,10 +34,9 @@ function Calendar(props: Props) {
         document.body.style.cursor = 'auto';
       }
     });
-    // document.body.addEventListener('touchend', () => {
-    //   // для мобилок
-    //   draggingElement.current = null;
-    // });
+    document.body.addEventListener('touchend', () => {
+      draggingElement.current = null;
+    });
     timeLineRef.current!.scrollTop = 400; // auto scroll to 8 hour
     timeLineRef.current!.onscroll = function () {
       // sync scroll

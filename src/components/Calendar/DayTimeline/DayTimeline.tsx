@@ -9,6 +9,7 @@ import {
   isThereIntersections,
   isEqualDays,
   isNextToOrInIntervals,
+  getCellDate,
 } from '../utils';
 import { Intervals } from './Intervals';
 import { MS_IN_HOUR } from '../../../consts';
@@ -55,6 +56,14 @@ function DayTimeline(props: Props) {
   function deleteInterval(id: number) {
     setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
   }
+  const touchMoveHandler = (e: any) => {
+    const cellElem = document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY);
+    const id = parseInt(cellElem!.getAttribute('data-id')!);
+    if (!id || draggingElement.current!.prevCellId === id) return;
+    draggingElement.current!.prevCellId = id;
+    const cellDate = getCellDate(id, day);
+    mouseCellEnterHandler(cellDate);
+  };
   const mouseCellEnterHandler = (cellDate: Date) => {
     console.log('enter');
     if (!draggingElement.current || isResults) return;
@@ -105,23 +114,21 @@ function DayTimeline(props: Props) {
     changeableIntervals.push(newInterval);
     setIntervals([...changeableIntervals]);
   };
-  const getCellDate = (id: number) =>
-    new Date(day.getFullYear(), day.getMonth(), day.getDate(), Math.floor(id / 2), (id % 2) * 30);
 
   return (
-    <div className={cx('column')}>
-      <div className={cx('inset0')}>
+    <div className={s.column}>
+      <div className={s.inset0}>
         {Array(AMOUNT_OF_CELLS)
           .fill(null)
           .map((_, id) => {
-            const cellDate = getCellDate(id);
+            const cellDate = getCellDate(id, day);
             return (
-              <div key={id} className={cx('cell')}>
+              <div key={id} className={s.cell}>
                 <div
-                  className={cx('inset0')}
+                  data-id={id.toString()}
+                  className={s.inset0}
                   onTouchStart={() => {
                     mouseCellEnterHandler(cellDate);
-                    draggingElement.current = null;
                   }}
                   onMouseEnter={() => mouseCellEnterHandler(cellDate)}
                   onMouseDown={() => {
@@ -139,6 +146,7 @@ function DayTimeline(props: Props) {
           color={'#c39bd3'}
           margin={1}
           draggingElement={draggingElement}
+          touchMoveHandler={touchMoveHandler}
           day={day}
           isResults
         />
@@ -147,6 +155,7 @@ function DayTimeline(props: Props) {
           <Intervals
             intervals={adminIntervalsToday}
             deleteInterval={deleteInterval}
+            touchMoveHandler={touchMoveHandler}
             draggable={!isResults && isAdmin}
             color={'var(--primary-light)'}
             margin={1}
@@ -156,6 +165,7 @@ function DayTimeline(props: Props) {
           <Intervals
             intervals={myIntervalsToday}
             deleteInterval={deleteInterval}
+            touchMoveHandler={touchMoveHandler}
             draggable={!isAdmin}
             color="var(--success-light)"
             margin={3}
