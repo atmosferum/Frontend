@@ -12,6 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag fedorresh/whattime:$(date +%s)
+        run: docker build . --file Dockerfile --tag fedorresh/whattime:gh-actions
       - name: push image
-        run: docker push fedorresh/whattime:$(date +%s)
+        run: docker push fedorresh/whattime:gh-actions
