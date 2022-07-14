@@ -16,6 +16,7 @@ export interface DraggingElement {
   current: {
     id: number;
     part: 'start' | 'end';
+    prevCellId?: number;
   } | null;
 }
 export interface BackendInterval {

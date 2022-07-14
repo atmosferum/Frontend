@@ -14,7 +14,7 @@
     z-index: 14;
     cursor: row-resize;
     pointer-events: all;
-    //touch-action: none;
+    touch-action: pan-x;
   }
 
   .bottom {
@@ -24,7 +24,7 @@
     z-index: 15;
     cursor: row-resize;
     pointer-events: all;
-    //touch-action: none;
+    touch-action: pan-x;
   }
   .cross {
     position: absolute;

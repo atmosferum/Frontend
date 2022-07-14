@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DraggingElement, Interval } from '../../../../types';
 import { getClockFace, isEqualDays } from '../../utils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
@@ -6,7 +6,8 @@ import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
 import { months } from '../../consts';
 import { Cross } from './cross';
-
+import { Popover } from '../../../Popover/Popover';
+import popoverStyle from '../../../Popover/style.module.scss';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -17,11 +18,29 @@ interface Props {
   day: Date;
   draggable?: boolean;
   deleteInterval?: any;
+  isResults?: boolean;
+  touchMoveHandler: (e: any) => void;
 }
 
 const Intervals = (props: Props) => {
-  const { intervals, color, margin, draggingElement, day, draggable, deleteInterval } = props;
+  const {
+    intervals,
+    color,
+    margin,
+    draggingElement,
+    day,
+    draggable,
+    deleteInterval,
+    isResults,
+    touchMoveHandler,
+  } = props;
   const intervalsRef = useRef<HTMLInputElement | null>(null);
+  const [y, setY] = useState(0);
+  function mouseEnterHandler(e: any) {
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const y = e.clientY - bounds.top;
+    setY(y);
+  }
   return (
     <div ref={intervalsRef}>
       {intervals.map(({ start, end, id }) => {
@@ -54,17 +73,25 @@ const Intervals = (props: Props) => {
         };
         return (
           <div
+            onMouseEnter={mouseEnterHandler}
             key={id}
-            style={style}
-            className={cx('interval')}
+            style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
+            className={`${s.interval} ${popoverStyle.trigger}`}
             // onMouseUp={()=>{intervalRef.current!.style.pointerEvents = "auto"}}
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
+            {isResults && (
+              <Popover y={y}>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci aliquam
+                aspernatur aut debitis deserunt dignissimos distinctio, dolores ex exercitationem
+                laudantium libero molestias nemo nobis pariatur repellendus, totam veritatis
+                voluptates?
+              </Popover>
+            )}
             {draggable && (
               <>
                 <div
-                  // draggable
                   className={cx('top')}
                   onMouseDown={(e) => {
                     e.preventDefault();
@@ -72,6 +99,10 @@ const Intervals = (props: Props) => {
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'start' };
                   }}
+                  onTouchStart={() => {
+                    draggingElement.current = { id, part: 'start' };
+                  }}
+                  onTouchMove={touchMoveHandler}
                 />
                 <div
                   // draggable
@@ -82,6 +113,10 @@ const Intervals = (props: Props) => {
                     document.body.style.cursor = 'row-resize';
                     draggingElement.current = { id, part: 'end' };
                   }}
+                  onTouchStart={() => {
+                    draggingElement.current = { id, part: 'end' };
+                  }}
+                  onTouchMove={touchMoveHandler}
                 />
               </>
             )}

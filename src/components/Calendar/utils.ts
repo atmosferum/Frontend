@@ -2,6 +2,9 @@ import { MS_IN_HOUR } from '../../consts';
 import { Interval } from '../../types';
 import { HOURS_IN_CELL } from './DayTimeline';
 
+export const getCellDate = (id: number, day: Date) =>
+  new Date(day.getFullYear(), day.getMonth(), day.getDate(), Math.floor(id / 2), (id % 2) * 30);
+
 export function getWeek(monday: Date): Date[] {
   return Array(7)
     .fill(null)
@@ -60,4 +63,10 @@ export class IntervalClass {
     this.end = end;
     this.id = IntervalClass.staticId++;
   }
+}
+
+export function isTouchEnabled() {
+  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+    window.navigator.userAgent.toLowerCase(),
+  );
 }

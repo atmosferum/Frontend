@@ -4,7 +4,7 @@ import { DayTimeline, HOURS_IN_CELL } from './DayTimeline';
 import { daysOfWeek, months } from './consts';
 import classNames from 'classnames/bind';
 import { DraggingElement, Interval } from '../../types';
-import { getClockFace, getWeek, isBefore, isToday } from './utils';
+import { getClockFace, getWeek, isBefore, isToday, isTouchEnabled } from './utils';
 
 const cx = classNames.bind(s);
 
@@ -27,16 +27,16 @@ function Calendar(props: Props) {
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     document.body.addEventListener('mouseup', () => {
-      if (window.innerWidth > 1000) {
+      if (!isTouchEnabled()) {
+        console.log(!isTouchEnabled());
         console.log('clear draggingElement');
         draggingElement.current = null;
         document.body.style.cursor = 'auto';
       }
     });
-    // document.body.addEventListener('touchend', () => {
-    //   // для мобилок
-    //   draggingElement.current = null;
-    // });
+    document.body.addEventListener('touchend', () => {
+      draggingElement.current = null;
+    });
     timeLineRef.current!.scrollTop = 400; // auto scroll to 8 hour
     timeLineRef.current!.onscroll = function () {
       // sync scroll

@@ -1,0 +1,24 @@
+.popover {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  z-index: 1000001;
+  border: var(--border);
+  width: 250px;
+  left: 180px;
+  top: 20px;
+  backdrop-filter: blur(5px);
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.2s;
+  user-select: none;
+}
+
+.trigger:hover .popover {
+  visibility: visible;
+  opacity: 1;
+}
+.trigger:hover {
+  z-index: 4;
+}

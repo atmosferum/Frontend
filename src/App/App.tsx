@@ -18,7 +18,6 @@ import { useInput } from '../customHooks';
 import { Participant, User } from '../types';
 import { ParticipantsModal } from './ParticipantsModal/ParticipantsModal';
 import { Buttons } from './Buttons/Buttons';
-import ReloadButton from '../components/ReloadButton/ReloadButton';
 
 export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
