@@ -93,5 +93,5 @@
       "prettier"
     ]
   },
-  "proxy": "http://whattime.ru"
+  "proxy": "http://135.181.211.34:25501"
 }

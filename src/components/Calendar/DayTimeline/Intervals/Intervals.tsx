@@ -75,7 +75,7 @@ const Intervals = (props: Props) => {
           <div
             onMouseEnter={mouseEnterHandler}
             key={id}
-            style={{ pointerEvents: draggable ? 'none' : 'all', ...style }}
+            style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
             className={`${s.interval} ${popoverStyle.trigger}`}
             // onMouseUp={()=>{intervalRef.current!.style.pointerEvents = "auto"}}
           >
