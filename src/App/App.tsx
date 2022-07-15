@@ -113,13 +113,13 @@ export const App = () => {
   }
 
   async function saveIntervals() {
-    if (!currentUser) {
-      setIsLoginModalOpen(true);
-    } else {
+    try {
       setIsLoading(true);
       await postIntervals(myIntervals, eventId);
       await goToResults();
       setIsLoading(false);
+    } catch (e) {
+      setIsLoginModalOpen(true);
     }
   }
 
