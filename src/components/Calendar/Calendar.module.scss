@@ -77,7 +77,7 @@
     .today::before {
       content: '';
       position: absolute;
-      inset: -4px -9px -2px;
+      inset: -4px -5px -2px -4px;
       background-color: var(--primary);
       z-index: -1;
       border-radius: 1000px;

@@ -1,0 +1,19 @@
+.participantsModalContent {
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: normal;
+  .user {
+    color: black;
+    width: 90%;
+    padding: 10px;
+    border-radius: var(--radius);
+    list-style: none;
+    transition: 0.5s;
+    margin: 0;
+    text-align: start;
+    span {
+      display: inline-block;
+      width: max-content;
+    }
+  }
+}
