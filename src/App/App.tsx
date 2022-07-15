@@ -10,13 +10,14 @@ import {
   getResult,
   getDateOfMonday,
   postLogin,
+  convertUsersToParticipants,
+  getParticipants,
 } from '../api';
 import s from '../styles/App.module.scss';
 import { MS_IN_DAY } from '../consts';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
 import { useInput } from '../customHooks';
 import { Participant, User } from '../types';
-import { ParticipantsModal } from './ParticipantsModal/ParticipantsModal';
 import { Buttons } from './Buttons/Buttons';
 
 export const App = () => {
@@ -30,7 +31,6 @@ export const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [eventId, setEventId] = useState('');
-  const [isParticipantsModalOpen, setIsParticipantsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const name = useInput('');
   const titleInput = useInput('');
@@ -78,15 +78,15 @@ export const App = () => {
 
   async function setResults(eventId: string) {
     setIsLoading(true);
-    const { intervals, participants, event } = await getResult(eventId);
-    setResultsIntervals(convertIntervalToFrontend(intervals) as any);
-    setParticipants(
-      participants.map((participant: User) => ({
-        ...participant,
-        isAdmin: participant.id === event.owner.id,
-        isCurrentUser: participant.id === currentUser?.id,
-      })),
-    );
+    const participants = await getParticipants(eventId);
+    const { intervals, event } = await getResult(eventId);
+    const convertUsersToParticipantsCarried = (users: User[]) =>
+      convertUsersToParticipants(currentUser!, event.owner, users);
+    intervals.forEach((interval) => {
+      interval.owners = convertUsersToParticipantsCarried(interval.owners!);
+    });
+    setResultsIntervals(convertIntervalToFrontend(intervals));
+    setParticipants(convertUsersToParticipantsCarried(participants));
     setIsLoading(false);
   }
 
@@ -101,7 +101,6 @@ export const App = () => {
       const eventIdCreated = event!.split('/')[event!.split('/').length - 1];
       setEventId(eventIdCreated);
       await postIntervals(adminIntervals, eventIdCreated);
-      await setResultsIntervals(adminIntervals);
       setIsResults(true);
       await setResults(eventIdCreated);
       console.log({ eventIdCreated }, 'createEvent');
@@ -169,10 +168,10 @@ export const App = () => {
     titleInput,
     adminIntervals,
     myIntervals,
-    showParticipantsModal: () => setIsParticipantsModalOpen(true),
     loginAndSaveIntervals,
     isLoading,
     setResults,
+    participants,
   };
   return (
     <div className={s.window}>
@@ -183,18 +182,12 @@ export const App = () => {
         ) : (
           <input {...titleInput.bind} placeholder="Название события" className={s.eventNameInput} />
         )}
-        <div>
+        <div style={{ display: 'flex', gap: 10 }}>
           <Buttons {...propsForButtons} />
         </div>
       </div>
 
       <Calendar {...propsForCalendar} />
-
-      <ParticipantsModal
-        isParticipantsModalOpen={isParticipantsModalOpen}
-        setIsParticipantsModalOpen={setIsParticipantsModalOpen}
-        participants={participants}
-      />
     </div>
   );
 };

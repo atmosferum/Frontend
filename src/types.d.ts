@@ -11,6 +11,7 @@ export interface Interval {
   end: Date;
   id: number;
   owner?: User;
+  owners?: Participant[];
 }
 export interface DraggingElement {
   current: {
@@ -23,6 +24,8 @@ export interface BackendInterval {
   id: number;
   startTime: number;
   endTime: number;
+  owner?: User;
+  owners?: Participant[];
 }
 export interface Event {
   id: string;
@@ -34,5 +37,4 @@ export interface Event {
 export interface Results {
   event: Event;
   intervals: BackendInterval[];
-  participants: User[];
 }

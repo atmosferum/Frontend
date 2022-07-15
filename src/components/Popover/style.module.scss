@@ -1,12 +1,11 @@
 .popover {
   position: absolute;
   background: rgba(255, 255, 255, 0.8);
-  padding: 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
   z-index: 1000001;
   border: var(--border);
   width: 250px;
-  left: 180px;
   top: 20px;
   backdrop-filter: blur(5px);
   visibility: hidden;

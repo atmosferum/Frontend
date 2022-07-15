@@ -46,14 +46,14 @@ function Calendar(props: Props) {
   }, []);
 
   return (
-    <div className={cx('calendar')}>
+    <div className={s.calendar}>
       {/* daysOfWeek */}
-      <div className={cx('topBar')}>
-        <div className={cx('monthAndYear')}>
+      <div className={s.topBar}>
+        <div className={s.monthAndYear}>
           <div>{months[week[0].getMonth()]}</div>
           <div>{week[0].getFullYear()}</div>
         </div>
-        <div className={cx('daysLine')} ref={daysLineRef}>
+        <div className={cx(s.daysLine)} ref={daysLineRef}>
           {week.map((day, id) => {
             return (
               <div key={id}>
@@ -75,14 +75,14 @@ function Calendar(props: Props) {
         </div>
       </div>
 
-      <div className={cx('timeLine')} ref={timeLineRef}>
+      <div className={s.timeLine} ref={timeLineRef}>
         {/* timeline */}
-        <div className={cx('clockFaces')} ref={clockFacesRef}>
+        <div className={s.clockFaces} ref={clockFacesRef}>
           {Array(24)
             .fill('')
             .map((_, id) => {
               return (
-                <div key={id} className={cx('clockFaceWrapper')}>
+                <div key={id} className={s.clockFaceWrapper}>
                   <p>{getClockFace(id)}</p>
                 </div>
               );

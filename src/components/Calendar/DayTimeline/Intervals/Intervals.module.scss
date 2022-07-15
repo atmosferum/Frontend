@@ -6,7 +6,12 @@
   border-radius: var(--radius);
   color: var(--background);
   transition: ease-in-out 0.1s;
-
+  &--results {
+    &:hover {
+      margin: 0 !important;
+      filter: sepia(5%);
+    }
+  }
   .top {
     position: absolute;
     inset: 0 30px 0 0;

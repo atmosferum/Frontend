@@ -7,6 +7,9 @@ import * as Icon from 'react-feather';
 import { LoginModal } from '../LoginModal/LoginModal';
 import React from 'react';
 import ReloadButton from '../../components/ReloadButton/ReloadButton';
+import { ParticipantsPopover } from '../ParticipantsPopover/ParticipantsPopover';
+import popoverStyles from '../../components/Popover/style.module.scss';
+import { Participant, User } from '../../types';
 
 export function Buttons(props: any) {
   const {
@@ -24,10 +27,10 @@ export function Buttons(props: any) {
     titleInput,
     adminIntervals,
     myIntervals,
-    showParticipantsModal,
     loginAndSaveIntervals,
     isLoading,
     setResults,
+    participants,
   } = props;
   const getHost = () => {
     if (typeof window !== 'undefined') {
@@ -42,9 +45,7 @@ export function Buttons(props: any) {
         {isResults ? (
           <>
             <ReloadButton onClick={() => setResults(eventId)} isLoading={isLoading} />
-            <Button variant="secondary" onClick={showParticipantsModal}>
-              <Icon.Users />
-            </Button>
+            <ParticipantButton participants={participants} />
             <Button onClick={() => setIsLoginModalOpen(true)}>Копировать ссылку</Button>
           </>
         ) : (
@@ -91,33 +92,41 @@ export function Buttons(props: any) {
     return (
       <>
         <ReloadButton onClick={() => setResults(eventId)} isLoading={isLoading} />
-        <Button variant="secondary" onClick={showParticipantsModal}>
-          <Icon.Users />
-        </Button>
+        <ParticipantButton participants={participants} />
         <Button onClick={goToVoting}>К голосованию</Button>
       </>
     );
-  } else {
-    return (
-      <>
-        <div className={s.headerControls}>
-          <Button onClick={goToResults} variant="ghost">
-            Результаты
-          </Button>
-          <Button variant="secondary" onClick={showParticipantsModal}>
-            <Icon.Users />
-          </Button>
-          <Button disabled={!myIntervals.length} onClick={saveIntervals}>
-            Сохранить
-          </Button>
-        </div>
-        <LoginModal
-          close={() => setIsLoginModalOpen(false)}
-          isLoginModalOpen={isLoginModalOpen}
-          name={name}
-          loginAndSaveIntervals={loginAndSaveIntervals}
-        />
-      </>
-    );
   }
+  return (
+    <>
+      <div className={s.headerControls}>
+        <Button onClick={goToResults} variant="ghost">
+          Результаты
+        </Button>
+        <ParticipantButton participants={participants} />
+        <Button disabled={!myIntervals.length} onClick={saveIntervals}>
+          Сохранить
+        </Button>
+      </div>
+      <LoginModal
+        close={() => setIsLoginModalOpen(false)}
+        isLoginModalOpen={isLoginModalOpen}
+        name={name}
+        loginAndSaveIntervals={loginAndSaveIntervals}
+      />
+    </>
+  );
+}
+
+function ParticipantButton(props: { participants: Participant[] }) {
+  return (
+    <Button
+      variant="secondary"
+      style={{ position: 'relative', zIndex: 1000, cursor: 'initial' }}
+      className={popoverStyles.trigger}
+    >
+      <Icon.Users />
+      <ParticipantsPopover participants={props.participants} position="right" y={40} />
+    </Button>
+  );
 }

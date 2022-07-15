@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import s from './style.module.scss';
 
-interface PopoverProps {
+export interface PopoverProps {
   children?: ReactNode;
   y?: number;
   maxHeight?: number;
@@ -11,9 +11,9 @@ interface PopoverProps {
 export function Popover(props: PopoverProps) {
   const { children, y, maxHeight, position = 'middle' } = props;
   const positions = {
-    right: '102%',
+    right: '30%',
     left: '-102%',
-    middle: '0',
+    middle: '-50px',
   };
   return (
     <div
@@ -21,7 +21,7 @@ export function Popover(props: PopoverProps) {
       style={{
         top: y,
         position: 'absolute',
-        transform: `translate(${positions[position]}, -64px)`,
+        transform: `translate(${positions[position]}, 0)`,
         maxHeight,
       }}
     >

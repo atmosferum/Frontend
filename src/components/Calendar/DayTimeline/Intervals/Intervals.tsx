@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DraggingElement, Interval } from '../../../../types';
+import { DraggingElement, Interval, Participant } from '../../../../types';
 import { getClockFace, isEqualDays } from '../../utils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
 import s from './Intervals.module.scss';
@@ -8,6 +8,7 @@ import { months } from '../../consts';
 import { Cross } from './cross';
 import { Popover } from '../../../Popover/Popover';
 import popoverStyle from '../../../Popover/style.module.scss';
+import { ParticipantsPopover } from '../../../../App/ParticipantsPopover/ParticipantsPopover';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -43,7 +44,7 @@ const Intervals = (props: Props) => {
   }
   return (
     <div ref={intervalsRef}>
-      {intervals.map(({ start, end, id }) => {
+      {intervals.map(({ start, end, id, owners }) => {
         const isStartToday = isEqualDays(start, day);
         const isEndToday = isEqualDays(end, day);
         const hoursOfStart = start.getHours() + start.getMinutes() / 60;
@@ -76,18 +77,13 @@ const Intervals = (props: Props) => {
             onMouseEnter={mouseEnterHandler}
             key={id}
             style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
-            className={`${s.interval} ${popoverStyle.trigger}`}
+            className={`${cx('interval', isResults && '--results')} ${popoverStyle.trigger}`}
             // onMouseUp={()=>{intervalRef.current!.style.pointerEvents = "auto"}}
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
-            {isResults && (
-              <Popover y={y}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci aliquam
-                aspernatur aut debitis deserunt dignissimos distinctio, dolores ex exercitationem
-                laudantium libero molestias nemo nobis pariatur repellendus, totam veritatis
-                voluptates?
-              </Popover>
+            {isResults && owners && (
+              <ParticipantsPopover position={'middle'} y={y} participants={owners!} />
             )}
             {draggable && (
               <>

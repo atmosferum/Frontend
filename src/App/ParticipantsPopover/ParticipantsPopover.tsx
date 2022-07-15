@@ -1,17 +1,17 @@
-import { Dialog } from '../../components/Dialog';
-import s from '../../styles/App.module.scss';
-import { Participant } from '../../types';
+import s from './ParticipantsPopover.module.scss';
+import { Participant, User } from '../../types';
 import React from 'react';
+import { Popover, PopoverProps } from '../../components/Popover/Popover';
 
-export function ParticipantsModal(props: any) {
-  const { participants, isParticipantsModalOpen, setIsParticipantsModalOpen } = props;
+interface Props extends PopoverProps {
+  participants: Participant[];
+}
+
+export function ParticipantsPopover(props: Props) {
+  const { participants, ...popoverProps } = props;
 
   return (
-    <Dialog
-      title="Участники"
-      open={isParticipantsModalOpen}
-      close={() => setIsParticipantsModalOpen(false)}
-    >
+    <Popover {...popoverProps}>
       <div className={s.participantsModalContent}>
         {participants.map((participant: Participant) => (
           <p className={s.user} key={participant.id}>
@@ -23,6 +23,6 @@ export function ParticipantsModal(props: any) {
           </p>
         ))}
       </div>
-    </Dialog>
+    </Popover>
   );
 }
