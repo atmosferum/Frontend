@@ -23,7 +23,8 @@ interface Props {
 
 function Calendar(props: Props) {
   const { draggingElement, ...propsForDayTimeline } = props;
-  const week = getWeek(getDateOfMonday(propsForDayTimeline.focusDate ?? new Date()));
+  const { isAdmin, isResults, focusDate } = propsForDayTimeline;
+  const week = getWeek(getDateOfMonday(focusDate ?? new Date()));
   const daysLineRef = useRef<HTMLInputElement | null>(null);
   const timeLineRef = useRef<HTMLInputElement | null>(null);
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
@@ -46,9 +47,10 @@ function Calendar(props: Props) {
     };
   }, []);
   useEffect(() => {
-    timeLineRef.current!.scrollTop =
-      propsForDayTimeline.focusDate.getHours() * HEIGHT_OF_CELL * 2 - 30;
-  }, [propsForDayTimeline.focusDate]);
+    const isWeakSlider = isAdmin && !isResults;
+    if (isWeakSlider) return;
+    timeLineRef.current!.scrollTop = focusDate.getHours() * HEIGHT_OF_CELL * 2 - 30;
+  }, [focusDate]);
   return (
     <div className={s.calendar}>
       {/* daysOfWeek */}
