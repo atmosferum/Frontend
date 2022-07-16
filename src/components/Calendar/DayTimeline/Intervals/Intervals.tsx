@@ -21,10 +21,12 @@ interface Props {
   deleteInterval?: any;
   isResults?: boolean;
   touchMoveHandler: (e: any) => void;
+  focusDate?: Date;
 }
 
 const Intervals = (props: Props) => {
   const {
+    focusDate,
     intervals,
     color,
     margin,
@@ -44,23 +46,14 @@ const Intervals = (props: Props) => {
   }
   return (
     <div ref={intervalsRef}>
-      {intervals.map(({ start, end, id, owners }) => {
+      {intervals.map(({ start, end, id, owners }, i) => {
         const isStartToday = isEqualDays(start, day);
         const isEndToday = isEqualDays(end, day);
         const hoursOfStart = start.getHours() + start.getMinutes() / 60;
         const hoursOfEnd = end.getHours() + end.getMinutes() / 60;
         const drawFrom = isStartToday ? hoursOfStart : 0;
         const drawTo = isEndToday ? hoursOfEnd : 24;
-        const clockFace = isEqualDays(start, end) ? (
-          <p>{`${getClockFace(hoursOfStart)} — ${getClockFace(hoursOfEnd)}`}</p>
-        ) : (
-          <>
-            <p>{`${months[start.getMonth()]} ${start.getDate()} ${getClockFace(
-              hoursOfStart,
-            )} — `}</p>
-            <p>{`${months[end.getMonth()]} ${end.getDate()} ${getClockFace(hoursOfEnd)}`}</p>
-          </>
-        );
+        const clockFace = <p>{`${getClockFace(hoursOfStart)} — ${getClockFace(hoursOfEnd)}`}</p>;
 
         const style = {
           top: drawFrom * HEIGHT_OF_CELL * 2,
@@ -75,10 +68,13 @@ const Intervals = (props: Props) => {
         return (
           <div
             onMouseEnter={mouseEnterHandler}
-            key={id}
+            key={+start}
             style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
-            className={`${cx('interval', isResults && '--results')} ${popoverStyle.trigger}`}
-            // onMouseUp={()=>{intervalRef.current!.style.pointerEvents = "auto"}}
+            className={`${cx(
+              'interval',
+              isResults && '--results',
+              start === focusDate && '--focus',
+            )} ${popoverStyle.trigger} ${start === focusDate && popoverStyle.hover}`}
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}

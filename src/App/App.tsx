@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { startTransition, useEffect, useRef, useState } from 'react';
 import { Calendar, Interval } from '../components/Calendar';
 import {
   convertIntervalToFrontend,
@@ -19,12 +19,14 @@ import { WeekSlider } from '../components/WeekSlider/WeekSlider';
 import { useInput } from '../customHooks';
 import { Participant, User } from '../types';
 import { Buttons } from './Buttons/Buttons';
+import { Button } from '../components/Button';
 
 export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
   const [myIntervals, setMyIntervals] = useState<Interval[]>([]);
   const [resultsIntervals, setResultsIntervals] = useState<Interval[]>([]);
-  const [dateOfMonday, setDateOfMonday] = useState(getDateOfMonday(new Date()));
+  const [focusDate, setFocusDate] = useState<Date>(new Date());
+
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [isResults, setIsResults] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -68,12 +70,19 @@ export const App = () => {
     setMyIntervals(allIntervals.filter((interval) => interval.owner!.id === user?.id));
   }
 
+  function nextInterval() {
+    const intervals = isResults ? resultsIntervals : adminIntervals;
+    const idOfFocusInterval = intervals.indexOf(intervals.find((i) => +i.start === +focusDate!)!);
+    setFocusDate((intervals[idOfFocusInterval + 1] ?? intervals[0]).start);
+    console.log(intervals[idOfFocusInterval + 1] ?? intervals[0], idOfFocusInterval);
+  }
+
   function previousWeek() {
-    setDateOfMonday(new Date(dateOfMonday.getTime() - MS_IN_DAY * 7));
+    setFocusDate(new Date(+focusDate - MS_IN_DAY * 7));
   }
 
   function nextWeek() {
-    setDateOfMonday(new Date(dateOfMonday.getTime() + MS_IN_DAY * 7));
+    setFocusDate(new Date(+focusDate + MS_IN_DAY * 7));
   }
 
   async function setResults(eventId: string) {
@@ -148,10 +157,10 @@ export const App = () => {
     adminIntervals,
     myIntervals,
     draggingElement,
-    dateOfMonday,
     setIntervals: isAdmin ? setAdminIntervals : setMyIntervals,
     isAdmin,
     isResults,
+    focusDate,
   };
   const propsForButtons = {
     login,
@@ -176,7 +185,12 @@ export const App = () => {
   return (
     <div className={s.window}>
       <div className={s.header}>
-        <WeekSlider right={nextWeek} left={previousWeek} date={dateOfMonday} />
+        {isAdmin && !isResults ? (
+          <WeekSlider right={nextWeek} left={previousWeek} date={getDateOfMonday(focusDate)} />
+        ) : (
+          <Button onClick={nextInterval}>next</Button>
+        )}
+
         {!isAdmin ? (
           <h1>{titleInput.value}</h1>
         ) : (

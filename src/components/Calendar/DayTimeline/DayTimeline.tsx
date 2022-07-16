@@ -14,6 +14,7 @@ import { Intervals } from './Intervals';
 import { MS_IN_HOUR } from '../../../consts';
 
 interface Props {
+  focusDate: Date;
   resultsIntervals: Interval[];
   adminIntervals: Interval[];
   myIntervals: Interval[];
@@ -40,6 +41,7 @@ function DayTimeline(props: Props) {
     isAdmin,
     isResults,
     resultsIntervals,
+    focusDate,
   } = props;
 
   const isTodayIncludesInterval = ({ start, end }: Interval) =>
@@ -119,9 +121,6 @@ function DayTimeline(props: Props) {
                 <div
                   data-id={id.toString()}
                   className={s.inset0}
-                  // onTouchStart={() => {
-                  //   mouseCellEnterHandler(cellDate);
-                  // }}
                   onMouseEnter={() => mouseCellEnterHandler(cellDate)}
                   onMouseDown={() => {
                     onCellClickHandler(cellDate);
@@ -134,6 +133,7 @@ function DayTimeline(props: Props) {
 
       {isResults ? (
         <Intervals
+          focusDate={focusDate}
           intervals={resultsIntervalsToday}
           color={'#c39bd3'}
           margin={1}

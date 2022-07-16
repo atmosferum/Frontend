@@ -6,11 +6,17 @@
   border-radius: var(--radius);
   color: var(--background);
   transition: ease-in-out 0.1s;
-  &--results {
+  &.--results {
     &:hover {
       margin: 0 !important;
       filter: sepia(5%);
     }
+  }
+  &.--focus {
+    margin: 0 !important;
+    filter: sepia(5%);
+    box-shadow: rgba(0, 0, 0, 0.44) 0 0 20px;
+    z-index: 10;
   }
   .top {
     position: absolute;

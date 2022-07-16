@@ -5,6 +5,8 @@ import { daysOfWeek, months } from './consts';
 import classNames from 'classnames/bind';
 import { DraggingElement, Interval } from '../../types';
 import { getClockFace, getWeek, isBefore, isToday, isTouchEnabled } from './utils';
+import { getDateOfMonday } from '../../api';
+import { HEIGHT_OF_CELL } from './DayTimeline/DayTimeline';
 
 const cx = classNames.bind(s);
 
@@ -12,7 +14,7 @@ interface Props {
   resultsIntervals: Interval[];
   adminIntervals: Interval[];
   myIntervals: Interval[];
-  dateOfMonday: Date;
+  focusDate: Date;
   draggingElement: DraggingElement;
   setIntervals: SetStateAction<any>;
   isAdmin?: boolean;
@@ -20,8 +22,8 @@ interface Props {
 }
 
 function Calendar(props: Props) {
-  const { dateOfMonday, draggingElement, ...propsForDayTimeline } = props;
-  const week = getWeek(dateOfMonday);
+  const { draggingElement, ...propsForDayTimeline } = props;
+  const week = getWeek(getDateOfMonday(propsForDayTimeline.focusDate ?? new Date()));
   const daysLineRef = useRef<HTMLInputElement | null>(null);
   const timeLineRef = useRef<HTMLInputElement | null>(null);
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
@@ -37,14 +39,16 @@ function Calendar(props: Props) {
     document.body.addEventListener('touchend', () => {
       draggingElement.current = null;
     });
-    timeLineRef.current!.scrollTop = 400; // auto scroll to 8 hour
     timeLineRef.current!.onscroll = function () {
       // sync scroll
       daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft;
       clockFacesRef.current!.style.left = timeLineRef.current!.scrollLeft + 'px';
     };
   }, []);
-
+  useEffect(() => {
+    timeLineRef.current!.scrollTop =
+      propsForDayTimeline.focusDate.getHours() * HEIGHT_OF_CELL * 2 - 30;
+  }, [propsForDayTimeline.focusDate]);
   return (
     <div className={s.calendar}>
       {/* daysOfWeek */}
