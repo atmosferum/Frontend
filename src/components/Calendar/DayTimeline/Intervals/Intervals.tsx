@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
-import { getClockFace, isEqualDays } from '../../utils';
+import { getClockFace, isEqualDays, isTouchEnabled } from '../../utils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
 import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
@@ -78,7 +78,6 @@ const Intervals = (props: Props) => {
             key={id}
             style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
             className={`${cx('interval', isResults && '--results')} ${popoverStyle.trigger}`}
-            // onMouseUp={()=>{intervalRef.current!.style.pointerEvents = "auto"}}
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
@@ -101,7 +100,7 @@ const Intervals = (props: Props) => {
                   onTouchMove={touchMoveHandler}
                 />
                 <div
-                  // draggable
+                  // style={{backgroundColor:isTouchEnabled()?'#000000':"transparent"}}
                   className={cx('bottom')}
                   onMouseDown={(e) => {
                     e.preventDefault();
