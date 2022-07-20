@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: ['main']
 
-env:
-  DOCKER_USERNAME: fedorresh
-  DOCKER_PASSWORD: whattime
 
 jobs:
   push_to_registries:
