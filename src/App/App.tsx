@@ -1,4 +1,4 @@
-import React, { startTransition, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, Interval } from '../components/Calendar';
 import {
   convertIntervalToFrontend,
@@ -12,6 +12,7 @@ import {
   postLogin,
   convertUsersToParticipants,
   getParticipants,
+  getNextDateOfMonday,
 } from '../api';
 import s from '../styles/App.module.scss';
 import { MS_IN_DAY } from '../consts';
@@ -20,6 +21,7 @@ import { useInput } from '../customHooks';
 import { Participant, User } from '../types';
 import { Buttons } from './Buttons/Buttons';
 import { Button } from '../components/Button';
+import { isBefore, isPhone } from '../components/Calendar/utils';
 
 export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -38,7 +40,7 @@ export const App = () => {
   const titleInput = useInput('');
   const draggingElement = useRef(null);
   const queryEventId = location.pathname.substring(1);
-
+  const currentIntervals = isResults ? resultsIntervals : adminIntervals;
   useEffect(() => {
     initState();
   }, []);
@@ -53,15 +55,20 @@ export const App = () => {
     console.log({ user, title, owner });
     titleInput.setValue(title);
     setCurrentUser(user ?? null);
+    const isAdminVar = owner.id === user?.id;
     await setResults(queryEventId);
     await setIntervals(owner, user);
-    if (owner.id === user?.id) {
-      console.log('admin');
+    if (isAdminVar) {
       setIsAdmin(true);
-      setIsResults(true);
+      await goToResults();
     }
   }
-
+  useEffect(() => {
+    const date = currentIntervals[0]?.start;
+    if (date && isResults) {
+      setFocusDate(date);
+    }
+  }, [adminIntervals, resultsIntervals]);
   async function setIntervals(ownerOfEvent: User, user: User | void) {
     const eventIntervals = await getAllIntervals(queryEventId);
     const allIntervals = convertIntervalToFrontend(eventIntervals);
@@ -71,7 +78,7 @@ export const App = () => {
   }
 
   function nextInterval() {
-    const intervals = isResults ? resultsIntervals : adminIntervals;
+    const intervals = currentIntervals;
     const idOfFocusInterval = intervals.indexOf(intervals.find((i) => +i.start === +focusDate!)!);
     setFocusDate((intervals[idOfFocusInterval + 1] ?? intervals[0]).start);
     console.log(intervals[idOfFocusInterval + 1] ?? intervals[0], idOfFocusInterval);
@@ -133,12 +140,13 @@ export const App = () => {
   }
 
   async function goToResults() {
-    setResults(eventId);
     setIsResults(true);
+    await setResults(eventId);
   }
 
   async function goToVoting() {
     setIsResults(false);
+    setFocusDate(adminIntervals[0].start);
   }
   async function login(name: string) {
     await postLogin({ name });
@@ -185,8 +193,23 @@ export const App = () => {
   return (
     <div className={s.window}>
       <div className={s.header}>
-        {isAdmin && !isResults ? (
-          <WeekSlider right={nextWeek} left={previousWeek} date={getDateOfMonday(focusDate)} />
+        {(isAdmin && !isResults) || !isPhone() ? (
+          <WeekSlider
+            right={nextWeek}
+            left={previousWeek}
+            highlightLeft={
+              !!currentIntervals.length &&
+              isBefore(currentIntervals[0]?.start, getDateOfMonday(focusDate))
+            }
+            highlightRight={
+              !!currentIntervals.length &&
+              !isBefore(
+                currentIntervals[currentIntervals.length - 1]?.end,
+                getNextDateOfMonday(focusDate),
+              )
+            }
+            date={getDateOfMonday(focusDate)}
+          />
         ) : (
           <Button onClick={nextInterval}>next</Button>
         )}
