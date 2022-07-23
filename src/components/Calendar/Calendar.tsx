@@ -49,6 +49,7 @@ function Calendar(props: Props) {
     if (isWeakSlider) return;
     timeLineRef.current!.scrollTop = focusDate.getHours() * HEIGHT_OF_CELL * 2 - 30;
   }, [focusDate]);
+  const dates = isPhone() ? [focusDate] : week;
   return (
     <div className={s.calendar}>
       {/* daysOfWeek */}
@@ -58,7 +59,7 @@ function Calendar(props: Props) {
           <div>{week[0].getFullYear()}</div>
         </div>
         <div className={cx(s.daysLine)} ref={daysLineRef}>
-          {week.map((day, id) => {
+          {dates.map((day, id) => {
             return (
               <div key={id}>
                 <div>
@@ -93,7 +94,7 @@ function Calendar(props: Props) {
             })}
         </div>
         {/* columns of cells */}
-        {week.map((day, id) => {
+        {dates.map((day, id) => {
           return (
             <DayTimeline
               {...propsForDayTimeline}
