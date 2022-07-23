@@ -35,13 +35,16 @@
   box-shadow: none;
   display: flex;
   align-items: center;
-  &.slider--left {
+  &.--left {
     border-radius: var(--radius) 0 0 var(--radius);
     cursor: pointer;
   }
 
-  &.slider--right {
+  &.--right {
     cursor: pointer;
     border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  &.--highlight {
+    background-color: var(--primary);
   }
 }
