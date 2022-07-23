@@ -68,7 +68,7 @@ const Intervals = (props: Props) => {
         return (
           <div
             onMouseEnter={mouseEnterHandler}
-            key={+start}
+            key={id}
             style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
             className={`${cx(
               'interval',

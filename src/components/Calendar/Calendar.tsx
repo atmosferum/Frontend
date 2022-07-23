@@ -4,7 +4,7 @@ import { DayTimeline, HOURS_IN_CELL } from './DayTimeline';
 import { daysOfWeek, months } from './consts';
 import classNames from 'classnames/bind';
 import { DraggingElement, Interval } from '../../types';
-import { getClockFace, getWeek, isBefore, isToday, isTouchEnabled } from './utils';
+import { getClockFace, getWeek, isBefore, isToday, isPhone } from './utils';
 import { getDateOfMonday } from '../../api';
 import { HEIGHT_OF_CELL } from './DayTimeline/DayTimeline';
 
@@ -30,9 +30,7 @@ function Calendar(props: Props) {
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     document.body.addEventListener('mouseup', () => {
-      if (!isTouchEnabled()) {
-        console.log(!isTouchEnabled());
-        console.log('clear draggingElement');
+      if (!isPhone()) {
         draggingElement.current = null;
         document.body.style.cursor = 'auto';
       }
@@ -47,7 +45,7 @@ function Calendar(props: Props) {
     };
   }, []);
   useEffect(() => {
-    const isWeakSlider = isAdmin && !isResults;
+    const isWeakSlider = (isAdmin && !isResults) || !isPhone();
     if (isWeakSlider) return;
     timeLineRef.current!.scrollTop = focusDate.getHours() * HEIGHT_OF_CELL * 2 - 30;
   }, [focusDate]);
