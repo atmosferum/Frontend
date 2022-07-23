@@ -9,19 +9,22 @@ const cx = classNames.bind(s);
 interface WeekSliderProps {
   left: () => void;
   right: () => void;
+  highlightRight: boolean;
+  highlightLeft: boolean;
   date: Date;
 }
 
 export function WeekSlider(props: WeekSliderProps) {
+  const { highlightRight, highlightLeft, right, left, date } = props;
   return (
     <div className={cx('week-slider')}>
-      <button onClick={props.left} className={cx('slider', 'slider--left')}>
+      <button onClick={left} className={cx('slider', '--left', highlightLeft && '--highlight')}>
         <ChevronLeft size="1rem" />
       </button>
       <div className={cx('date-div')}>
-        <span className={cx('date-span')}>{getWeekInterval(props.date)}</span>
+        <span className={cx('date-span')}>{getWeekInterval(date)}</span>
       </div>
-      <button onClick={props.right} className={cx('slider', 'slider--right')}>
+      <button onClick={right} className={cx('slider', '--right', highlightRight && '--highlight')}>
         <ChevronRight size="1rem" />
       </button>
     </div>

@@ -38,10 +38,4 @@ const Template: ComponentStory<typeof Calendar> = (args) => {
 };
 export const Primary = Template.bind({});
 const now = getDateOfMonday(new Date());
-Primary.args = {
-  dateOfMonday: now,
-  adminIntervals: [],
-  myIntervals: [],
-  resultsIntervals: [],
-  isAdmin: true,
-};
+Primary.args = {};

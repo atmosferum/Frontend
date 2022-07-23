@@ -5,7 +5,9 @@ import { BackendInterval, Interval, Results, Event, User, Participant } from './
 export function getDateOfMonday(date: Date): Date {
   return new Date(date.getTime() - MS_IN_DAY * (date.getDay() ? date.getDay() - 1 : 6));
 }
-
+export function getNextDateOfMonday(date: Date): Date {
+  return getDateOfMonday(new Date(+date + MS_IN_DAY * 7));
+}
 const API_PATH = '/api/v1';
 
 export function convertUsersToParticipants(

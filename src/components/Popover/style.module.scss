@@ -14,7 +14,8 @@
   user-select: none;
 }
 
-.trigger:hover .popover {
+.trigger:hover .popover,
+.hover .popover {
   visibility: visible;
   opacity: 1;
 }
