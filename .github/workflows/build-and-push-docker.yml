@@ -2,7 +2,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['main']
+    branches: ['main','18-button-next-interval']
 
 env:
   DOCKER_USERNAME: fedorresh
