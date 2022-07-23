@@ -4,9 +4,6 @@ on:
   push:
     branches: ['main','18-button-next-interval']
 
-env:
-  DOCKER_USERNAME: fedorresh
-  DOCKER_PASSWORD: whattime
 
 jobs:
   push_to_registries:

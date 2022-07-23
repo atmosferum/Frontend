@@ -50,8 +50,10 @@ export function Buttons(props: any) {
           </>
         ) : (
           <>
-            <ReloadButton isLoading={isLoading} />
-            <Button disabled={!titleInput.value || !adminIntervals.length} onClick={createEvent}>
+            <Button
+              disabled={isLoading || !titleInput.value || !adminIntervals.length}
+              onClick={createEvent}
+            >
               Создать событие
             </Button>
           </>

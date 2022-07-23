@@ -52,9 +52,11 @@ function DayTimeline(props: Props) {
   const adminIntervalsToday = adminIntervals.filter(isTodayIncludesInterval);
   const resultsIntervalsToday = resultsIntervals.filter(isTodayIncludesInterval);
   const changeableIntervals = isAdmin ? adminIntervals : myIntervals;
+
   function deleteInterval(id: number) {
     setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
   }
+
   const touchMoveHandler = (e: any) => {
     const cellElem = document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY);
     const id = parseInt(cellElem!.getAttribute('data-id')!);
@@ -63,6 +65,7 @@ function DayTimeline(props: Props) {
     const cellDate = getCellDate(id, day);
     mouseCellEnterHandler(cellDate);
   };
+
   const mouseCellEnterHandler = (cellDate: Date) => {
     if (!draggingElement.current || isResults) return;
     const { id, part } = draggingElement.current;
@@ -99,7 +102,8 @@ function DayTimeline(props: Props) {
       isResults ||
       isNextToOrInIntervals(changeableIntervals, cellDate) ||
       isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_CELL)) ||
-      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, cellDate))
+      (!isAdmin && !isInIntervals(adminIntervals, cellDate)) ||
+      (!isAdmin && !isInIntervals(adminIntervals, new Date(+cellDate + MS_IN_CELL)))
     )
       return;
     document.body.style.cursor = 'row-resize';
