@@ -13,20 +13,18 @@ export function getWeek(monday: Date): Date[] {
     });
 }
 
-export function isToday(day: Date) {
-  return new Date().toString().substring(0, 15) === day.toString().substring(0, 15);
-}
-
 export function isEqualDays(startOrEnd: Date, day: Date) {
   return startOrEnd.toString().substring(0, 15) === day.toString().substring(0, 15);
 }
 
-export function isBefore(startOrEnd: Date, day: Date) {
-  return (
-    day.getFullYear() > startOrEnd.getFullYear() ||
-    day.getMonth() > startOrEnd.getMonth() ||
-    day.getDate() > startOrEnd.getDate()
-  );
+export function isToday(day: Date) {
+  return isEqualDays(new Date(), day);
+}
+
+export function isBefore(first: Date, second: Date) {
+  const firstCopy = new Date(first);
+  const secondCopy = new Date(second);
+  return firstCopy.setHours(0, 0, 0, 0) < secondCopy.setHours(0, 0, 0, 0);
 }
 
 export function isInIntervals(intervals: Interval[], date: Date) {
@@ -65,7 +63,7 @@ export class IntervalClass {
   }
 }
 
-export function isTouchEnabled() {
+export function isPhone() {
   return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
     window.navigator.userAgent.toLowerCase(),
   );
