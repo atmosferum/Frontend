@@ -63,18 +63,16 @@ export const App = () => {
       await goToResults();
     }
   }
-  useEffect(() => {
-    const date = currentIntervals[0]?.start;
-    if (date && isResults) {
-      setFocusDate(date);
-    }
-  }, [adminIntervals, resultsIntervals]);
   async function setIntervals(ownerOfEvent: User, user: User | void) {
     const eventIntervals = await getAllIntervals(queryEventId);
     const allIntervals = convertIntervalToFrontend(eventIntervals);
-    console.log({ allIntervals, ownerOfEvent });
-    setAdminIntervals(allIntervals.filter((interval) => interval.owner!.id === ownerOfEvent.id));
-    setMyIntervals(allIntervals.filter((interval) => interval.owner!.id === user?.id));
+    const adminIntervals = allIntervals.filter(
+      (interval) => interval.owner!.id === ownerOfEvent.id,
+    );
+    const myIntervals = allIntervals.filter((interval) => interval.owner!.id === user?.id);
+    setAdminIntervals(adminIntervals);
+    setMyIntervals(myIntervals);
+    setFocusDate(adminIntervals[0].start);
   }
 
   function nextInterval() {
@@ -104,6 +102,7 @@ export const App = () => {
     setResultsIntervals(convertIntervalToFrontend(intervals));
     setParticipants(convertUsersToParticipantsCarried(participants));
     setIsLoading(false);
+    return convertIntervalToFrontend(intervals);
   }
 
   async function createEvent() {
@@ -141,7 +140,8 @@ export const App = () => {
 
   async function goToResults() {
     setIsResults(true);
-    await setResults(eventId);
+    const resultIntervals = await setResults(eventId);
+    setFocusDate(resultIntervals[0].start);
   }
 
   async function goToVoting() {
