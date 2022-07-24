@@ -1,5 +1,4 @@
-import { months } from '../Calendar/consts';
-import { MS_IN_DAY } from '../../consts';
+import { months, MS_IN_DAY } from '../../consts';
 
 export function getWeekInterval(date: Date): string {
   const nextMonday = new Date(date.getTime() + MS_IN_DAY * 7);

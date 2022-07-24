@@ -8,8 +8,9 @@ import { LoginModal } from '../LoginModal/LoginModal';
 import React from 'react';
 import ReloadButton from '../../components/ReloadButton/ReloadButton';
 import { ParticipantsPopover } from '../ParticipantsPopover/ParticipantsPopover';
-import popoverStyles from '../../components/Popover/style.module.scss';
+import popoverStyles from '../../components/Popover/Popover.module.scss';
 import { Participant, User } from '../../types';
+import { isPhone } from '../../utils';
 
 export function Buttons(props: any) {
   const {
@@ -53,6 +54,7 @@ export function Buttons(props: any) {
             <Button
               disabled={isLoading || !titleInput.value || !adminIntervals.length}
               onClick={createEvent}
+              isStretch={isPhone()}
             >
               Создать событие
             </Button>

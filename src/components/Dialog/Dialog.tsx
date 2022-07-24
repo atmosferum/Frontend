@@ -7,7 +7,7 @@ import {
   Close,
   DialogProps as RadixDialogProps,
 } from '@radix-ui/react-dialog';
-import styles from './style.module.scss';
+import styles from './Dialog.module.scss';
 import cn from 'classnames/bind';
 import React, { ReactNode } from 'react';
 import { X } from 'react-feather';

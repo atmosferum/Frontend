@@ -9,18 +9,17 @@
   box-sizing: border-box;
   justify-content: center;
   background-color: var(--gray-light);
-  border-radius: var(--radius);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
 }
 
 .date-div {
   width: 100%;
-  border-top: 1px solid var(--gray-dark);
-  border-bottom: 1px solid var(--gray-dark);
   color: var(--gray-dark);
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 0 0.25rem;
   box-sizing: border-box;
 }
@@ -32,7 +31,6 @@
 
 .slider {
   color: var(--gray-dark);
-  border: 1px solid var(--gray-dark);
   height: 100%;
   background: none;
   padding: 0 0.5rem;
@@ -41,14 +39,14 @@
   display: flex;
   align-items: center;
   &.--left {
-    border-radius: var(--radius) 0 0 var(--radius);
-    border-right: none;
+    border-radius: var(--radius) 0 0 0;
+    border: none;
     cursor: pointer;
   }
 
   &.--right {
-    border-radius: 0 var(--radius) var(--radius) 0;
-    border-left: none;
+    border-radius: 0 var(--radius) 0 0;
+    border: none;
     cursor: pointer;
   }
   &.--highlight {

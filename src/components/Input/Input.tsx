@@ -1,5 +1,5 @@
 import React, { InputHTMLAttributes } from 'react';
-import styles from './style.module.scss';
+import styles from './Input.module.scss';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);

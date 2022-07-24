@@ -10,13 +10,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-
-  > * {
-    margin: 10px auto 10px 0;
+  justify-content: stretch;
+  width: 100%;
+  .daySlider {
+    order: 5;
+    margin-bottom: -10px;
   }
-
-  input {
+  > * {
+    margin: 10px 0 10px 0;
+  }
+  input,
+  h1 {
     order: -1;
     margin: 0;
   }

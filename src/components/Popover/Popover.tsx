@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import s from './style.module.scss';
+import s from './Popover.module.scss';
 
 export interface PopoverProps {
   children?: ReactNode;

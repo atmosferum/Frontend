@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './style.module.scss';
+import s from './WeakSlider.module.scss';
 import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import { getWeekInterval } from './utils';
