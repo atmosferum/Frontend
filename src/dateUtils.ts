@@ -1,6 +1,14 @@
-import { MS_IN_HOUR } from '../../consts';
-import { Interval } from '../../types';
-import { HOURS_IN_CELL } from './DayTimeline';
+import { MS_IN_DAY, MS_IN_HOUR } from './consts';
+import { Interval } from './types';
+import { HOURS_IN_CELL } from './components/Calendar/DayTimeline';
+import { isPhone } from './utils';
+
+export function getDateOfMonday(date: Date): Date {
+  return new Date(date.getTime() - MS_IN_DAY * (date.getDay() ? date.getDay() - 1 : 6));
+}
+export function getNextDateOfMonday(date: Date): Date {
+  return getDateOfMonday(new Date(+date + MS_IN_DAY * 7));
+}
 
 export const getCellDate = (id: number, day: Date) =>
   new Date(day.getFullYear(), day.getMonth(), day.getDate(), Math.floor(id / 2), (id % 2) * 30);
@@ -46,25 +54,16 @@ export function isThereIntersections(intervals: Interval[], newInterval: Interva
     );
   });
 }
+export const isIntervalsBefore = (currentIntervals: Interval[], focusDate: Date) =>
+  !!currentIntervals.length &&
+  isBefore(currentIntervals[0]?.start, isPhone() ? focusDate : getDateOfMonday(focusDate));
+
+export const isIntervalsAfter = (currentIntervals: Interval[], focusDate: Date) =>
+  !!currentIntervals.length &&
+  !isBefore(
+    currentIntervals[currentIntervals.length - 1]?.end,
+    isPhone() ? new Date(+focusDate + MS_IN_DAY) : getNextDateOfMonday(focusDate),
+  );
 
 export const getClockFace = (hours: number) =>
   `${Math.floor(hours)}:${Math.round((hours % 1) * 60)}${hours % 1 ? '' : '0'}`;
-
-export class IntervalClass {
-  start: Date;
-  end: Date;
-  id: number;
-  static staticId: number = 0;
-
-  constructor(start: Date, end: Date) {
-    this.start = start;
-    this.end = end;
-    this.id = IntervalClass.staticId++;
-  }
-}
-
-export function isPhone() {
-  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-    window.navigator.userAgent.toLowerCase(),
-  );
-}

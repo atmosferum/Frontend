@@ -1,12 +1,12 @@
 import React, { SetStateAction, useEffect, useRef } from 'react';
 import s from './Calendar.module.scss';
 import { DayTimeline, HOURS_IN_CELL } from './DayTimeline';
-import { daysOfWeek, months } from './consts';
 import classNames from 'classnames/bind';
 import { DraggingElement, Interval } from '../../types';
-import { getClockFace, getWeek, isBefore, isToday, isPhone } from './utils';
-import { getDateOfMonday } from '../../api';
+import { getClockFace, getWeek, isBefore, isToday, getDateOfMonday } from '../../dateUtils';
 import { HEIGHT_OF_CELL } from './DayTimeline/DayTimeline';
+import { isPhone } from '../../utils';
+import { daysOfWeek, months } from '../../consts';
 
 const cx = classNames.bind(s);
 
@@ -49,35 +49,38 @@ function Calendar(props: Props) {
     if (isWeakSlider) return;
     timeLineRef.current!.scrollTop = focusDate.getHours() * HEIGHT_OF_CELL * 2 - 30;
   }, [focusDate]);
+  const dates = isPhone() ? [focusDate] : week;
   return (
     <div className={s.calendar}>
       {/* daysOfWeek */}
-      <div className={s.topBar}>
-        <div className={s.monthAndYear}>
-          <div>{months[week[0].getMonth()]}</div>
-          <div>{week[0].getFullYear()}</div>
-        </div>
-        <div className={cx(s.daysLine)} ref={daysLineRef}>
-          {week.map((day, id) => {
-            return (
-              <div key={id}>
-                <div>
-                  <p
-                    className={cx(
-                      'date',
-                      isToday(day) && 'today',
-                      isBefore(day, new Date()) && 'before',
-                    )}
-                  >
-                    {day.getDate()}
-                  </p>
-                  <p>{daysOfWeek[day.getDay()]}</p>
+      {!isPhone() && (
+        <div className={s.topBar}>
+          <div className={s.monthAndYear}>
+            <div>{months[week[0].getMonth()]}</div>
+            <div>{week[0].getFullYear()}</div>
+          </div>
+          <div className={cx(s.daysLine)} ref={daysLineRef}>
+            {dates.map((day, id) => {
+              return (
+                <div key={id}>
+                  <div>
+                    <p
+                      className={cx(
+                        'date',
+                        isToday(day) && 'today',
+                        isBefore(day, new Date()) && 'before',
+                      )}
+                    >
+                      {day.getDate()}
+                    </p>
+                    <p>{daysOfWeek[day.getDay()]}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className={s.timeLine} ref={timeLineRef}>
         {/* timeline */}
@@ -93,7 +96,7 @@ function Calendar(props: Props) {
             })}
         </div>
         {/* columns of cells */}
-        {week.map((day, id) => {
+        {dates.map((day, id) => {
           return (
             <DayTimeline
               {...propsForDayTimeline}

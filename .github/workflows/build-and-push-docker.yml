@@ -2,7 +2,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['main','18-button-next-interval']
+    branches: ['main']
 
 
 jobs:

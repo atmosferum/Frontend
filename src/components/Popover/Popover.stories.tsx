@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Popover } from './Popover';
-import popoverStyles from './style.module.scss';
+import popoverStyles from './Popover.module.scss';
 export default {
   title: 'RadixPopover',
   component: Popover,

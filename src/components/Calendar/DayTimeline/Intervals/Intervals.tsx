@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
-import { getClockFace, isEqualDays } from '../../utils';
+import { getClockFace, isEqualDays } from '../../../../dateUtils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
 import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
-import { months } from '../../consts';
 import { Cross } from './cross';
 import { Popover } from '../../../Popover/Popover';
-import popoverStyle from '../../../Popover/style.module.scss';
+import popoverStyle from '../../../Popover/Popover.module.scss';
 import { ParticipantsPopover } from '../../../../App/ParticipantsPopover/ParticipantsPopover';
+import { months } from '../../../../consts';
 const cx = classNames.bind(s);
 
 interface Props {

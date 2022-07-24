@@ -68,4 +68,8 @@
       border-color: var(--gray-light);
     }
   }
+  &.--stretch {
+    width: 100% !important;
+    display: block !important;
+  }
 }

@@ -8,11 +8,9 @@ import {
   postIntervals,
   postEvent,
   getResult,
-  getDateOfMonday,
   postLogin,
   convertUsersToParticipants,
   getParticipants,
-  getNextDateOfMonday,
 } from '../api';
 import s from '../styles/App.module.scss';
 import { MS_IN_DAY } from '../consts';
@@ -21,7 +19,9 @@ import { useInput } from '../customHooks';
 import { Participant, User } from '../types';
 import { Buttons } from './Buttons/Buttons';
 import { Button } from '../components/Button';
-import { isBefore, isPhone } from '../components/Calendar/utils';
+import { isPhone } from '../utils';
+import { getDateOfMonday, isIntervalsAfter, isIntervalsBefore } from '../dateUtils';
+import { DaySlider } from '../components/DaySlider/DaySlider';
 
 export const App = () => {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -63,35 +63,33 @@ export const App = () => {
       await goToResults();
     }
   }
-  useEffect(() => {
-    const date = currentIntervals[0]?.start;
-    if (date && isResults) {
-      setFocusDate(date);
-    }
-  }, [adminIntervals, resultsIntervals]);
   async function setIntervals(ownerOfEvent: User, user: User | void) {
     const eventIntervals = await getAllIntervals(queryEventId);
     const allIntervals = convertIntervalToFrontend(eventIntervals);
-    console.log({ allIntervals, ownerOfEvent });
-    setAdminIntervals(allIntervals.filter((interval) => interval.owner!.id === ownerOfEvent.id));
-    setMyIntervals(allIntervals.filter((interval) => interval.owner!.id === user?.id));
+    const adminIntervals = allIntervals.filter(
+      (interval) => interval.owner!.id === ownerOfEvent.id,
+    );
+    const myIntervals = allIntervals.filter((interval) => interval.owner!.id === user?.id);
+    setAdminIntervals(adminIntervals);
+    setMyIntervals(myIntervals);
+    setFocusDate(adminIntervals[0].start);
   }
 
   function nextInterval() {
     const intervals = currentIntervals;
     const idOfFocusInterval = intervals.indexOf(intervals.find((i) => +i.start === +focusDate!)!);
     setFocusDate((intervals[idOfFocusInterval + 1] ?? intervals[0]).start);
-    console.log(intervals[idOfFocusInterval + 1] ?? intervals[0], idOfFocusInterval);
   }
 
-  function previousWeek() {
-    setFocusDate(new Date(+focusDate - MS_IN_DAY * 7));
+  function previousInterval() {
+    const intervals = currentIntervals;
+    const idOfFocusInterval = intervals.indexOf(intervals.find((i) => +i.start === +focusDate!)!);
+    setFocusDate((intervals[idOfFocusInterval - 1] ?? intervals[intervals.length - 1]).start);
   }
 
-  function nextWeek() {
-    setFocusDate(new Date(+focusDate + MS_IN_DAY * 7));
+  function relativelyTodayGoByDays(amountOfDays: number) {
+    setFocusDate(new Date(+focusDate + MS_IN_DAY * amountOfDays));
   }
-
   async function setResults(eventId: string) {
     setIsLoading(true);
     const participants = await getParticipants(eventId);
@@ -104,6 +102,7 @@ export const App = () => {
     setResultsIntervals(convertIntervalToFrontend(intervals));
     setParticipants(convertUsersToParticipantsCarried(participants));
     setIsLoading(false);
+    return convertIntervalToFrontend(intervals);
   }
 
   async function createEvent() {
@@ -141,7 +140,8 @@ export const App = () => {
 
   async function goToResults() {
     setIsResults(true);
-    await setResults(eventId);
+    const resultIntervals = await setResults(eventId);
+    setFocusDate(resultIntervals[0].start);
   }
 
   async function goToVoting() {
@@ -160,6 +160,7 @@ export const App = () => {
     saveIntervals();
     setIsLoginModalOpen(false);
   }
+
   const propsForCalendar = {
     resultsIntervals,
     adminIntervals,
@@ -190,28 +191,27 @@ export const App = () => {
     setResults,
     participants,
   };
+
   return (
     <div className={s.window}>
       <div className={s.header}>
-        {(isAdmin && !isResults) || !isPhone() ? (
-          <WeekSlider
-            right={nextWeek}
-            left={previousWeek}
-            highlightLeft={
-              !!currentIntervals.length &&
-              isBefore(currentIntervals[0]?.start, getDateOfMonday(focusDate))
-            }
-            highlightRight={
-              !!currentIntervals.length &&
-              !isBefore(
-                currentIntervals[currentIntervals.length - 1]?.end,
-                getNextDateOfMonday(focusDate),
-              )
-            }
-            date={getDateOfMonday(focusDate)}
+        {isPhone() ? (
+          <DaySlider
+            className={s.daySlider}
+            right={!isResults && isAdmin ? () => relativelyTodayGoByDays(1) : nextInterval}
+            left={!isResults && isAdmin ? () => relativelyTodayGoByDays(-1) : previousInterval}
+            highlightLeft={isIntervalsBefore(currentIntervals, focusDate)}
+            highlightRight={isIntervalsAfter(currentIntervals, focusDate)}
+            date={focusDate}
           />
         ) : (
-          <Button onClick={nextInterval}>next</Button>
+          <WeekSlider
+            right={() => relativelyTodayGoByDays(7)}
+            left={() => relativelyTodayGoByDays(-7)}
+            highlightLeft={isIntervalsBefore(currentIntervals, focusDate)}
+            highlightRight={isIntervalsAfter(currentIntervals, focusDate)}
+            date={getDateOfMonday(focusDate)}
+          />
         )}
 
         {!isAdmin ? (
@@ -219,7 +219,7 @@ export const App = () => {
         ) : (
           <input {...titleInput.bind} placeholder="Название события" className={s.eventNameInput} />
         )}
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, width: '100%', justifyContent: 'end' }}>
           <Buttons {...propsForButtons} />
         </div>
       </div>

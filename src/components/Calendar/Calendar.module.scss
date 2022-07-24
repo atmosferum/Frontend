@@ -1,11 +1,13 @@
 .calendar {
-  border-radius: var(--radius);
   overflow: hidden;
   border-bottom: var(--border);
   border-left: var(--border);
   display: flex;
   flex-direction: column;
   flex: 1;
+  @media (min-width: 1000px) {
+    border-radius: var(--radius);
+  }
 }
 
 .topBar {

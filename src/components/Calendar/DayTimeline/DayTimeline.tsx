@@ -2,16 +2,16 @@ import React, { SetStateAction } from 'react';
 import s from './DayTimeline.module.scss';
 import { DraggingElement, Interval } from '../../../types';
 import {
-  IntervalClass,
   isBefore,
   isInIntervals,
   isThereIntersections,
   isEqualDays,
   isNextToOrInIntervals,
   getCellDate,
-} from '../utils';
+} from '../../../dateUtils';
 import { Intervals } from './Intervals';
 import { MS_IN_HOUR } from '../../../consts';
+import { IntervalClass } from '../../../utils';
 
 interface Props {
   focusDate: Date;
