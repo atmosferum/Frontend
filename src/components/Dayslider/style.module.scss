@@ -1,0 +1,80 @@
+.day-slider {
+  width: 100%;
+  font-weight: 500;
+  height: 2rem;
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  justify-content: center;
+  background-color: var(--gray-light);
+  border-radius: var(--radius);
+}
+
+.date-div {
+  width: 100%;
+  border-top: 1px solid var(--gray-dark);
+  border-bottom: 1px solid var(--gray-dark);
+  color: var(--gray-dark);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+  box-sizing: border-box;
+}
+
+.date-span {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.slider {
+  color: var(--gray-dark);
+  border: 1px solid var(--gray-dark);
+  height: 100%;
+  background: none;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  &.--left {
+    border-radius: var(--radius) 0 0 var(--radius);
+    border-right: none;
+    cursor: pointer;
+  }
+
+  &.--right {
+    border-radius: 0 var(--radius) var(--radius) 0;
+    border-left: none;
+    cursor: pointer;
+  }
+  &.--highlight {
+    background-color: var(--primary);
+  }
+}
+
+.weekday,
+.number,
+.month {
+  margin: 0;
+}
+
+.month,
+.weekday {
+  font-size: 18px;
+  font-weight: 400;
+}
+.number {
+  font-size: 21px;
+  font-weight: 400;
+  margin-right: 7px;
+}
+
+.date-span,
+.weekday-span {
+  display: flex;
+  align-items: center;
+}
