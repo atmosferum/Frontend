@@ -31,7 +31,7 @@
 .slider {
   height: 100%;
   background: none;
-  padding: 0 0.5rem;
+  padding: 0 0.25rem;
   box-sizing: border-box;
   box-shadow: none;
   display: flex;
@@ -64,7 +64,7 @@
   font-weight: 400;
 }
 .number {
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 400;
   margin-right: 7px;
 }
@@ -80,17 +80,12 @@
 }
 .today {
   position: relative;
-  color: white;
-  z-index: 2;
-  background-position: 10px;
-}
-
-.today {
+  color: var(--gray-light);
   background-color: var(--primary);
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
   text-align: center;
   margin-right: 2px;
 }

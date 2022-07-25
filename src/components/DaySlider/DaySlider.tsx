@@ -2,7 +2,7 @@ import React from 'react';
 import s from './DaySlider.module.scss';
 import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import { daysOfWeek, months } from '../../consts';
+import { daysOfWeek, monthsAcc } from '../../consts';
 import { isToday, isBefore } from '../../dateUtils';
 const cx = classNames.bind(s);
 
@@ -36,7 +36,7 @@ export function DaySlider(props: DaySliderProps) {
       <div className={cx('date-div', isBefore(date, new Date()) && 'before')}>
         <span className={cx('date-span')}>
           <p className={cx('number', isToday(date) && 'today')}>{date.getDate()}</p>
-          <p className={cx('month')}>{months[date.getMonth()]}</p>
+          <p className={cx('month')}>{monthsAcc[date.getMonth()]}</p>
         </span>
         <span className={cx('weekday-span')}>
           <p className={cx('weekday')}>{daysOfWeek[date.getDay()]}</p>
