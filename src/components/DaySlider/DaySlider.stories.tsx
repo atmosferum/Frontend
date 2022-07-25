@@ -18,7 +18,7 @@ export const Primary: ComponentStory<typeof DaySlider> = (args) => {
     setDate(new Date(+date + MS_IN_DAY * 1));
   }
   return (
-    <div style={{ width: '300px', marginLeft: 'auto', marginRight: 'auto' }}>
+    <div style={{ width: '350px', marginLeft: 'auto', marginRight: 'auto' }}>
       <DaySlider {...args} date={date} left={previousWeek} right={nextWeek} />
     </div>
   );
