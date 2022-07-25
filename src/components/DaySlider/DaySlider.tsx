@@ -3,7 +3,7 @@ import s from './DaySlider.module.scss';
 import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import { daysOfWeek, months } from '../../consts';
-
+import { isToday, isBefore } from '../../dateUtils';
 const cx = classNames.bind(s);
 
 interface DaySliderProps {
@@ -22,11 +22,20 @@ export function DaySlider(props: DaySliderProps) {
   return (
     <div className={cx('day-slider', className)}>
       <button onClick={left} className={cx('slider', '--left')}>
-        <ChevronLeft color={highlightLeft ? 'var(--primary)' : 'var(--gray-dark)'} size="1.5rem" />
+        <ChevronLeft
+          color={
+            highlightLeft
+              ? 'var(--primary)'
+              : isBefore(date, new Date())
+              ? 'var(--gray-dark)'
+              : 'black'
+          }
+          size="1.5rem"
+        />
       </button>
-      <div className={cx('date-div')}>
+      <div className={cx('date-div', isBefore(date, new Date()) && 'before')}>
         <span className={cx('date-span')}>
-          <p className={cx('number')}>{date.getDate()}</p>
+          <p className={cx('number', isToday(date) && 'today')}>{date.getDate()}</p>
           <p className={cx('month')}>{months[date.getMonth()]}</p>
         </span>
         <span className={cx('weekday-span')}>
@@ -35,7 +44,13 @@ export function DaySlider(props: DaySliderProps) {
       </div>
       <button onClick={right} className={cx('slider', '--right')}>
         <ChevronRight
-          color={highlightRight ? 'var(--primary)' : 'var(--gray-dark)'}
+          color={
+            highlightRight
+              ? 'var(--primary)'
+              : isBefore(date, new Date())
+              ? 'var(--gray-dark)'
+              : 'black'
+          }
           size="1.5rem"
         />
       </button>

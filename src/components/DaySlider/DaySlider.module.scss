@@ -15,7 +15,6 @@
 
 .date-div {
   width: 100%;
-  color: var(--gray-dark);
   height: 100%;
   display: flex;
   align-items: center;
@@ -30,7 +29,6 @@
 }
 
 .slider {
-  color: var(--gray-dark);
   height: 100%;
   background: none;
   padding: 0 0.5rem;
@@ -75,4 +73,24 @@
 .weekday-span {
   display: flex;
   align-items: center;
+}
+
+.before {
+  color: var(--gray-dark);
+}
+.today {
+  position: relative;
+  color: white;
+  z-index: 2;
+  background-position: 10px;
+}
+
+.today {
+  background-color: var(--primary);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  margin-right: 2px;
 }
