@@ -1,29 +1,17 @@
-import React, { SetStateAction, useEffect, useRef } from 'react';
+import React, { SetStateAction, useContext, useEffect, useRef } from 'react';
 import s from './Calendar.module.scss';
 import { DayTimeline, HOURS_IN_CELL } from './DayTimeline';
 import classNames from 'classnames/bind';
-import { DraggingElement, Interval } from '../../types';
 import { getClockFace, getWeek, isBefore, isToday, getDateOfMonday } from '../../dateUtils';
 import { HEIGHT_OF_CELL } from './DayTimeline/DayTimeline';
 import { isPhone } from '../../utils';
 import { daysOfWeek, months } from '../../consts';
+import { AppContext } from '../../App/App';
 
 const cx = classNames.bind(s);
 
-interface Props {
-  resultsIntervals: Interval[];
-  adminIntervals: Interval[];
-  myIntervals: Interval[];
-  focusDate: Date;
-  draggingElement: DraggingElement;
-  setIntervals: SetStateAction<any>;
-  isAdmin?: boolean;
-  isResults?: boolean;
-}
-
-function Calendar(props: Props) {
-  const { draggingElement, ...propsForDayTimeline } = props;
-  const { isAdmin, isResults, focusDate } = propsForDayTimeline;
+function Calendar() {
+  const { draggingElement, isAdmin, isResults, focusDate } = useContext(AppContext)!;
   const week = getWeek(getDateOfMonday(focusDate ?? new Date()));
   const daysLineRef = useRef<HTMLInputElement | null>(null);
   const timeLineRef = useRef<HTMLInputElement | null>(null);
@@ -97,14 +85,7 @@ function Calendar(props: Props) {
         </div>
         {/* columns of cells */}
         {dates.map((day, id) => {
-          return (
-            <DayTimeline
-              {...propsForDayTimeline}
-              draggingElement={draggingElement}
-              key={id}
-              day={day}
-            />
-          );
+          return <DayTimeline key={id} day={day} />;
         })}
       </div>
     </div>

@@ -74,15 +74,13 @@
     .today {
       position: relative;
       color: var(--gray-light);
-    }
-
-    .today::before {
-      content: '';
-      position: absolute;
-      inset: -4px -5px -2px -4px;
       background-color: var(--primary);
-      z-index: -1;
-      border-radius: 1000px;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      margin-right: 2px;
     }
   }
 }

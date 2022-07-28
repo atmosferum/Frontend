@@ -5,10 +5,8 @@ import { HEIGHT_OF_CELL } from '../DayTimeline';
 import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
 import { Cross } from './cross';
-import { Popover } from '../../../Popover/Popover';
 import popoverStyle from '../../../Popover/Popover.module.scss';
 import { ParticipantsPopover } from '../../../../App/ParticipantsPopover/ParticipantsPopover';
-import { months } from '../../../../consts';
 const cx = classNames.bind(s);
 
 interface Props {

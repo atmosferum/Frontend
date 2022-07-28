@@ -9,13 +9,15 @@ interface Props extends PopoverProps {
 
 export function ParticipantsPopover(props: Props) {
   const { participants, ...popoverProps } = props;
-
   return (
-    <Popover {...popoverProps}>
+    <Popover customStyles={{ width: '350px', transform: 'translate(-40px, 0)' }} {...popoverProps}>
       <div className={s.participantsModalContent}>
         {participants.map((participant: Participant) => (
           <p className={s.user} key={participant.id}>
-            {participant.name}{' '}
+            <span style={{ backgroundColor: 'bisque' }} className={s.userBackground}>
+              {/* {participant.name.length > 20 ? participant.name.slice(0, 19) + '...' : participant.name} */}
+              {participant.name}
+            </span>{' '}
             <span style={{ color: 'var(--success-dark)' }}>
               {participant.isAdmin && 'Организатор '}
               {participant.isCurrentUser && 'Вы'}
