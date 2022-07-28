@@ -1,8 +1,11 @@
+import { SetStateAction } from 'react';
+
 export interface User {
   id: string;
   name: string;
 }
 export interface Participant extends User {
+  color?: number;
   isAdmin: boolean;
   isCurrentUser: boolean;
 }
@@ -37,4 +40,33 @@ export interface Event {
 export interface Results {
   event: Event;
   intervals: BackendInterval[];
+}
+
+export interface State {
+  adminIntervals: Interval[];
+  myIntervals: Interval[];
+  resultsIntervals: Interval[];
+  setIntervals: (any) => any;
+  setIsLoginModalOpen: (any) => any;
+  setResults: (any) => any;
+  goToResults: () => any;
+  saveIntervals: () => any;
+  isResults: boolean;
+  isAdmin: boolean;
+  titleInput: any;
+  eventId: string;
+  focusDate: Date;
+  isLoginModalOpen: boolean;
+  login: any;
+  goToVoting: () => any;
+  draggingElement: DraggingElement;
+  name: any;
+  participants: Participant[];
+  isLoading: boolean;
+  loginAndSaveIntervals: () => any;
+  createEvent: () => void;
+  currentIntervals: Interval[];
+  previousInterval: () => any;
+  relativelyTodayGoByDays: (x: number) => any;
+  nextInterval: () => any;
 }
