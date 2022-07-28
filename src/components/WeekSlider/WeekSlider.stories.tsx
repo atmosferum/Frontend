@@ -16,3 +16,10 @@ export default {
 export const Primary: ComponentStory<typeof WeekSlider> = (args) => {
   return <WeekSlider {...args} />;
 };
+Primary.args = {
+  highlightRight: false,
+  highlightLeft: false,
+  date: new Date(),
+  left: () => {},
+  right: () => {},
+};
