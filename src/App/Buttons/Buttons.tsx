@@ -69,7 +69,12 @@ export function Buttons() {
           {!isResults ? (
             <>
               <br />
-              <Input className={s.stretch} {...name.bind} placeholder="Иван Иванов" />
+              <Input
+                className={s.stretch}
+                {...name.bind}
+                placeholder="Иван Иванов"
+                maxLength={15}
+              />
               <br />
               <Button
                 onClick={() => {

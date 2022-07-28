@@ -52,6 +52,7 @@ export const App = () => {
               {...titleInput.bind}
               placeholder="Название события"
               className={s.eventNameInput}
+              maxLength={35}
             />
           )}
           <div style={{ display: 'flex', gap: 10, width: '100%', justifyContent: 'end' }}>
