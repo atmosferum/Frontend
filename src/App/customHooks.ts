@@ -44,7 +44,6 @@ export function useInitState() {
     setEventId(queryEventId);
     const { owner, title } = await getEventById(queryEventId);
     const user = await getCurrentUser().catch(console.log);
-    console.log({ user, title, owner });
     titleInput.setValue(title);
     setCurrentUser(user ?? null);
     const isAdminVar = owner.id === user?.id;
@@ -52,7 +51,7 @@ export function useInitState() {
     await setIntervals(owner, user);
     if (isAdminVar) {
       setIsAdmin(true);
-      await goToResults();
+      await goToResults(queryEventId);
     }
   }
   async function setIntervals(ownerOfEvent: User, user: User | void) {
@@ -92,7 +91,7 @@ export function useInitState() {
       interval.owners = convertUsersToParticipantsCarried(interval.owners!);
     });
     setResultsIntervals(convertIntervalToFrontend(intervals));
-    setParticipants(convertUsersToParticipantsCarried(participants));
+    setParticipants(convertUsersToParticipantsCarried(participants!));
     setIsLoading(false);
     return convertIntervalToFrontend(intervals);
   }
@@ -130,9 +129,9 @@ export function useInitState() {
     }
   }
 
-  async function goToResults() {
+  async function goToResults(eventIdProp?: string) {
     setIsResults(true);
-    const resultIntervals = await setResults(eventId);
+    const resultIntervals = await setResults(eventIdProp || eventId);
     setFocusDate(resultIntervals[0].start);
   }
 

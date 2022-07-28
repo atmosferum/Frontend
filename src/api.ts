@@ -42,7 +42,7 @@ export async function getCurrentUser(): Promise<{ name: string; id: string }> {
   return data;
 }
 
-export async function getLogout(): Promise<void> {
+export async function logout(): Promise<void> {
   const { data } = await axios.get(`${API_PATH}/logout`);
   return data;
 }

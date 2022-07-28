@@ -132,7 +132,7 @@ function DayTimeline(props: Props) {
         <Intervals
           focusDate={focusDate}
           intervals={resultsIntervalsToday}
-          color={'#c39bd3'}
+          color={'#63adb7'}
           margin={1}
           draggingElement={draggingElement}
           touchMoveHandler={touchMoveHandler}
