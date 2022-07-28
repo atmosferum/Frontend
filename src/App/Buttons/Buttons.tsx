@@ -5,14 +5,15 @@ import s from '../../styles/App.module.scss';
 import { Copyboard } from '../../components/Copyboard/Copyboard';
 import * as Icon from 'react-feather';
 import { LoginModal } from '../LoginModal/LoginModal';
-import React from 'react';
+import React, { useContext } from 'react';
 import ReloadButton from '../../components/ReloadButton/ReloadButton';
 import { ParticipantsPopover } from '../ParticipantsPopover/ParticipantsPopover';
 import popoverStyles from '../../components/Popover/Popover.module.scss';
 import { Participant, User } from '../../types';
 import { isPhone } from '../../utils';
+import { App, AppContext } from '../App';
 
-export function Buttons(props: any) {
+export function Buttons() {
   const {
     login,
     isResults,
@@ -32,7 +33,7 @@ export function Buttons(props: any) {
     isLoading,
     setResults,
     participants,
-  } = props;
+  } = useContext(AppContext)!;
   const getHost = () => {
     if (typeof window !== 'undefined') {
       return `${window.location.protocol}//${window.location.host}/`;

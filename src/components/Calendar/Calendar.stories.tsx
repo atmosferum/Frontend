@@ -9,29 +9,14 @@ export default {
   component: Calendar,
 } as ComponentMeta<typeof Calendar>;
 
-// resultsIntervals: Interval[];
-// adminIntervals: Interval[];
-// myIntervals: Interval[];
-// dateOfMonday: Date;
-// draggingElement: DraggingElement;
-// setIntervals: SetStateAction<any>;
-// isAdmin?: boolean;
-// isResults?: boolean;
-
 const Template: ComponentStory<typeof Calendar> = (args) => {
   const [intervals, setIntervals] = useState<Array<Interval>>([]);
-  const [adminIntervals, setAdminIntervals] = useState<Array<Interval>>(args.adminIntervals);
+  const [adminIntervals, setAdminIntervals] = useState<Array<Interval>>();
   const draggingElement = useRef(null);
 
   return (
     <>
-      <Calendar
-        {...args}
-        adminIntervals={adminIntervals}
-        setIntervals={args.isAdmin ? setAdminIntervals : setIntervals}
-        draggingElement={draggingElement}
-        myIntervals={intervals}
-      />
+      <Calendar />
       <h1>Hello World</h1>
     </>
   );

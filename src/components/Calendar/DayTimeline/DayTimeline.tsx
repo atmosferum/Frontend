@@ -1,4 +1,4 @@
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useContext } from 'react';
 import s from './DayTimeline.module.scss';
 import { DraggingElement, Interval } from '../../../types';
 import {
@@ -12,17 +12,10 @@ import {
 import { Intervals } from './Intervals';
 import { MS_IN_HOUR } from '../../../consts';
 import { IntervalClass } from '../../../utils';
+import { AppContext } from '../../../App/App';
 
 interface Props {
-  focusDate: Date;
-  resultsIntervals: Interval[];
-  adminIntervals: Interval[];
-  myIntervals: Interval[];
   day: Date;
-  draggingElement: DraggingElement;
-  setIntervals: SetStateAction<any>;
-  isAdmin?: boolean;
-  isResults?: boolean;
 }
 
 export const HOURS_IN_CELL = 0.5;
@@ -32,17 +25,17 @@ export const HEIGHT_OF_CELL = 30;
 export const MS_IN_CELL = MS_IN_HOUR * HOURS_IN_CELL;
 
 function DayTimeline(props: Props) {
+  const { day } = props;
   const {
     adminIntervals,
     myIntervals,
-    day,
     draggingElement,
     setIntervals,
     isAdmin,
     isResults,
     resultsIntervals,
     focusDate,
-  } = props;
+  } = useContext(AppContext)!;
 
   const isTodayIncludesInterval = ({ start, end }: Interval) =>
     isEqualDays(start, day) ||
