@@ -5,7 +5,7 @@
   .user {
     color: black;
     width: 90%;
-    padding: 10px;
+    padding: 5px;
     border-radius: var(--radius);
     list-style: none;
     transition: 0.5s;
@@ -16,4 +16,13 @@
       width: max-content;
     }
   }
+}
+
+.userBackground {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  padding: 8px;
+  border-radius: 12px;
 }
