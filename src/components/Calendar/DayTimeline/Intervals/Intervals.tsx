@@ -8,6 +8,7 @@ import { Cross } from './cross';
 import popoverStyle from '../../../Popover/Popover.module.scss';
 import { ParticipantsPopover } from '../../../../App/ParticipantsPopover/ParticipantsPopover';
 import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
+import * as Icon from 'react-feather';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -80,11 +81,17 @@ const Intervals = memo((props: Props) => {
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
-            <div className={s.participantsLineWrapper}>
-              {isResults && owners && (
-                <ParticipantsLine borderColor={color} participants={owners!} />
-              )}
-            </div>
+            {isResults && owners && (
+              <>
+                <div className={s.participantsAmount}>
+                  <p>{owners?.length!}</p>
+                  <Icon.Users />
+                </div>
+                <div className={s.participantsLineWrapper}>
+                  <ParticipantsLine borderColor={color} participants={owners!} />
+                </div>
+              </>
+            )}
             {draggable && (
               <>
                 <div

@@ -55,6 +55,22 @@
   * {
     transition: 0.1s;
   }
+  .participantsAmount {
+    position: absolute;
+    inset: 6px 10px auto auto;
+    z-index: 20;
+    opacity: 0.5;
+    display: flex;
+    p {
+      display: inline-block;
+      margin: 3px 5px 5px 5px;
+      font-size: 18px;
+      font-weight: lighter;
+    }
+    svg {
+      width: 20px;
+    }
+  }
   .participantsLineWrapper {
     padding: 0 5px 0 15px;
   }

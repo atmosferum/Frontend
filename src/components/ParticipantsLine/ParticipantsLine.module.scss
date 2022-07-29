@@ -13,7 +13,7 @@
     border-radius: 20px;
     font-weight: 1000;
     margin-left: -10px;
-    cursor: pointer;
+    cursor: default;
     white-space: nowrap;
     flex-shrink: 1;
     flex-grow: 0;
@@ -24,6 +24,7 @@
       font-weight: normal;
       margin: 0;
       padding: 0 9px;
+      color: white;
     }
     &:last-child p {
       padding: 0 10px;

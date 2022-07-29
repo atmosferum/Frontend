@@ -55,7 +55,7 @@ export const App = () => {
               maxLength={35}
             />
           )}
-          <div style={{ display: 'flex', gap: 10, width: '100%', justifyContent: 'end' }}>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Buttons />
           </div>
         </div>
