@@ -11,27 +11,30 @@ interface IProps {
 // eslint-disable-next-line react/display-name
 const ParticipantsLine = memo(({ participants, borderColor, children }: IProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
+  function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   useEffect(() => {
     Array.from(ref!.current?.children!).forEach((e: any, id) => {
-      e.style.setProperty('--width', `${20 + participants[id].name.length * 10}px`);
+      e.style.setProperty('--width', `${30 + participants[id].name.length * 10}px`);
     });
+    console.log(participants);
   }, [participants]);
   return (
     <div>
       {children}
 
-      <div ref={ref} className={s.wrapper}>
-        {participants.map((participant, id) => (
+      <div ref={ref} className={s.wrapper} style={{ pointerEvents: children ? 'none' : 'all' }}>
+        {participants.map((participant) => (
           <div
             key={participant.id}
             style={{
-              backgroundColor: `hsl(${(360 / participants.length) * id},55%,60%)`,
-              // backgroundColor: `hsl(${(360 / participants.length) * id},55%,60%)`,
+              backgroundColor: '#' + participant.color,
               borderColor,
             }}
             className={s.participant}
           >
-            <p>{participant.name}</p>
+            <p>{capitalizeFirstLetter(participant.name)}</p>
           </div>
         ))}
       </div>

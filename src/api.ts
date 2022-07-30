@@ -5,15 +5,18 @@ import { BackendInterval, Interval, Results, Event, User, Participant } from './
 const API_PATH = '/api/v1';
 
 export function convertUsersToParticipants(
+  participants: any[],
   currentUser: User,
   owner: User,
   users: User[],
 ): Participant[] {
-  return users.map((participant: User) => ({
-    ...participant,
-    isAdmin: participant.id === owner.id,
-    isCurrentUser: participant.id === currentUser?.id,
-  }));
+  return participants
+    .filter((participant) => users.find((user) => user.id === participant.id))
+    .map((participant: User) => ({
+      ...participant,
+      isAdmin: participant.id === owner.id,
+      isCurrentUser: participant.id === currentUser?.id,
+    }));
 }
 export function convertIntervalToBackend(intervals: Interval[]): BackendInterval[] {
   return intervals.map(({ start, end, id }) => ({
@@ -79,7 +82,9 @@ export async function getResult(id: string): Promise<Results> {
   return data;
 }
 
-export async function getParticipants(id: string): Promise<User[]> {
+export async function getParticipants(
+  id: string,
+): Promise<Pick<Participant, 'color' | 'id' | 'name'>[]> {
   const { data } = await axios.get(`${API_PATH}/events/${id}/participants`);
   return data;
 }

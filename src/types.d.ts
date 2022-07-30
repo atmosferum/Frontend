@@ -5,7 +5,7 @@ export interface User {
   name: string;
 }
 export interface Participant extends User {
-  color?: number;
+  color?: string;
   isAdmin: boolean;
   isCurrentUser: boolean;
 }

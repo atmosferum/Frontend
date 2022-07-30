@@ -14,7 +14,7 @@ export function ParticipantsPopover(props: Props) {
       <div className={s.participantsModalContent}>
         {participants.map((participant: Participant) => (
           <p className={s.user} key={participant.id}>
-            <span style={{ backgroundColor: 'bisque' }} className={s.userBackground}>
+            <span style={{ backgroundColor: '#' + participant.color }} className={s.userBackground}>
               {/* {participant.name.length > 20 ? participant.name.slice(0, 19) + '...' : participant.name} */}
               {participant.name}
             </span>{' '}

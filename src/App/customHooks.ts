@@ -86,7 +86,7 @@ export function useInitState() {
     const participants = await getParticipants(eventId);
     const { intervals, event } = await getResult(eventId);
     const convertUsersToParticipantsCarried = (users: User[]) =>
-      convertUsersToParticipants(currentUser!, event.owner, users);
+      convertUsersToParticipants(participants, currentUser!, event.owner, users);
     intervals.forEach((interval) => {
       interval.owners = convertUsersToParticipantsCarried(interval.owners!);
     });
