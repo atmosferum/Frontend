@@ -25,16 +25,16 @@ const ParticipantsLine = memo(({ participants, borderColor, children }: IProps) 
       {children}
 
       <div ref={ref} className={s.wrapper} style={{ pointerEvents: children ? 'none' : 'all' }}>
-        {participants.map((participant) => (
+        {participants.map(({ isAdmin, name, id, color, isCurrentUser }) => (
           <div
-            key={participant.id}
+            key={id}
             style={{
-              backgroundColor: '#' + participant.color,
-              borderColor,
+              borderColor: isCurrentUser ? 'var(--primary)' : borderColor,
+              backgroundColor: '#' + color,
             }}
             className={s.participant}
           >
-            <p>{capitalizeFirstLetter(participant.name)}</p>
+            <p>{capitalizeFirstLetter(name)}</p>
           </div>
         ))}
       </div>
