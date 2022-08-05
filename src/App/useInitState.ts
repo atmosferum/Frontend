@@ -93,6 +93,7 @@ export function useInitState() {
     setResultsIntervals(convertIntervalToFrontend(intervals));
     setParticipants(convertUsersToParticipantsCarried(participants!));
     setIsLoading(false);
+    console.log(intervals);
     return convertIntervalToFrontend(intervals);
   }
 

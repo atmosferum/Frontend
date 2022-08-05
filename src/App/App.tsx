@@ -6,7 +6,7 @@ import { Buttons } from './Buttons/Buttons';
 import { isPhone } from '../utils';
 import { getDateOfMonday, isIntervalsAfter, isIntervalsBefore } from '../dateUtils';
 import { DaySlider } from '../components/DaySlider/DaySlider';
-import { useInitState } from './customHooks';
+import { useInitState } from './useInitState';
 import { State } from '../types';
 export const AppContext = React.createContext<State | null>(null);
 export const App = () => {
