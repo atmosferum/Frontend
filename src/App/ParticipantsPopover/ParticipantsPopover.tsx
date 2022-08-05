@@ -12,15 +12,15 @@ export function ParticipantsPopover(props: Props) {
   return (
     <Popover customStyles={{ width: '350px', transform: 'translate(-40px, 0)' }} {...popoverProps}>
       <div className={s.participantsModalContent}>
-        {participants.map((participant: Participant) => (
-          <p className={s.user} key={participant.id}>
-            <span style={{ backgroundColor: '#' + participant.color }} className={s.userBackground}>
-              {/* {participant.name.length > 20 ? participant.name.slice(0, 19) + '...' : participant.name} */}
-              {participant.name}
+        {participants.map(({ isAdmin, name, id, color, isCurrentUser }: Participant) => (
+          <p className={s.user} key={id}>
+            <span style={{ backgroundColor: color }} className={s.userBackground}>
+              {/* {name.length > 20 ? name.slice(0, 19) + '...' : name} */}
+              {name}
             </span>{' '}
             <span style={{ color: 'var(--success-dark)' }}>
-              {participant.isAdmin && 'Организатор '}
-              {participant.isCurrentUser && 'Вы'}
+              {isAdmin && 'Организатор '}
+              {isCurrentUser && 'Вы'}
             </span>
           </p>
         ))}

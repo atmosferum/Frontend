@@ -10,7 +10,9 @@ export class IntervalClass {
     this.id = IntervalClass.staticId++;
   }
 }
-
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 export function isPhone() {
   return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
     window.navigator.userAgent.toLowerCase(),

@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useRef } from 'react';
 import { Participant } from '../../types';
 import s from './ParticipantsLine.module.scss';
+import { capitalizeFirstLetter } from '../../utils';
 
 interface IProps {
   participants: Participant[];
@@ -11,12 +12,9 @@ interface IProps {
 // eslint-disable-next-line react/display-name
 const ParticipantsLine = memo(({ participants, borderColor, children }: IProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
   useEffect(() => {
     Array.from(ref!.current?.children!).forEach((e: any, id) => {
-      e.style.setProperty('--width', `${30 + participants[id].name.length * 10}px`);
+      e.style.setProperty('--width', `${20 + participants[id].name.length * 11}px`);
     });
     console.log(participants);
   }, [participants]);
@@ -30,7 +28,7 @@ const ParticipantsLine = memo(({ participants, borderColor, children }: IProps) 
             key={id}
             style={{
               borderColor: isCurrentUser ? 'var(--primary)' : borderColor,
-              backgroundColor: '#' + color,
+              backgroundColor: color,
             }}
             className={s.participant}
           >
