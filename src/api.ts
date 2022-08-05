@@ -4,15 +4,14 @@ import { BackendInterval, Interval, Results, Event, User, Participant } from './
 import { capitalizeFirstLetter } from './utils';
 
 const API_PATH = '/api/v1';
-export function convertUsersToParticipants(
-  participants: any[],
+export function convertParticipants(
+  participants: User[],
   currentUser: User,
   owner: User,
-  users: User[],
 ): Participant[] {
   const hslArr = [0, 180, 90, 270, 30, 210, 300, 60, 240, 330, 15, 195, 105, 285, 45, 225, 315, 75];
   return participants
-    .sort((a, b) => a.id - b.id)
+    .sort((a, b) => +a.id - +b.id)
     .map((participant: User, id) => ({
       ...participant,
       name: capitalizeFirstLetter(participant.name),
@@ -21,8 +20,10 @@ export function convertUsersToParticipants(
       hslNumber: hslArr[id],
       color: `hsl(${hslArr[id]}, 60%, 50%)`,
     }))
-    .filter((participant) => users.find((user) => user.id === participant.id))
     .sort((a, b) => a.hslNumber - b.hslNumber);
+}
+export function filterParticipantsByUsers(participants: Participant[], users: User[]) {
+  return participants.filter((participant) => users.find((user) => user.id === participant.id));
 }
 export function convertIntervalToBackend(intervals: Interval[]): BackendInterval[] {
   return intervals.map(({ start, end, id }) => ({

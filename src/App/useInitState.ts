@@ -1,6 +1,7 @@
 import {
   convertIntervalToFrontend,
-  convertUsersToParticipants,
+  convertParticipants,
+  filterParticipantsByUsers,
   getAllIntervals,
   getCurrentUser,
   getEventById,
@@ -83,15 +84,13 @@ export function useInitState() {
   }
   async function setResults(eventId: string, user: User | null = currentUser) {
     setIsLoading(true);
-    const participants = await getParticipants(eventId);
     const { intervals, event } = await getResult(eventId);
-    const convertUsersToParticipantsCarried = (users: User[]) =>
-      convertUsersToParticipants(participants, user!, event.owner, users);
+    const participants = convertParticipants(await getParticipants(eventId), user!, event.owner);
     intervals.forEach((interval) => {
-      interval.owners = convertUsersToParticipantsCarried(interval.owners!);
+      interval.owners = filterParticipantsByUsers(participants, interval.owners!);
     });
     setResultsIntervals(convertIntervalToFrontend(intervals));
-    setParticipants(convertUsersToParticipantsCarried(participants!));
+    setParticipants(participants);
     setIsLoading(false);
     console.log(intervals);
     return convertIntervalToFrontend(intervals);
