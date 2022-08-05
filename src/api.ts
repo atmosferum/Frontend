@@ -12,7 +12,6 @@ export function convertUsersToParticipants(
 ): Participant[] {
   const hslArr = [0, 180, 90, 270, 30, 210, 300, 60, 240, 330, 15, 195, 105, 285, 45, 225, 315, 75];
   return participants
-    .filter((participant) => users.find((user) => user.id === participant.id))
     .sort((a, b) => a.id - b.id)
     .map((participant: User, id) => ({
       ...participant,
@@ -22,6 +21,7 @@ export function convertUsersToParticipants(
       hslNumber: hslArr[id],
       color: `hsl(${hslArr[id]}, 60%, 50%)`,
     }))
+    .filter((participant) => users.find((user) => user.id === participant.id))
     .sort((a, b) => a.hslNumber - b.hslNumber);
 }
 export function convertIntervalToBackend(intervals: Interval[]): BackendInterval[] {
