@@ -1,6 +1,6 @@
 import { Dialog } from '../../components/Dialog';
 import { Input } from '../../components/Input';
-import s from '../../styles/App.module.scss';
+import s from '../App.module.scss';
 import { Button } from '../../components/Button';
 import React from 'react';
 

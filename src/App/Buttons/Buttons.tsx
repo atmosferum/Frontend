@@ -1,7 +1,7 @@
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';
 import { Input } from '../../components/Input';
-import s from '../../styles/App.module.scss';
+import s from '../App.module.scss';
 import { Copyboard } from '../../components/Copyboard/Copyboard';
 import * as Icon from 'react-feather';
 import { LoginModal } from '../LoginModal/LoginModal';
@@ -135,7 +135,7 @@ function ParticipantButton({ participants }: { participants: Participant[] }) {
         <p>{participants.length}</p>
         <Icon.Users />
       </div>
-      <div style={{ width: participants.length * 27 }}>
+      <div style={{ width: participants.length * 23 }}>
         <ParticipantsLine participants={participants} borderColor={'white'}>
           <ParticipantsPopover participants={participants} position="right" y={60} />
         </ParticipantsLine>

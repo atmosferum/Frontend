@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, Interval } from '../components/Calendar';
-import s from '../styles/App.module.scss';
+import s from './App.module.scss';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
 import { Buttons } from './Buttons/Buttons';
 import { isPhone } from '../utils';
@@ -55,7 +55,7 @@ export const App = () => {
               maxLength={35}
             />
           )}
-          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div className={s.buttonsWrapper}>
             <Buttons />
           </div>
         </div>

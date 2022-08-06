@@ -26,6 +26,14 @@
     margin: 0;
   }
 }
+.buttonsWrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  @media (max-width: 700px) {
+    flex-wrap: wrap;
+  }
+}
 @media (min-width: 900px) {
   .header {
     margin: 20px 0;
