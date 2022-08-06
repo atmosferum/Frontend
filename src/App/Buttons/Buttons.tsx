@@ -1,7 +1,7 @@
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';
 import { Input } from '../../components/Input';
-import s from '../../styles/App.module.scss';
+import s from '../App.module.scss';
 import { Copyboard } from '../../components/Copyboard/Copyboard';
 import * as Icon from 'react-feather';
 import { LoginModal } from '../LoginModal/LoginModal';
@@ -12,7 +12,7 @@ import popoverStyles from '../../components/Popover/Popover.module.scss';
 import { Participant, User } from '../../types';
 import { isPhone } from '../../utils';
 import { App, AppContext } from '../App';
-
+import ParticipantsLine from '../../components/ParticipantsLine/ParticipantsLine';
 export function Buttons() {
   const {
     login,
@@ -128,15 +128,18 @@ export function Buttons() {
   );
 }
 
-function ParticipantButton(props: { participants: Participant[] }) {
+function ParticipantButton({ participants }: { participants: Participant[] }) {
   return (
-    <Button
-      variant="secondary"
-      style={{ position: 'relative', zIndex: 1000, cursor: 'initial' }}
-      className={popoverStyles.trigger}
-    >
-      <Icon.Users />
-      <ParticipantsPopover participants={props.participants} position="right" y={40} />
-    </Button>
+    <div className={popoverStyles.trigger} style={{ display: 'flex', zIndex: 20 }}>
+      <div className={s.participantsAmount}>
+        <p>{participants.length}</p>
+        <Icon.Users />
+      </div>
+      <div style={{ width: participants.length * 23 }}>
+        <ParticipantsLine participants={participants} borderColor={'white'}>
+          <ParticipantsPopover participants={participants} position="right" y={60} />
+        </ParticipantsLine>
+      </div>
+    </div>
   );
 }

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, Interval } from '../components/Calendar';
-import s from '../styles/App.module.scss';
+import s from './App.module.scss';
 import { WeekSlider } from '../components/WeekSlider/WeekSlider';
 import { Buttons } from './Buttons/Buttons';
 import { isPhone } from '../utils';
 import { getDateOfMonday, isIntervalsAfter, isIntervalsBefore } from '../dateUtils';
 import { DaySlider } from '../components/DaySlider/DaySlider';
-import { useInitState } from './customHooks';
+import { useInitState } from './useInitState';
 import { State } from '../types';
 export const AppContext = React.createContext<State | null>(null);
 export const App = () => {
@@ -55,7 +55,7 @@ export const App = () => {
               maxLength={35}
             />
           )}
-          <div style={{ display: 'flex', gap: 10, width: '100%', justifyContent: 'end' }}>
+          <div className={s.buttonsWrapper}>
             <Buttons />
           </div>
         </div>

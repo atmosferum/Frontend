@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, memo } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
 import { getClockFace, isEqualDays } from '../../../../dateUtils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
@@ -7,6 +7,8 @@ import classNames from 'classnames/bind';
 import { Cross } from './cross';
 import popoverStyle from '../../../Popover/Popover.module.scss';
 import { ParticipantsPopover } from '../../../../App/ParticipantsPopover/ParticipantsPopover';
+import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
+import * as Icon from 'react-feather';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -22,7 +24,8 @@ interface Props {
   focusDate?: Date;
 }
 
-const Intervals = (props: Props) => {
+// eslint-disable-next-line react/display-name
+const Intervals = memo((props: Props) => {
   const {
     focusDate,
     intervals,
@@ -35,6 +38,7 @@ const Intervals = (props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
+
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   const [y, setY] = useState(0);
   function mouseEnterHandler(e: any) {
@@ -66,18 +70,27 @@ const Intervals = (props: Props) => {
         return (
           <div
             onMouseEnter={mouseEnterHandler}
-            key={id}
+            key={id || i}
             style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
             className={`${cx(
               'interval',
               isResults && '--results',
               start === focusDate && '--focus',
+              style.height < 80,
             )} ${popoverStyle.trigger} ${start === focusDate && popoverStyle.hover}`}
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
             {isResults && owners && (
-              <ParticipantsPopover position={'middle'} y={y} participants={owners!} />
+              <>
+                <div className={s.participantsAmount}>
+                  <p>{owners?.length!}</p>
+                  <Icon.Users />
+                </div>
+                <div className={s.participantsLineWrapper}>
+                  <ParticipantsLine borderColor={color} participants={owners!} />
+                </div>
+              </>
             )}
             {draggable && (
               <>
@@ -115,6 +128,6 @@ const Intervals = (props: Props) => {
       })}
     </div>
   );
-};
+});
 
 export { Intervals };

@@ -1,0 +1,41 @@
+.wrapper {
+  display: flex;
+  justify-content: start;
+
+  .participant {
+    display: inline-block;
+    position: relative;
+    transition: flex-basis 0.3s, letter-spacing 0.1s;
+    padding: 5px 0 4px;
+    border: solid 2px #63adb7;
+    background-color: darkgreen;
+    overflow: hidden;
+    border-radius: 20px;
+    font-weight: 1000;
+    margin-left: -10px;
+    cursor: default;
+    white-space: nowrap;
+    flex-shrink: 1;
+    flex-grow: 0;
+    letter-spacing: 15px;
+    flex-basis: 32px;
+    p {
+      font-weight: normal;
+      margin: 0;
+      padding: 0 9px;
+      color: white;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+    }
+    &:last-child p {
+      padding: 0 9px;
+    }
+  }
+
+  .participant:hover {
+    flex-basis: var(--width) !important;
+    flex-shrink: 0;
+    flex-grow: 0;
+    letter-spacing: 1px;
+  }
+}

@@ -1,6 +1,7 @@
 import {
   convertIntervalToFrontend,
-  convertUsersToParticipants,
+  convertParticipants,
+  filterParticipantsByUsers,
   getAllIntervals,
   getCurrentUser,
   getEventById,
@@ -44,15 +45,14 @@ export function useInitState() {
     setEventId(queryEventId);
     const { owner, title } = await getEventById(queryEventId);
     const user = await getCurrentUser().catch(console.log);
-    console.log({ user, title, owner });
     titleInput.setValue(title);
     setCurrentUser(user ?? null);
     const isAdminVar = owner.id === user?.id;
-    await setResults(queryEventId);
+    await setResults(queryEventId, user!);
     await setIntervals(owner, user);
     if (isAdminVar) {
       setIsAdmin(true);
-      await goToResults();
+      await goToResults(queryEventId, user);
     }
   }
   async function setIntervals(ownerOfEvent: User, user: User | void) {
@@ -82,18 +82,17 @@ export function useInitState() {
   function relativelyTodayGoByDays(amountOfDays: number) {
     setFocusDate(new Date(+focusDate + MS_IN_DAY * amountOfDays));
   }
-  async function setResults(eventId: string) {
+  async function setResults(eventId: string, user: User | null = currentUser) {
     setIsLoading(true);
-    const participants = await getParticipants(eventId);
     const { intervals, event } = await getResult(eventId);
-    const convertUsersToParticipantsCarried = (users: User[]) =>
-      convertUsersToParticipants(currentUser!, event.owner, users);
+    const participants = convertParticipants(await getParticipants(eventId), user!, event.owner);
     intervals.forEach((interval) => {
-      interval.owners = convertUsersToParticipantsCarried(interval.owners!);
+      interval.owners = filterParticipantsByUsers(participants, interval.owners!);
     });
     setResultsIntervals(convertIntervalToFrontend(intervals));
-    setParticipants(convertUsersToParticipantsCarried(participants));
+    setParticipants(participants);
     setIsLoading(false);
+    console.log(intervals);
     return convertIntervalToFrontend(intervals);
   }
 
@@ -130,9 +129,9 @@ export function useInitState() {
     }
   }
 
-  async function goToResults() {
+  async function goToResults(eventIdProp: string = eventId, user = currentUser) {
     setIsResults(true);
-    const resultIntervals = await setResults(eventId);
+    const resultIntervals = await setResults(eventIdProp, user);
     setFocusDate(resultIntervals[0].start);
   }
 

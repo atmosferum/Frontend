@@ -1,6 +1,7 @@
 .window {
-  margin: 0 20px;
-  height: 100vh;
+  width: calc(100% - 10px);
+  padding: 0 10px;
+  height: 99vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -23,6 +24,14 @@
   h1 {
     order: -1;
     margin: 0;
+  }
+}
+.buttonsWrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  @media (max-width: 700px) {
+    flex-wrap: wrap;
   }
 }
 @media (min-width: 900px) {
@@ -78,4 +87,19 @@
 
 .stretch {
   width: 100%;
+}
+
+.participantsAmount {
+  display: flex;
+  margin-right: 20px;
+  margin-top: 5px;
+  p {
+    display: inline-block;
+    margin: 3px 5px 0 5px;
+    font-size: 18px;
+    font-weight: lighter;
+  }
+  svg {
+    width: 20px;
+  }
 }
