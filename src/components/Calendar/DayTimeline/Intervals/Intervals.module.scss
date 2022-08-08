@@ -6,12 +6,30 @@
   border-radius: var(--radius);
   color: var(--background);
   transition: ease-in-out 0.1s;
+
   &.--results:hover,
   &.--focus {
     margin: 0 !important;
     filter: sepia(5%);
     box-shadow: rgba(0, 0, 0, 0.44) 0 0 20px;
     z-index: 10;
+  }
+
+  &:before {
+  }
+  svg.up,
+  svg.down {
+    position: absolute;
+    left: 50%;
+    width: 20px;
+  }
+  svg.up {
+    top: -20px;
+    transform: translateX(-50%) scaleY(0.7);
+  }
+  svg.down {
+    bottom: -20px;
+    transform: rotate(180deg) translateX(50%) scaleY(0.7);
   }
   .top {
     position: absolute;
@@ -32,19 +50,28 @@
     pointer-events: all;
     touch-action: pan-x;
   }
+
   .cross {
     position: absolute;
     inset: 6px 10px auto auto;
-    height: 20px;
-    width: 20px;
     cursor: pointer !important;
     z-index: 20;
     pointer-events: all;
     opacity: 0.5;
+    transition: 0.2s;
+    //visibility: hidden;
+    //display: none;
   }
+
+  //&:hover .cross,
+  //&.--phone .cross{
+  //  visibility: visible;
+  //  display: block;
+  //}
   .cross:hover {
     opacity: 1;
   }
+
   .clockFace p {
     user-select: none;
     position: relative;
@@ -55,26 +82,31 @@
   * {
     transition: 0.1s;
   }
+
   .participantsAmount {
     position: absolute;
     inset: 6px 10px auto auto;
     z-index: 20;
     opacity: 0.5;
     display: flex;
+
     p {
       display: inline-block;
       margin: 3px 5px 5px 5px;
       font-size: 18px;
       font-weight: lighter;
     }
+
     svg {
       width: 20px;
     }
   }
+
   .participantsLineWrapper {
     padding: 0 5px 0 15px;
   }
 }
+
 .interval:not(.--draggable) {
   pointer-events: none !important;
 }

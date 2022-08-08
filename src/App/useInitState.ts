@@ -158,8 +158,7 @@ export function useInitState() {
   function getFocusInterval() {
     return changeableIntervals.find((interval) => +interval.start === +focusDate)!;
   }
-  function changeFocusInterval(part: 'start' | 'end', byHours: number) {
-    const interval = getFocusInterval();
+  function changeInterval(interval: Interval, part: 'start' | 'end', byHours: number) {
     if (!interval) return;
     const date = new Date(+interval[part] + byHours * MS_IN_HOUR);
     if (
@@ -174,16 +173,13 @@ export function useInitState() {
       return;
     interval[part] = date;
 
-    if (part === 'start') {
-      setFocusDate(new Date(+focusDate + byHours * MS_IN_HOUR));
-    }
     setChangeableIntervals([...changeableIntervals]);
   }
 
   return {
     setFocusDate,
     getFocusInterval,
-    changeFocusInterval,
+    changeInterval,
     resultsIntervals,
     adminIntervals,
     myIntervals,

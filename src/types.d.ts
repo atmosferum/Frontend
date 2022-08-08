@@ -69,7 +69,7 @@ export interface State {
   previousInterval: () => any;
   relativelyTodayGoByDays: (x: number) => any;
   nextInterval: () => any;
-  changeFocusInterval: (part: 'start' | 'end', byHours: number) => void;
+  changeInterval: (interval: Interval, part: 'start' | 'end', byHours: number) => void;
   getFocusInterval: () => Interval | undefined;
   setFocusDate: SetStateAction<any>;
 }

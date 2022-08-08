@@ -94,9 +94,9 @@ function DayTimeline(props: Props) {
     if (
       isResults ||
       isNextToOrInIntervals(changeableIntervals, cellDate) ||
-      isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_CELL)) ||
+      isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_HOUR)) ||
       (!isAdmin && !isInIntervals(adminIntervals, cellDate)) ||
-      (!isAdmin && !isInIntervals(adminIntervals, new Date(+cellDate + MS_IN_CELL)))
+      (!isAdmin && !isInIntervals(adminIntervals, new Date(+cellDate + MS_IN_HOUR)))
     )
       return;
     const newInterval = new IntervalClass(cellDate, new Date(cellDate.getTime() + MS_IN_CELL * 2));

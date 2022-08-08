@@ -10,6 +10,9 @@ import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
 import * as Icon from 'react-feather';
 import setFocus from 'focus-lock';
 import { App, AppContext } from '../../../../App/App';
+import { isPhone } from '../../../../utils';
+// @ts-ignore
+import { ReactComponent as Triengle } from './triangle-svgrepo-com.svg';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -74,6 +77,7 @@ const Intervals = memo((props: Props) => {
               'interval',
               draggable && '--draggable',
               isResults && '--results',
+              isPhone() && '--phone',
               start === focusDate && '--focus',
               style.height < 80,
             )} interval`}
@@ -120,6 +124,8 @@ const Intervals = memo((props: Props) => {
                   }}
                   onTouchMove={touchMoveHandler}
                 />
+                <Triengle style={{ fill: color }} className={s.up} />
+                <Triengle style={{ fill: color }} className={s.down} />
               </>
             )}
           </div>
