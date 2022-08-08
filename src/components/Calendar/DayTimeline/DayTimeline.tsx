@@ -67,9 +67,9 @@ function DayTimeline(props: Props) {
     if (
       isNextToOrInIntervals(
         changeableIntervals.filter((interval) => interval.id !== id),
-        cellDate,
+        date,
       ) ||
-      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, cellDate)) ||
+      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, date)) ||
       !draggingElement ||
       (part === 'start' &&
         changeableIntervals.find((el) => el.id === id)!.end.getTime() - date.getTime() <

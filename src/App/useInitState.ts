@@ -15,6 +15,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Interval, Participant, User } from '../types';
 import { useInput } from '../customHooks';
 import { MS_IN_DAY, MS_IN_HOUR } from '../consts';
+import { isInIntervals, isNextToOrInIntervals } from '../dateUtils';
+import { MS_IN_CELL } from '../components/Calendar/DayTimeline/DayTimeline';
 
 export function useInitState() {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -159,11 +161,22 @@ export function useInitState() {
   function changeFocusInterval(part: 'start' | 'end', byHours: number) {
     const interval = getFocusInterval();
     if (!interval) return;
-    interval[part] = new Date(+interval[part] + byHours * MS_IN_HOUR);
+    const date = new Date(+interval[part] + byHours * MS_IN_HOUR);
+    if (
+      isNextToOrInIntervals(
+        changeableIntervals.filter((i) => i.id !== interval.id),
+        date,
+      ) ||
+      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, date)) ||
+      (part === 'start' && interval!.end.getTime() - date.getTime() < MS_IN_CELL) ||
+      (part === 'end' && date.getTime() - interval!.start.getTime() < MS_IN_CELL)
+    )
+      return;
+    interval[part] = date;
+
     if (part === 'start') {
       setFocusDate(new Date(+focusDate + byHours * MS_IN_HOUR));
     }
-
     setChangeableIntervals([...changeableIntervals]);
   }
 

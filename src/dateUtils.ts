@@ -36,12 +36,12 @@ export function isBefore(first: Date, second: Date) {
 }
 
 export function isInIntervals(intervals: Interval[], date: Date) {
-  return intervals.some((interval) => interval.start <= date && date < interval.end);
+  return intervals.some((interval) => interval.start <= date && date <= interval.end);
 }
 export function isNextToOrInIntervals(intervals: Interval[], date: Date) {
   return intervals.some(
     (interval) =>
-      interval.start.getTime() - date.getTime() <= MS_IN_HOUR * HOURS_IN_CELL &&
+      interval.start.getTime() - date.getTime() < MS_IN_HOUR * HOURS_IN_CELL &&
       date.getTime() - interval.end.getTime() < MS_IN_HOUR * HOURS_IN_CELL,
   );
 }

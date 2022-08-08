@@ -69,9 +69,10 @@ const Intervals = memo((props: Props) => {
           <div
             onClick={() => onIntervalClickHandler(start)}
             key={id || i}
-            style={style}
+            style={{ ...style }}
             className={`${cx(
               'interval',
+              draggable && '--draggable',
               isResults && '--results',
               start === focusDate && '--focus',
               style.height < 80,

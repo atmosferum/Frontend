@@ -75,3 +75,6 @@
     padding: 0 5px 0 15px;
   }
 }
+.interval:not(.--draggable) {
+  pointer-events: none !important;
+}
