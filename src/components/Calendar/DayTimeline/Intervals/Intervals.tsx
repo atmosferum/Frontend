@@ -6,7 +6,6 @@ import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
 import { Cross } from './cross';
 import popoverStyle from '../../../Popover/Popover.module.scss';
-import { ParticipantsPopover } from '../../../../App/ParticipantsPopover/ParticipantsPopover';
 import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
 import * as Icon from 'react-feather';
 const cx = classNames.bind(s);
@@ -38,14 +37,10 @@ const Intervals = memo((props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
-
-  const intervalsRef = useRef<HTMLInputElement | null>(null);
-  const [y, setY] = useState(0);
-  function mouseEnterHandler(e: any) {
-    const bounds = e.currentTarget.getBoundingClientRect();
-    const y = e.clientY - bounds.top;
-    setY(y);
+  function onIntervalClickHandler(id: number) {
+    if (!id) return null;
   }
+  const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
     <div ref={intervalsRef}>
       {intervals.map(({ start, end, id, owners }, i) => {
@@ -69,15 +64,15 @@ const Intervals = memo((props: Props) => {
         };
         return (
           <div
-            onMouseEnter={mouseEnterHandler}
+            onClick={() => onIntervalClickHandler(id)}
             key={id || i}
-            style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
+            style={style}
             className={`${cx(
               'interval',
               isResults && '--results',
               start === focusDate && '--focus',
               style.height < 80,
-            )} ${popoverStyle.trigger} ${start === focusDate && popoverStyle.hover}`}
+            )} interval`}
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
@@ -96,10 +91,9 @@ const Intervals = memo((props: Props) => {
               <>
                 <div
                   className={cx('top')}
-                  onMouseDown={(e) => {
+                  onMouseDown={(e: any) => {
                     e.preventDefault();
-                    console.log(e);
-                    document.body.style.cursor = 'row-resize';
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'start' };
                   }}
                   onTouchStart={() => {
@@ -110,10 +104,9 @@ const Intervals = memo((props: Props) => {
                 <div
                   // draggable
                   className={cx('bottom')}
-                  onMouseDown={(e) => {
+                  onMouseDown={(e: any) => {
                     e.preventDefault();
-                    console.log(e);
-                    document.body.style.cursor = 'row-resize';
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'end' };
                   }}
                   onTouchStart={() => {

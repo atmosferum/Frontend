@@ -20,10 +20,11 @@ function Calendar() {
     document.body.addEventListener('mouseup', () => {
       if (!isPhone()) {
         draggingElement.current = null;
-        document.body.style.cursor = 'auto';
+        document.body.classList.remove('dragInterval');
       }
     });
     document.body.addEventListener('touchend', () => {
+      document.body.classList.remove('dragInterval');
       draggingElement.current = null;
     });
     timeLineRef.current!.onscroll = function () {

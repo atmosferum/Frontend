@@ -13,11 +13,22 @@ a {
   text-decoration: none;
   color: white;
 }
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 body {
   font-family: 'Inter', sans-serif;
   font-weight: normal;
   box-sizing: border-box;
   margin: 0;
+}
+body.dragInterval {
+  cursor: row-resize !important;
+  .interval {
+    pointer-events: none;
+  }
 }
 
 @media not handheld {
