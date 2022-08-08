@@ -8,6 +8,7 @@ import { getDateOfMonday, isIntervalsAfter, isIntervalsBefore } from '../dateUti
 import { DaySlider } from '../components/DaySlider/DaySlider';
 import { useInitState } from './useInitState';
 import { State } from '../types';
+import TimeClicker from '../components/TimeClicker/TimeClicker';
 export const AppContext = React.createContext<State | null>(null);
 export const App = () => {
   const state = useInitState();
@@ -62,6 +63,7 @@ export const App = () => {
 
         <Calendar />
       </div>
+      <TimeClicker />
     </AppContext.Provider>
   );
 };

@@ -7,6 +7,7 @@ import { HEIGHT_OF_CELL } from './DayTimeline/DayTimeline';
 import { isPhone } from '../../utils';
 import { daysOfWeek, months } from '../../consts';
 import { AppContext } from '../../App/App';
+import TimeClicker from '../TimeClicker/TimeClicker';
 
 const cx = classNames.bind(s);
 
@@ -18,10 +19,8 @@ function Calendar() {
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     document.body.addEventListener('mouseup', () => {
-      if (!isPhone()) {
-        draggingElement.current = null;
-        document.body.classList.remove('dragInterval');
-      }
+      draggingElement.current = null;
+      document.body.classList.remove('dragInterval');
     });
     document.body.addEventListener('touchend', () => {
       document.body.classList.remove('dragInterval');

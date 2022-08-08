@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, memo } from 'react';
+import React, { useEffect, useRef, useState, memo, useContext } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
 import { getClockFace, isEqualDays } from '../../../../dateUtils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
@@ -8,6 +8,8 @@ import { Cross } from './cross';
 import popoverStyle from '../../../Popover/Popover.module.scss';
 import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
 import * as Icon from 'react-feather';
+import setFocus from 'focus-lock';
+import { App, AppContext } from '../../../../App/App';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -37,8 +39,9 @@ const Intervals = memo((props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
-  function onIntervalClickHandler(id: number) {
-    if (!id) return null;
+  const { setFocusDate } = useContext(AppContext)!;
+  function onIntervalClickHandler(date: Date) {
+    setFocusDate(date);
   }
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
@@ -64,7 +67,7 @@ const Intervals = memo((props: Props) => {
         };
         return (
           <div
-            onClick={() => onIntervalClickHandler(id)}
+            onClick={() => onIntervalClickHandler(start)}
             key={id || i}
             style={style}
             className={`${cx(
@@ -97,6 +100,7 @@ const Intervals = memo((props: Props) => {
                     draggingElement.current = { id, part: 'start' };
                   }}
                   onTouchStart={() => {
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'start' };
                   }}
                   onTouchMove={touchMoveHandler}
@@ -110,6 +114,7 @@ const Intervals = memo((props: Props) => {
                     draggingElement.current = { id, part: 'end' };
                   }}
                   onTouchStart={() => {
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'end' };
                   }}
                   onTouchMove={touchMoveHandler}

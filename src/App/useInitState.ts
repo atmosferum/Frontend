@@ -14,7 +14,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { Interval, Participant, User } from '../types';
 import { useInput } from '../customHooks';
-import { MS_IN_DAY } from '../consts';
+import { MS_IN_DAY, MS_IN_HOUR } from '../consts';
 
 export function useInitState() {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -34,6 +34,8 @@ export function useInitState() {
   const draggingElement = useRef(null);
   const queryEventId = location.pathname.substring(1);
   const currentIntervals = isResults ? resultsIntervals : adminIntervals;
+  const changeableIntervals = isAdmin ? adminIntervals : myIntervals;
+  const setChangeableIntervals = isAdmin ? setAdminIntervals : setMyIntervals;
   useEffect(() => {
     initState();
   }, []);
@@ -151,13 +153,29 @@ export function useInitState() {
     saveIntervals();
     setIsLoginModalOpen(false);
   }
+  function getFocusInterval() {
+    return changeableIntervals.find((interval) => +interval.start === +focusDate)!;
+  }
+  function changeFocusInterval(part: 'start' | 'end', byHours: number) {
+    const interval = getFocusInterval();
+    if (!interval) return;
+    interval[part] = new Date(+interval[part] + byHours * MS_IN_HOUR);
+    if (part === 'start') {
+      setFocusDate(new Date(+focusDate + byHours * MS_IN_HOUR));
+    }
+
+    setChangeableIntervals([...changeableIntervals]);
+  }
 
   return {
+    setFocusDate,
+    getFocusInterval,
+    changeFocusInterval,
     resultsIntervals,
     adminIntervals,
     myIntervals,
     draggingElement,
-    setIntervals: isAdmin ? setAdminIntervals : setMyIntervals,
+    setIntervals: setChangeableIntervals,
     isAdmin,
     isResults,
     focusDate,

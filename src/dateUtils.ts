@@ -64,6 +64,8 @@ export const isIntervalsAfter = (currentIntervals: Interval[], focusDate: Date) 
     currentIntervals[currentIntervals.length - 1]?.end,
     isPhone() ? new Date(+focusDate + MS_IN_DAY) : getNextDateOfMonday(focusDate),
   );
-
+export const getHours = (date: Date) => {
+  return date.getHours() + date.getMinutes() / 60;
+};
 export const getClockFace = (hours: number) =>
   `${Math.floor(hours)}:${Math.round((hours % 1) * 60)}${hours % 1 ? '' : '0'}`;

@@ -99,7 +99,6 @@ function DayTimeline(props: Props) {
       (!isAdmin && !isInIntervals(adminIntervals, new Date(+cellDate + MS_IN_CELL)))
     )
       return;
-    document.body.style.cursor = 'row-resize';
     const newInterval = new IntervalClass(cellDate, new Date(cellDate.getTime() + MS_IN_CELL * 2));
     draggingElement.current = { id: newInterval.id, part: 'end' };
     changeableIntervals.push(newInterval);
