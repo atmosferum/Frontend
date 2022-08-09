@@ -1,0 +1,29 @@
+// Высота у .carousel и у .carousel-item должны быть одинаковые, иначе не будет работать проценты у .buttons
+
+.carousel {
+  overflow: hidden;
+  height: 200px;
+}
+
+.inner {
+  white-space: nowrap;
+  transition: transform 0.3s;
+}
+
+.carousel-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: beige;
+  height: 200px;
+  color: black;
+}
+
+.buttons {
+  transform: translate(0, -100%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
