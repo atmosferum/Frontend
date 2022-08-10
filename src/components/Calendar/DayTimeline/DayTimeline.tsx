@@ -100,6 +100,7 @@ function DayTimeline(props: Props) {
     )
       return;
     const newInterval = new IntervalClass(cellDate, new Date(cellDate.getTime() + MS_IN_CELL * 2));
+    document.body.classList.add('dragInterval');
     draggingElement.current = { id: newInterval.id, part: 'end' };
     changeableIntervals.push(newInterval);
     setIntervals([...changeableIntervals]);

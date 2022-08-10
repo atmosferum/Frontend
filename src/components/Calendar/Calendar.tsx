@@ -18,17 +18,16 @@ function Calendar() {
   const timeLineRef = useRef<HTMLInputElement | null>(null);
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
-    document.body.addEventListener('mouseup', () => {
+    const setDefaultDragSettings = () => {
       draggingElement.current = null;
       document.body.classList.remove('dragInterval');
-    });
-    document.body.addEventListener('touchend', () => {
-      document.body.classList.remove('dragInterval');
-      draggingElement.current = null;
-    });
+    };
+    document.body.addEventListener('mouseup', setDefaultDragSettings);
+    document.body.addEventListener('touchend', setDefaultDragSettings);
+    timeLineRef.current!.scrollTop = 400;
     timeLineRef.current!.onscroll = function () {
-      // sync scroll
-      daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft;
+      if (isPhone()) return;
+      daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft; // sync scroll
       clockFacesRef.current!.style.left = timeLineRef.current!.scrollLeft + 'px';
     };
   }, []);

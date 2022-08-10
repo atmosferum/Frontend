@@ -9,10 +9,10 @@ export interface PopoverProps {
 }
 
 export function Popover(props: PopoverProps) {
-  const { children, y, maxHeight, position = 'middle', customStyles } = props;
+  const { children, y, maxHeight, position = 'left', customStyles } = props;
   const positions = {
     right: '30%',
-    left: '-102%',
+    left: '-130px',
     middle: '-50px',
   };
   return (
