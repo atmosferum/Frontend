@@ -2,20 +2,22 @@
 
 .carousel {
   overflow: hidden;
-  height: 200px;
+  height: 400px;
+  border-radius: 10px;
 }
 
 .inner {
   white-space: nowrap;
   transition: transform 0.3s;
+  height: 100%;
 }
 
 .carousel-item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: beige;
-  height: 200px;
+  background-color: #ededed;
+  height: 100%;
   color: black;
 }
 

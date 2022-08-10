@@ -6,13 +6,9 @@ import { ChevronLeft, ChevronRight } from 'react-feather';
 const cx = classNames.bind(s);
 interface ChildProps {
   children: any;
-  width: any;
+  width?: any;
 }
-interface CarouselProps {
-  childrens: any;
-}
-
-export function CarouselChild(props: any) {
+export function CarouselChild(props: ChildProps) {
   const { children, width } = props;
   return (
     <div className={cx('carousel-item')} style={{ width }}>
@@ -24,15 +20,15 @@ export function CarouselChild(props: any) {
 function Carousel(props: any) {
   const [slideIndex, setSlideIndex] = useState(0);
   const [disableLeft, setDisableLeft] = useState(true);
-  const [disableRight, setDisablRight] = useState(false);
+  const [disableRight, setDisableRight] = useState(false);
   const { children } = props;
   function updateIndex(newIndex: number) {
     if (newIndex === 0) {
       setDisableLeft(true);
     } else if (newIndex === React.Children.count(children) - 1) {
-      setDisablRight(true);
+      setDisableRight(true);
     } else {
-      setDisablRight(false);
+      setDisableRight(false);
       setDisableLeft(false);
     }
     setSlideIndex(newIndex);
