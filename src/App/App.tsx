@@ -46,7 +46,7 @@ export const App = () => {
             />
           )}
 
-          {!isAdmin ? (
+          {!isAdmin || isResults ? (
             <h1>{titleInput.value}</h1>
           ) : (
             <input

@@ -5,13 +5,13 @@
   .user {
     font-family: 'Roboto Mono', sans-serif;
     color: black;
-    width: 90%;
     padding: 5px;
     border-radius: var(--radius);
     list-style: none;
     transition: 0.5s;
     margin: 0;
     text-align: start;
+    width: max-content;
     span {
       display: inline-block;
       width: max-content;
