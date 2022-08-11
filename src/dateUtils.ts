@@ -54,6 +54,15 @@ export function isThereIntersections(intervals: Interval[], newInterval: Interva
     );
   });
 }
+
+export function isSomethingInInterval(interval: Interval, someIntervals: Interval[]) {
+  return someIntervals.some(
+    (someInterval) =>
+      someInterval.start.getTime() >= interval.start.getTime() &&
+      interval.end.getTime() >= someInterval.end.getTime(),
+  );
+}
+
 export const isIntervalsBefore = (currentIntervals: Interval[], focusDate: Date) =>
   !!currentIntervals.length &&
   isBefore(currentIntervals[0]?.start, isPhone() ? focusDate : getDateOfMonday(focusDate));

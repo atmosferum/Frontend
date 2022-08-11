@@ -2,7 +2,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['main','43-mobile-time-clicker']
+    branches: ['main','43-mobile-time-clicker','46-add-select-interval-button']
 
 
 jobs:

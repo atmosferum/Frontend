@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState, memo, useContext } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
-import { getClockFace, isEqualDays } from '../../../../dateUtils';
+import {
+  getClockFace,
+  isEqualDays,
+  isSomethingInInterval,
+  isThereIntersections,
+} from '../../../../dateUtils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
 import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
@@ -10,7 +15,7 @@ import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
 import * as Icon from 'react-feather';
 import setFocus from 'focus-lock';
 import { App, AppContext } from '../../../../App/App';
-import { isPhone } from '../../../../utils';
+import { IntervalClass, isPhone } from '../../../../utils';
 // @ts-ignore
 import { ReactComponent as Triengle } from './triangle-svgrepo-com.svg';
 const cx = classNames.bind(s);
@@ -42,10 +47,7 @@ const Intervals = memo((props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
-  const { setFocusDate } = useContext(AppContext)!;
-  function onIntervalClickHandler(date: Date) {
-    setFocusDate(date);
-  }
+  const { setFocusDate, isAdmin, setIntervals, myIntervals } = useContext(AppContext)!;
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
     <div ref={intervalsRef}>
@@ -68,9 +70,15 @@ const Intervals = memo((props: Props) => {
           borderBottomRightRadius: isEndToday ? 15 : 0,
           margin,
         };
+        const fillInterval = () => {
+          setIntervals((intervals: Interval[]) => {
+            const newInterval = new IntervalClass(start, end);
+            return [...intervals, newInterval];
+          });
+        };
         return (
           <div
-            onClick={() => onIntervalClickHandler(start)}
+            onClick={() => setFocusDate(start)}
             key={id || i}
             style={{ ...style }}
             className={`${cx(
@@ -95,6 +103,12 @@ const Intervals = memo((props: Props) => {
                 </div>
               </>
             )}
+            {!(draggable || isAdmin || isResults) &&
+              !isSomethingInInterval({ start, end, id }, myIntervals) && (
+                <p className={s.selectAll} onClick={fillInterval}>
+                  Выделить весь
+                </p>
+              )}
             {draggable && (
               <>
                 <div
