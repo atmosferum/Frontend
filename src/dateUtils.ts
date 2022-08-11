@@ -34,9 +34,17 @@ export function isBefore(first: Date, second: Date) {
   const secondCopy = new Date(second);
   return firstCopy.setHours(0, 0, 0, 0) < secondCopy.setHours(0, 0, 0, 0);
 }
+export const isDateInInterval = (interval: Interval, date: Date) =>
+  interval.start <= date && date <= interval.end;
 
-export function isInIntervals(intervals: Interval[], date: Date) {
-  return intervals.some((interval) => interval.start <= date && date <= interval.end);
+export function isDateInIntervals(intervals: Interval[], date: Date) {
+  const isTheDateInInterval = (interval: Interval) => isDateInInterval(interval, date);
+  return intervals.some(isTheDateInInterval);
+}
+export function isIntervalInIntervals(intervals: Interval[], interval: Interval) {
+  const isIntervalInInterval = (i: Interval) =>
+    isDateInInterval(i, interval.start) && isDateInInterval(i, interval.end);
+  return intervals.some(isIntervalInInterval);
 }
 export function isNextToOrInIntervals(intervals: Interval[], date: Date) {
   return intervals.some(
@@ -45,22 +53,14 @@ export function isNextToOrInIntervals(intervals: Interval[], date: Date) {
       date.getTime() - interval.end.getTime() < MS_IN_HOUR * HOURS_IN_CELL,
   );
 }
+export const isIntervalsIntersect = (first: Interval, second: Interval) =>
+  isDateInInterval(first, second.start) ||
+  isDateInInterval(first, second.end) ||
+  isDateInInterval(second, first.start) ||
+  isDateInInterval(second, first.end);
 
 export function isThereIntersections(intervals: Interval[], newInterval: Interval) {
-  return intervals.some((interval) => {
-    return (
-      newInterval.start.getTime() < interval.start.getTime() &&
-      interval.end.getTime() < newInterval.end.getTime()
-    );
-  });
-}
-
-export function isSomethingInInterval(interval: Interval, someIntervals: Interval[]) {
-  return someIntervals.some(
-    (someInterval) =>
-      someInterval.start.getTime() >= interval.start.getTime() &&
-      interval.end.getTime() >= someInterval.end.getTime(),
-  );
+  return intervals.some((interval) => isIntervalsIntersect(interval, newInterval));
 }
 
 export const isIntervalsBefore = (currentIntervals: Interval[], focusDate: Date) =>

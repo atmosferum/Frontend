@@ -3,7 +3,7 @@ import { DraggingElement, Interval, Participant } from '../../../../types';
 import {
   getClockFace,
   isEqualDays,
-  isSomethingInInterval,
+  isIntervalsIntersect,
   isThereIntersections,
 } from '../../../../dateUtils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
@@ -48,6 +48,15 @@ const Intervals = memo((props: Props) => {
     touchMoveHandler,
   } = props;
   const { setFocusDate, isAdmin, setIntervals, myIntervals } = useContext(AppContext)!;
+  const fillInterval = (start: Date, end: Date) => {
+    setIntervals((intervals: Interval[]) => {
+      const newInterval = new IntervalClass(start, end);
+      return [
+        ...intervals.filter((interval) => !isIntervalsIntersect(interval, newInterval)),
+        newInterval,
+      ];
+    });
+  };
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
     <div ref={intervalsRef}>
@@ -70,12 +79,7 @@ const Intervals = memo((props: Props) => {
           borderBottomRightRadius: isEndToday ? 15 : 0,
           margin,
         };
-        const fillInterval = () => {
-          setIntervals((intervals: Interval[]) => {
-            const newInterval = new IntervalClass(start, end);
-            return [...intervals, newInterval];
-          });
-        };
+
         return (
           <div
             onClick={() => setFocusDate(start)}
@@ -103,12 +107,11 @@ const Intervals = memo((props: Props) => {
                 </div>
               </>
             )}
-            {!(draggable || isAdmin || isResults) &&
-              !isSomethingInInterval({ start, end, id }, myIntervals) && (
-                <p className={s.selectAll} onClick={fillInterval}>
-                  Выделить весь
-                </p>
-              )}
+            {!(draggable || isAdmin || isResults) && (
+              <p className={s.selectAll} onClick={() => fillInterval(start, end)}>
+                Выделить весь
+              </p>
+            )}
             {draggable && (
               <>
                 <div

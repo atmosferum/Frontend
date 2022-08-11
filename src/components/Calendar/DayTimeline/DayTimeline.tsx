@@ -3,16 +3,18 @@ import s from './DayTimeline.module.scss';
 import { DraggingElement, Interval } from '../../../types';
 import {
   isBefore,
-  isInIntervals,
+  isDateInIntervals,
   isThereIntersections,
   isEqualDays,
   isNextToOrInIntervals,
   getCellDate,
+  isIntervalInIntervals,
 } from '../../../dateUtils';
 import { Intervals } from './Intervals';
 import { MS_IN_HOUR } from '../../../consts';
 import { IntervalClass } from '../../../utils';
 import { AppContext } from '../../../App/App';
+import internal from 'stream';
 
 interface Props {
   day: Date;
@@ -64,42 +66,32 @@ function DayTimeline(props: Props) {
     const { id, part } = draggingElement.current;
     const date = new Date(cellDate.getTime() + (part === 'end' ? MS_IN_CELL : 0));
 
-    if (
-      isNextToOrInIntervals(
-        changeableIntervals.filter((interval) => interval.id !== id),
-        date,
-      ) ||
-      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, date)) ||
-      !draggingElement ||
-      (part === 'start' &&
-        changeableIntervals.find((el) => el.id === id)!.end.getTime() - date.getTime() <
-          MS_IN_CELL) ||
-      (part === 'end' &&
-        date.getTime() - changeableIntervals.find((el) => el.id === id)!.start.getTime() <
-          MS_IN_CELL)
-    )
-      return;
-
     const copyOfIntervals = structuredClone(changeableIntervals);
-    const interval = copyOfIntervals.find((interval: Interval) => interval.id === id)!;
-    interval[part] = date;
+    const newInterval = copyOfIntervals.find((interval: Interval) => interval.id === id)!;
+    const copyOfIntervalsWithoutNewInterval = copyOfIntervals.filter(
+      (interval) => interval.id !== id,
+    );
+    newInterval[part] = date;
     if (
-      !isThereIntersections(copyOfIntervals, interval) &&
-      isEqualDays(interval.start, interval.end)
+      !isNextToOrInIntervals(copyOfIntervalsWithoutNewInterval, date) &&
+      !(!isAdmin && adminIntervals.length && !isIntervalInIntervals(adminIntervals, newInterval)) &&
+      !(+newInterval.end - +newInterval.start < MS_IN_CELL) &&
+      !isThereIntersections(copyOfIntervalsWithoutNewInterval, newInterval) &&
+      isEqualDays(newInterval.start, newInterval.end)
     ) {
       setIntervals(copyOfIntervals);
     }
   };
   const onCellClickHandler = (cellDate: Date) => {
+    const newInterval = new IntervalClass(cellDate, new Date(+cellDate + MS_IN_CELL * 2));
     if (
       isResults ||
       isNextToOrInIntervals(changeableIntervals, cellDate) ||
       isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_HOUR)) ||
-      (!isAdmin && !isInIntervals(adminIntervals, cellDate)) ||
-      (!isAdmin && !isInIntervals(adminIntervals, new Date(+cellDate + MS_IN_HOUR)))
-    )
+      (!isAdmin && !isIntervalInIntervals(adminIntervals, newInterval))
+    ) {
       return;
-    const newInterval = new IntervalClass(cellDate, new Date(cellDate.getTime() + MS_IN_CELL * 2));
+    }
     document.body.classList.add('dragInterval');
     draggingElement.current = { id: newInterval.id, part: 'end' };
     changeableIntervals.push(newInterval);
