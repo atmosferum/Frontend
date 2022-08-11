@@ -76,8 +76,7 @@ function DayTimeline(props: Props) {
       !isNextToOrInIntervals(copyOfIntervalsWithoutNewInterval, date) &&
       !(!isAdmin && adminIntervals.length && !isIntervalInIntervals(adminIntervals, newInterval)) &&
       !(+newInterval.end - +newInterval.start < MS_IN_CELL) &&
-      !isThereIntersections(copyOfIntervalsWithoutNewInterval, newInterval) &&
-      isEqualDays(newInterval.start, newInterval.end)
+      !isThereIntersections(copyOfIntervalsWithoutNewInterval, newInterval)
     ) {
       setIntervals(copyOfIntervals);
     }

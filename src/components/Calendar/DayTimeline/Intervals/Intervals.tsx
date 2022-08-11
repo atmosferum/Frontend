@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, memo, useContext } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
 import {
   getClockFace,
+  getHours,
   isEqualDays,
   isIntervalsIntersect,
   isThereIntersections,
@@ -63,8 +64,8 @@ const Intervals = memo((props: Props) => {
       {intervals.map(({ start, end, id, owners }, i) => {
         const isStartToday = isEqualDays(start, day);
         const isEndToday = isEqualDays(end, day);
-        const hoursOfStart = start.getHours() + start.getMinutes() / 60;
-        const hoursOfEnd = end.getHours() + end.getMinutes() / 60;
+        const hoursOfStart = getHours(start);
+        const hoursOfEnd = getHours(end);
         const drawFrom = isStartToday ? hoursOfStart : 0;
         const drawTo = isEndToday ? hoursOfEnd : 24;
         const clockFace = <p>{`${getClockFace(hoursOfStart)} — ${getClockFace(hoursOfEnd)}`}</p>;
