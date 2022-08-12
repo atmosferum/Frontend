@@ -6,6 +6,7 @@
     "@babel/eslint-parser": "^7.18.2",
     "@radix-ui/react-dialog": "^0.1.7",
     "@radix-ui/react-popover": "^0.1.6",
+    "@reduxjs/toolkit": "^1.8.4",
     "@storybook/preset-create-react-app": "^4.1.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -17,6 +18,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
+    "react-redux": "^8.0.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -93,6 +95,5 @@
       "prettier"
     ]
   },
-
   "proxy": "http://135.181.211.34:25501"
 }

@@ -17,6 +17,7 @@ import { useInput } from '../customHooks';
 import { MS_IN_DAY, MS_IN_HOUR } from '../consts';
 import { isDateInIntervals, isNextToOrInIntervals } from '../dateUtils';
 import { MS_IN_CELL } from '../components/Calendar/DayTimeline/DayTimeline';
+import { useActions } from '../hooks/actions';
 
 export function useInitState() {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -38,27 +39,28 @@ export function useInitState() {
   const currentIntervals = isResults ? resultsIntervals : adminIntervals;
   const changeableIntervals = isAdmin ? adminIntervals : myIntervals;
   const setChangeableIntervals = isAdmin ? setAdminIntervals : setMyIntervals;
+  // const {initState} = useActions()
   useEffect(() => {
-    initState();
+    // initState(queryEventId);
   }, []);
-  async function initState() {
-    if (!queryEventId) {
-      setIsAdmin(true);
-      return;
-    }
-    setEventId(queryEventId);
-    const { owner, title } = await getEventById(queryEventId);
-    const user = await getCurrentUser().catch(console.log);
-    titleInput.setValue(title);
-    setCurrentUser(user ?? null);
-    const isAdminVar = owner.id === user?.id;
-    await setResults(queryEventId, user!);
-    await setIntervals(owner, user);
-    if (isAdminVar) {
-      setIsAdmin(true);
-      await goToResults(queryEventId, user);
-    }
-  }
+  // async function initState() {
+  //   if (!queryEventId) {
+  //     setIsAdmin(true);
+  //     return;
+  //   }
+  //   setEventId(queryEventId);
+  //   const { owner, title } = await getEventById(queryEventId);
+  //   const user = await getCurrentUser().catch(console.log);
+  //   titleInput.setValue(title);
+  //   setCurrentUser(user ?? null);
+  //   const isAdminVar = owner.id === user?.id;
+  //   await setResults(queryEventId, user!);
+  //   await setIntervals(owner, user);
+  //   if (isAdminVar) {
+  //     setIsAdmin(true);
+  //     await goToResults(queryEventId, user);
+  //   }
+  // }
   async function setIntervals(ownerOfEvent: User, user: User | void) {
     const eventIntervals = await getAllIntervals(queryEventId);
     const allIntervals = convertIntervalToFrontend(eventIntervals);

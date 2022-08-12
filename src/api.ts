@@ -58,10 +58,7 @@ export async function logout(): Promise<void> {
 }
 
 export async function postEvent(params: { title: string; description: string }): Promise<string> {
-  const { headers } = await axios.post(`${API_PATH}/events`, {
-    title: params.title,
-    description: params.description,
-  });
+  const { headers } = await axios.post(`${API_PATH}/events`, params);
 
   return headers.location;
 }
