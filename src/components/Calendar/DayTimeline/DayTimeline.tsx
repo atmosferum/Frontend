@@ -67,9 +67,9 @@ function DayTimeline(props: Props) {
     if (
       isNextToOrInIntervals(
         changeableIntervals.filter((interval) => interval.id !== id),
-        cellDate,
+        date,
       ) ||
-      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, cellDate)) ||
+      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, date)) ||
       !draggingElement ||
       (part === 'start' &&
         changeableIntervals.find((el) => el.id === id)!.end.getTime() - date.getTime() <
@@ -94,13 +94,13 @@ function DayTimeline(props: Props) {
     if (
       isResults ||
       isNextToOrInIntervals(changeableIntervals, cellDate) ||
-      isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_CELL)) ||
+      isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_HOUR)) ||
       (!isAdmin && !isInIntervals(adminIntervals, cellDate)) ||
-      (!isAdmin && !isInIntervals(adminIntervals, new Date(+cellDate + MS_IN_CELL)))
+      (!isAdmin && !isInIntervals(adminIntervals, new Date(+cellDate + MS_IN_HOUR)))
     )
       return;
-    document.body.style.cursor = 'row-resize';
     const newInterval = new IntervalClass(cellDate, new Date(cellDate.getTime() + MS_IN_CELL * 2));
+    document.body.classList.add('dragInterval');
     draggingElement.current = { id: newInterval.id, part: 'end' };
     changeableIntervals.push(newInterval);
     setIntervals([...changeableIntervals]);

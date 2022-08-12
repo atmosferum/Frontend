@@ -1,0 +1,71 @@
+.timeclicker {
+  background-color: white;
+  padding: 10px 1px;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: rgba(0, 0, 0, 0.17) 0 0 20px;
+  z-index: 1000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.minus {
+  padding: 0;
+  margin: 4px 0 0;
+}
+.time-slider {
+  font-weight: 500;
+  height: 2rem;
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.time-div {
+  width: 60px;
+  border-top: 2px solid rgba(123, 123, 123, 0.18);
+  border-bottom: 2px solid rgba(123, 123, 123, 0.18);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.time-span {
+  padding: 0 0.75rem;
+
+  box-sizing: border-box;
+}
+
+.slider {
+  border: 2px solid rgba(123, 123, 123, 0.18);
+  height: 100%;
+  background: none;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  &.--left {
+    border-radius: var(--radius) 0 0 var(--radius);
+    cursor: pointer;
+  }
+
+  &.--right {
+    cursor: pointer;
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  &.--highlight {
+    background-color: var(--primary);
+  }
+}
+.cross {
+  margin-top: 5px;
+  opacity: 0.3;
+  width: 20px;
+}

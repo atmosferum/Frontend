@@ -14,7 +14,9 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { Interval, Participant, User } from '../types';
 import { useInput } from '../customHooks';
-import { MS_IN_DAY } from '../consts';
+import { MS_IN_DAY, MS_IN_HOUR } from '../consts';
+import { isInIntervals, isNextToOrInIntervals } from '../dateUtils';
+import { MS_IN_CELL } from '../components/Calendar/DayTimeline/DayTimeline';
 
 export function useInitState() {
   const [adminIntervals, setAdminIntervals] = useState<Interval[]>([]);
@@ -34,6 +36,8 @@ export function useInitState() {
   const draggingElement = useRef(null);
   const queryEventId = location.pathname.substring(1);
   const currentIntervals = isResults ? resultsIntervals : adminIntervals;
+  const changeableIntervals = isAdmin ? adminIntervals : myIntervals;
+  const setChangeableIntervals = isAdmin ? setAdminIntervals : setMyIntervals;
   useEffect(() => {
     initState();
   }, []);
@@ -151,13 +155,36 @@ export function useInitState() {
     saveIntervals();
     setIsLoginModalOpen(false);
   }
+  function getFocusInterval() {
+    return changeableIntervals.find((interval) => +interval.start === +focusDate)!;
+  }
+  function changeInterval(interval: Interval, part: 'start' | 'end', byHours: number) {
+    if (!interval) return;
+    const date = new Date(+interval[part] + byHours * MS_IN_HOUR);
+    if (
+      isNextToOrInIntervals(
+        changeableIntervals.filter((i) => i.id !== interval.id),
+        date,
+      ) ||
+      (!isAdmin && adminIntervals.length && !isInIntervals(adminIntervals, date)) ||
+      (part === 'start' && interval!.end.getTime() - date.getTime() < MS_IN_CELL) ||
+      (part === 'end' && date.getTime() - interval!.start.getTime() < MS_IN_CELL)
+    )
+      return;
+    interval[part] = date;
+
+    setChangeableIntervals([...changeableIntervals]);
+  }
 
   return {
+    setFocusDate,
+    getFocusInterval,
+    changeInterval,
     resultsIntervals,
     adminIntervals,
     myIntervals,
     draggingElement,
-    setIntervals: isAdmin ? setAdminIntervals : setMyIntervals,
+    setIntervals: setChangeableIntervals,
     isAdmin,
     isResults,
     focusDate,

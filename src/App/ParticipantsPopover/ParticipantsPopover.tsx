@@ -10,7 +10,7 @@ interface Props extends PopoverProps {
 export function ParticipantsPopover(props: Props) {
   const { participants, ...popoverProps } = props;
   return (
-    <Popover customStyles={{ width: '350px', transform: 'translate(-40px, 0)' }} {...popoverProps}>
+    <Popover customStyles={{ transform: 'translate(-50%, 0)' }} {...popoverProps}>
       <div className={s.participantsModalContent}>
         {participants.map(({ isAdmin, name, id, color, isCurrentUser }: Participant) => (
           <p className={s.user} key={id}>

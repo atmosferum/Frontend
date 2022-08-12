@@ -17,8 +17,6 @@ interface DaySliderProps {
 
 export function DaySlider(props: DaySliderProps) {
   const { highlightRight, highlightLeft, right, left, date, className } = props;
-  console.log(date.getMonth());
-  console.log(date.getDate());
   return (
     <div className={cx('day-slider', className)}>
       <button onClick={left} className={cx('slider', '--left')}>

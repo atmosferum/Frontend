@@ -7,6 +7,7 @@ import { HEIGHT_OF_CELL } from './DayTimeline/DayTimeline';
 import { isPhone } from '../../utils';
 import { daysOfWeek, months } from '../../consts';
 import { AppContext } from '../../App/App';
+import TimeClicker from '../TimeClicker/TimeClicker';
 
 const cx = classNames.bind(s);
 
@@ -17,18 +18,16 @@ function Calendar() {
   const timeLineRef = useRef<HTMLInputElement | null>(null);
   const clockFacesRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
-    document.body.addEventListener('mouseup', () => {
-      if (!isPhone()) {
-        draggingElement.current = null;
-        document.body.style.cursor = 'auto';
-      }
-    });
-    document.body.addEventListener('touchend', () => {
+    const setDefaultDragSettings = () => {
       draggingElement.current = null;
-    });
+      document.body.classList.remove('dragInterval');
+    };
+    document.body.addEventListener('mouseup', setDefaultDragSettings);
+    document.body.addEventListener('touchend', setDefaultDragSettings);
+    timeLineRef.current!.scrollTop = 400;
     timeLineRef.current!.onscroll = function () {
-      // sync scroll
-      daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft;
+      if (isPhone()) return;
+      daysLineRef.current!.scrollLeft = timeLineRef.current!.scrollLeft; // sync scroll
       clockFacesRef.current!.style.left = timeLineRef.current!.scrollLeft + 'px';
     };
   }, []);

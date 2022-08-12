@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, memo } from 'react';
+import React, { useEffect, useRef, useState, memo, useContext } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
 import { getClockFace, isEqualDays } from '../../../../dateUtils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
@@ -6,9 +6,13 @@ import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
 import { Cross } from './cross';
 import popoverStyle from '../../../Popover/Popover.module.scss';
-import { ParticipantsPopover } from '../../../../App/ParticipantsPopover/ParticipantsPopover';
 import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
 import * as Icon from 'react-feather';
+import setFocus from 'focus-lock';
+import { App, AppContext } from '../../../../App/App';
+import { isPhone } from '../../../../utils';
+// @ts-ignore
+import { ReactComponent as Triengle } from './triangle-svgrepo-com.svg';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -38,14 +42,11 @@ const Intervals = memo((props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
-
-  const intervalsRef = useRef<HTMLInputElement | null>(null);
-  const [y, setY] = useState(0);
-  function mouseEnterHandler(e: any) {
-    const bounds = e.currentTarget.getBoundingClientRect();
-    const y = e.clientY - bounds.top;
-    setY(y);
+  const { setFocusDate } = useContext(AppContext)!;
+  function onIntervalClickHandler(date: Date) {
+    setFocusDate(date);
   }
+  const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
     <div ref={intervalsRef}>
       {intervals.map(({ start, end, id, owners }, i) => {
@@ -69,15 +70,17 @@ const Intervals = memo((props: Props) => {
         };
         return (
           <div
-            onMouseEnter={mouseEnterHandler}
+            onClick={() => onIntervalClickHandler(start)}
             key={id || i}
-            style={{ pointerEvents: isResults ? 'all' : 'none', ...style }}
+            style={{ ...style }}
             className={`${cx(
               'interval',
+              draggable && '--draggable',
               isResults && '--results',
+              isPhone() && '--phone',
               start === focusDate && '--focus',
               style.height < 80,
-            )} ${popoverStyle.trigger} ${start === focusDate && popoverStyle.hover}`}
+            )} interval`}
           >
             <div className={cx('clockFace')}>{clockFace}</div>
             {draggable && <Cross onClick={() => deleteInterval(id)} className={s.cross} />}
@@ -96,13 +99,13 @@ const Intervals = memo((props: Props) => {
               <>
                 <div
                   className={cx('top')}
-                  onMouseDown={(e) => {
+                  onMouseDown={(e: any) => {
                     e.preventDefault();
-                    console.log(e);
-                    document.body.style.cursor = 'row-resize';
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'start' };
                   }}
                   onTouchStart={() => {
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'start' };
                   }}
                   onTouchMove={touchMoveHandler}
@@ -110,17 +113,19 @@ const Intervals = memo((props: Props) => {
                 <div
                   // draggable
                   className={cx('bottom')}
-                  onMouseDown={(e) => {
+                  onMouseDown={(e: any) => {
                     e.preventDefault();
-                    console.log(e);
-                    document.body.style.cursor = 'row-resize';
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'end' };
                   }}
                   onTouchStart={() => {
+                    document.body.classList.add('dragInterval');
                     draggingElement.current = { id, part: 'end' };
                   }}
                   onTouchMove={touchMoveHandler}
                 />
+                <Triengle style={{ fill: color }} className={s.up} />
+                <Triengle style={{ fill: color }} className={s.down} />
               </>
             )}
           </div>

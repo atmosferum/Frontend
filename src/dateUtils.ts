@@ -36,12 +36,12 @@ export function isBefore(first: Date, second: Date) {
 }
 
 export function isInIntervals(intervals: Interval[], date: Date) {
-  return intervals.some((interval) => interval.start <= date && date < interval.end);
+  return intervals.some((interval) => interval.start <= date && date <= interval.end);
 }
 export function isNextToOrInIntervals(intervals: Interval[], date: Date) {
   return intervals.some(
     (interval) =>
-      interval.start.getTime() - date.getTime() <= MS_IN_HOUR * HOURS_IN_CELL &&
+      interval.start.getTime() - date.getTime() < MS_IN_HOUR * HOURS_IN_CELL &&
       date.getTime() - interval.end.getTime() < MS_IN_HOUR * HOURS_IN_CELL,
   );
 }
@@ -64,6 +64,8 @@ export const isIntervalsAfter = (currentIntervals: Interval[], focusDate: Date) 
     currentIntervals[currentIntervals.length - 1]?.end,
     isPhone() ? new Date(+focusDate + MS_IN_DAY) : getNextDateOfMonday(focusDate),
   );
-
+export const getHours = (date: Date) => {
+  return date.getHours() + date.getMinutes() / 60;
+};
 export const getClockFace = (hours: number) =>
   `${Math.floor(hours)}:${Math.round((hours % 1) * 60)}${hours % 1 ? '' : '0'}`;
