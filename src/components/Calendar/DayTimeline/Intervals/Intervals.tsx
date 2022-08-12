@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState, memo, useContext } from 'react';
 import { DraggingElement, Interval, Participant } from '../../../../types';
-import { getClockFace, isEqualDays } from '../../../../dateUtils';
+import {
+  getClockFace,
+  getHours,
+  isEqualDays,
+  isIntervalsIntersect,
+  isThereIntersections,
+} from '../../../../dateUtils';
 import { HEIGHT_OF_CELL } from '../DayTimeline';
 import s from './Intervals.module.scss';
 import classNames from 'classnames/bind';
@@ -10,7 +16,7 @@ import ParticipantsLine from '../../../ParticipantsLine/ParticipantsLine';
 import * as Icon from 'react-feather';
 import setFocus from 'focus-lock';
 import { App, AppContext } from '../../../../App/App';
-import { isPhone } from '../../../../utils';
+import { IntervalClass, isPhone } from '../../../../utils';
 // @ts-ignore
 import { ReactComponent as Triengle } from './triangle-svgrepo-com.svg';
 const cx = classNames.bind(s);
@@ -42,18 +48,24 @@ const Intervals = memo((props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
-  const { setFocusDate } = useContext(AppContext)!;
-  function onIntervalClickHandler(date: Date) {
-    setFocusDate(date);
-  }
+  const { setFocusDate, isAdmin, setIntervals, myIntervals } = useContext(AppContext)!;
+  const fillInterval = (start: Date, end: Date) => {
+    setIntervals((intervals: Interval[]) => {
+      const newInterval = new IntervalClass(start, end);
+      return [
+        ...intervals.filter((interval) => !isIntervalsIntersect(interval, newInterval)),
+        newInterval,
+      ];
+    });
+  };
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
     <div ref={intervalsRef}>
       {intervals.map(({ start, end, id, owners }, i) => {
         const isStartToday = isEqualDays(start, day);
         const isEndToday = isEqualDays(end, day);
-        const hoursOfStart = start.getHours() + start.getMinutes() / 60;
-        const hoursOfEnd = end.getHours() + end.getMinutes() / 60;
+        const hoursOfStart = getHours(start);
+        const hoursOfEnd = getHours(end);
         const drawFrom = isStartToday ? hoursOfStart : 0;
         const drawTo = isEndToday ? hoursOfEnd : 24;
         const clockFace = <p>{`${getClockFace(hoursOfStart)} — ${getClockFace(hoursOfEnd)}`}</p>;
@@ -68,9 +80,10 @@ const Intervals = memo((props: Props) => {
           borderBottomRightRadius: isEndToday ? 15 : 0,
           margin,
         };
+
         return (
           <div
-            onClick={() => onIntervalClickHandler(start)}
+            onClick={() => setFocusDate(start)}
             key={id || i}
             style={{ ...style }}
             className={`${cx(
@@ -94,6 +107,11 @@ const Intervals = memo((props: Props) => {
                   <ParticipantsLine borderColor={color} participants={owners!} />
                 </div>
               </>
+            )}
+            {!(draggable || isAdmin || isResults) && (
+              <p className={s.selectAll} onClick={() => fillInterval(start, end)}>
+                Выделить весь
+              </p>
             )}
             {draggable && (
               <>
