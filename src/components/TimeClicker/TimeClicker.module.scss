@@ -1,6 +1,6 @@
 .timeclicker {
   background-color: white;
-  padding: 10px 30px;
+  padding: 10px 1px;
   display: flex;
   justify-content: space-around;
   box-shadow: rgba(0, 0, 0, 0.17) 0 0 20px;
@@ -12,7 +12,7 @@
 }
 .minus {
   padding: 0;
-  margin: 4px 10px 0;
+  margin: 4px 0 0;
 }
 .time-slider {
   font-weight: 500;
@@ -65,9 +65,7 @@
   }
 }
 .cross {
-  position: absolute;
-  top: 3px;
-  right: 5px;
+  margin-top: 5px;
   opacity: 0.3;
   width: 20px;
 }
