@@ -19,6 +19,8 @@ import { App, AppContext } from '../../../../App/App';
 import { IntervalClass, isPhone } from '../../../../utils';
 // @ts-ignore
 import { ReactComponent as Triengle } from './triangle-svgrepo-com.svg';
+import { useAppSelector } from '../../../../hooks/redux';
+import { useActions } from '../../../../hooks/actions';
 const cx = classNames.bind(s);
 
 interface Props {
@@ -48,15 +50,15 @@ const Intervals = memo((props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
-  const { setFocusDate, isAdmin, setIntervals, myIntervals } = useContext(AppContext)!;
+  const { isAdmin, adminIntervals, myIntervals } = useAppSelector((state) => state.store);
+  const { setIntervals, setState } = useActions();
   const fillInterval = (start: Date, end: Date) => {
-    setIntervals((intervals: Interval[]) => {
-      const newInterval = new IntervalClass(start, end);
-      return [
-        ...intervals.filter((interval) => !isIntervalsIntersect(interval, newInterval)),
-        newInterval,
-      ];
-    });
+    const newInterval = new IntervalClass(start, end);
+
+    setIntervals([
+      ...myIntervals.filter((interval) => !isIntervalsIntersect(interval, newInterval)),
+      newInterval,
+    ]);
   };
   const intervalsRef = useRef<HTMLInputElement | null>(null);
   return (
@@ -83,7 +85,7 @@ const Intervals = memo((props: Props) => {
 
         return (
           <div
-            onClick={() => setFocusDate(start)}
+            onClick={() => setState({ focusDate: start })}
             key={id || i}
             style={{ ...style }}
             className={`${cx(

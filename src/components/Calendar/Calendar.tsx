@@ -8,11 +8,13 @@ import { isPhone } from '../../utils';
 import { daysOfWeek, months } from '../../consts';
 import { AppContext } from '../../App/App';
 import TimeClicker from '../TimeClicker/TimeClicker';
+import { useAppSelector } from '../../hooks/redux';
 
 const cx = classNames.bind(s);
 
 function Calendar() {
-  const { draggingElement, isAdmin, isResults, focusDate } = useContext(AppContext)!;
+  const { draggingElement } = useContext(AppContext)!;
+  const { focusDate, isAdmin, isResults } = useAppSelector((state) => state.store);
   const week = getWeek(getDateOfMonday(focusDate ?? new Date()));
   const daysLineRef = useRef<HTMLInputElement | null>(null);
   const timeLineRef = useRef<HTMLInputElement | null>(null);

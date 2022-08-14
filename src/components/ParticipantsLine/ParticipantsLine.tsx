@@ -16,7 +16,6 @@ const ParticipantsLine = memo(({ participants, borderColor, children }: IProps) 
     Array.from(ref!.current?.children!).forEach((e: any, id) => {
       e.style.setProperty('--width', `${20 + participants[id].name.length * 11}px`);
     });
-    console.log(participants);
   }, [participants]);
   return (
     <div>

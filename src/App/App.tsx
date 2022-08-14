@@ -9,19 +9,17 @@ import { DaySlider } from '../components/DaySlider/DaySlider';
 import { useInitState } from './useInitState';
 import { State } from '../types';
 import TimeClicker from '../components/TimeClicker/TimeClicker';
+import { useAppSelector, useCurrentIntervals } from '../hooks/redux';
+import { useActions } from '../hooks/actions';
 export const AppContext = React.createContext<State | null>(null);
 export const App = () => {
+  const reduxState = useAppSelector((state) => state.store);
   const state = useInitState();
-  const {
-    isResults,
-    isAdmin,
-    titleInput,
-    focusDate,
-    currentIntervals,
-    previousInterval,
-    relativelyTodayGoByDays,
-    nextInterval,
-  } = state;
+  const { isResults, isAdmin, focusDate } = reduxState;
+
+  const { titleInput } = state;
+  const currentIntervals = useCurrentIntervals();
+  const { nextInterval, relativelyTodayGoByDays } = useActions();
 
   return (
     <AppContext.Provider value={state}>
@@ -30,8 +28,16 @@ export const App = () => {
           {isPhone() ? (
             <DaySlider
               className={s.daySlider}
-              right={!isResults && isAdmin ? () => relativelyTodayGoByDays(1) : nextInterval}
-              left={!isResults && isAdmin ? () => relativelyTodayGoByDays(-1) : previousInterval}
+              right={
+                !isResults && isAdmin
+                  ? () => relativelyTodayGoByDays(1)
+                  : () => nextInterval('next')
+              }
+              left={
+                !isResults && isAdmin
+                  ? () => relativelyTodayGoByDays(-1)
+                  : () => nextInterval('previous')
+              }
               highlightLeft={isIntervalsBefore(currentIntervals, focusDate)}
               highlightRight={isIntervalsAfter(currentIntervals, focusDate)}
               date={focusDate}

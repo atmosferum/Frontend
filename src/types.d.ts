@@ -43,33 +43,7 @@ export interface Results {
 }
 
 export interface State {
-  adminIntervals: Interval[];
-  myIntervals: Interval[];
-  resultsIntervals: Interval[];
-  setIntervals: (any) => any;
-  setIsLoginModalOpen: (any) => any;
-  setResults: (any) => any;
-  goToResults: () => any;
-  saveIntervals: () => any;
-  isResults: boolean;
-  isAdmin: boolean;
   titleInput: any;
-  eventId: string;
-  focusDate: Date;
-  isLoginModalOpen: boolean;
-  login: any;
-  goToVoting: () => any;
   draggingElement: DraggingElement;
   name: any;
-  participants: Participant[];
-  isLoading: boolean;
-  loginAndSaveIntervals: () => any;
-  createEvent: () => void;
-  currentIntervals: Interval[];
-  previousInterval: () => any;
-  relativelyTodayGoByDays: (x: number) => any;
-  nextInterval: () => any;
-  changeInterval: (interval: Interval, part: 'start' | 'end', byHours: number) => void;
-  getFocusInterval: () => Interval | undefined;
-  setFocusDate: SetStateAction<any>;
 }
