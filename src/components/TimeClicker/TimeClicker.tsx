@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import s from './TimeClicker.module.scss';
 import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight, Minus } from 'react-feather';
@@ -7,16 +7,17 @@ import { AppContext } from '../../App/App';
 import { getClockFace, getHours } from '../../dateUtils';
 import { isPhone } from '../../utils';
 import { Cross } from '../Calendar/DayTimeline/Intervals/cross';
-import { useAppSelector, useFocusInterval } from '../../hooks/redux';
+import { useAppSelector } from '../../hooks/redux';
 import { useActions } from '../../hooks/actions';
+import { selectFocusInterval } from '../../store/selectors';
 const cx = classNames.bind(s);
 
-interface Props {}
+function TimeClicker() {
+  const isResults = useAppSelector((state) => state.store.isResults)!;
+  const focusDate = useAppSelector((state) => state.store.focusDate)!;
+  const { changeInterval } = useActions();
+  const focusInterval = useAppSelector(selectFocusInterval);
 
-function TimeClicker(props: Props) {
-  const { focusDate, isResults } = useAppSelector((state) => state.store)!;
-  const { setState, changeInterval } = useActions();
-  const focusInterval = useFocusInterval();
   const [interval, setInterval] = useState<Interval | undefined>(focusInterval);
   const changeFocusInterval = (part: any, hour: number) =>
     changeInterval({ interval: interval!, part, byHours: hour });

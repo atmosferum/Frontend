@@ -1,23 +1,6 @@
-import {
-  convertIntervalToFrontend,
-  convertParticipants,
-  filterParticipantsByUsers,
-  getAllIntervals,
-  getCurrentUser,
-  getEventById,
-  getParticipants,
-  getResult,
-  postEvent,
-  postIntervals,
-  postLogin,
-} from '../api';
 import { useEffect, useRef, useState } from 'react';
 import { Interval, Participant, User } from '../types';
 import { useInput } from '../customHooks';
-import { MS_IN_DAY, MS_IN_HOUR } from '../consts';
-import { isDateInIntervals, isNextToOrInIntervals } from '../dateUtils';
-import { MS_IN_CELL } from '../components/Calendar/DayTimeline/DayTimeline';
-import { useActions } from '../hooks/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppSelector } from '../hooks/redux';
 import { getAllIntervalsThunk, initState, setResultThunk } from '../store/store.slice';

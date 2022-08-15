@@ -1,7 +1,7 @@
 import { DraggingElement, Interval, Participant, User } from '../types';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  convertIntervalToFrontend,
+  convertIntervalsToFrontend,
   convertParticipants,
   filterParticipantsByUsers,
   getAllIntervals,
@@ -20,7 +20,7 @@ import { store } from './index';
 
 // @ts-ignore
 
-interface State {
+export interface Store {
   isResults: boolean;
   isAdmin: boolean;
   isLoading: boolean;
@@ -37,7 +37,7 @@ interface State {
   owner: User | null;
 }
 
-const initialState: State = {
+const initialState: Store = {
   adminIntervals: [],
   myIntervals: [],
   draggingElement: { current: null },
@@ -86,7 +86,7 @@ const getResults = async (_: void, { getState, dispatch }: any) => {
   intervals.forEach((interval) => {
     interval.owners = filterParticipantsByUsers(participants, interval.owners!);
   });
-  const resultsIntervals = convertIntervalToFrontend(intervals);
+  const resultsIntervals = convertIntervalsToFrontend(intervals);
   dispatch(setState({ isLoading: false }));
   return { resultsIntervals, participants };
 };
@@ -137,6 +137,7 @@ export const login = createAsyncThunk('login', async (name: string) => {
 });
 export const setResultThunk = createAsyncThunk('getResult', getResults);
 export const goToResultsThunk = createAsyncThunk('goToResults/...', async (_, params) => {
+  params.dispatch(setState({ isResults: true }));
   const res = await getResults(_, params);
   params.dispatch(goToResults());
   return res;
@@ -163,30 +164,31 @@ export const storeSlice = createSlice({
       const { adminIntervals, isAdmin } = state;
       const changeableIntervals = isAdmin ? 'adminIntervals' : 'myIntervals';
       const date = new Date(+interval[part] + byHours * MS_IN_HOUR);
+      const intervals = state[changeableIntervals].filter((i) => i.id !== interval.id);
       if (
-        isNextToOrInIntervals(
-          state[changeableIntervals].filter((i) => i.id !== interval.id),
-          date,
-        ) ||
+        isNextToOrInIntervals(intervals, date) ||
         (!isAdmin && adminIntervals.length && !isDateInIntervals(adminIntervals, date)) ||
         (part === 'start' && interval!.end.getTime() - date.getTime() < MS_IN_CELL) ||
         (part === 'end' && date.getTime() - interval!.start.getTime() < MS_IN_CELL)
       )
         return;
       interval[part] = date;
+      state[changeableIntervals] = [...intervals, interval];
     },
     goToVoting: (state) => {
       state.isResults = false;
       state.focusDate = state.adminIntervals[0].start;
     },
     setState: (state, { payload }) => {
-      const { isLoginModalOpen, isResults, eventId, currentUser, owner, isLoading } = payload;
+      const { isLoginModalOpen, isResults, eventId, currentUser, owner, isLoading, focusDate } =
+        payload;
       state.isLoginModalOpen = isLoginModalOpen ?? state.isLoginModalOpen;
       state.isResults = isResults ?? state.isResults;
       state.eventId = eventId ?? state.eventId;
       state.currentUser = currentUser ?? state.currentUser;
       state.owner = owner ?? state.owner;
       state.isLoading = isLoading ?? state.isLoading;
+      state.focusDate = focusDate ?? state.focusDate;
     },
     setAdmin: (state) => {
       state.isAdmin = true;
@@ -223,7 +225,7 @@ export const storeSlice = createSlice({
     },
     [getAllIntervalsThunk.fulfilled.toString()]: (state, action) => {
       const eventIntervals = action.payload;
-      const allIntervals = convertIntervalToFrontend(eventIntervals);
+      const allIntervals = convertIntervalsToFrontend(eventIntervals);
       state.adminIntervals = allIntervals.filter(
         (interval) => interval.owner!.id === state.owner?.id,
       );

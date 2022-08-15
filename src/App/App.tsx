@@ -9,8 +9,10 @@ import { DaySlider } from '../components/DaySlider/DaySlider';
 import { useInitState } from './useInitState';
 import { State } from '../types';
 import TimeClicker from '../components/TimeClicker/TimeClicker';
-import { useAppSelector, useCurrentIntervals } from '../hooks/redux';
+import { useAppSelector } from '../hooks/redux';
 import { useActions } from '../hooks/actions';
+import { createSelector } from 'reselect';
+import { selectCurrentIntervals } from '../store/selectors';
 export const AppContext = React.createContext<State | null>(null);
 export const App = () => {
   const reduxState = useAppSelector((state) => state.store);
@@ -18,7 +20,7 @@ export const App = () => {
   const { isResults, isAdmin, focusDate } = reduxState;
 
   const { titleInput } = state;
-  const currentIntervals = useCurrentIntervals();
+  const currentIntervals = useAppSelector(selectCurrentIntervals);
   const { nextInterval, relativelyTodayGoByDays } = useActions();
 
   return (

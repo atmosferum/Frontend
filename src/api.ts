@@ -25,14 +25,14 @@ export function convertParticipants(
 export function filterParticipantsByUsers(participants: Participant[], users: User[]) {
   return participants.filter((participant) => users.find((user) => user.id === participant.id));
 }
-export function convertIntervalToBackend(intervals: Interval[]): BackendInterval[] {
+export function convertIntervalsToBackend(intervals: Interval[]): BackendInterval[] {
   return intervals.map(({ start, end, id }) => ({
     startTime: start.getTime() / 1000,
     endTime: end.getTime() / 1000,
     id,
   }));
 }
-export function convertIntervalToFrontend(intervals: BackendInterval[]): Interval[] {
+export function convertIntervalsToFrontend(intervals: BackendInterval[]): Interval[] {
   return intervals.map(({ startTime, endTime, ...rest }) => ({
     start: new Date(startTime * 1000),
     end: new Date(endTime * 1000),
@@ -72,7 +72,7 @@ export async function getEventById(id: string): Promise<Event> {
 export async function postIntervals(intervals: Interval[], eventId: string) {
   const { data } = await axios.post(
     `${API_PATH}/events/${eventId}/intervals`,
-    convertIntervalToBackend(intervals),
+    convertIntervalsToBackend(intervals),
   );
   return data;
 }
