@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import s from './TimeClicker.module.scss';
 import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight, Minus } from 'react-feather';
@@ -7,19 +7,24 @@ import { AppContext } from '../../App/App';
 import { getClockFace, getHours } from '../../dateUtils';
 import { isPhone } from '../../utils';
 import { Cross } from '../Calendar/DayTimeline/Intervals/cross';
+import { useAppSelector } from '../../hooks/redux';
+import { useActions } from '../../hooks/actions';
+import { selectFocusInterval } from '../../store/selectors';
 const cx = classNames.bind(s);
 
-interface Props {}
+function TimeClicker() {
+  const isResults = useAppSelector((state) => state.store.isResults)!;
+  const focusDate = useAppSelector((state) => state.store.focusDate)!;
+  const { changeInterval } = useActions();
+  const focusInterval = useAppSelector(selectFocusInterval);
 
-function TimeClicker(props: Props) {
-  const { changeInterval, focusDate, getFocusInterval, isResults } = useContext(AppContext)!;
-  const [focusInterval, setFocusInterval] = useState<Interval | undefined>(getFocusInterval());
+  const [interval, setInterval] = useState<Interval | undefined>(focusInterval);
   const changeFocusInterval = (part: any, hour: number) =>
-    changeInterval(focusInterval!, part, hour);
+    changeInterval({ interval: interval!, part, byHours: hour });
   useEffect(() => {
-    setFocusInterval(getFocusInterval());
+    setInterval(focusInterval);
   }, [focusDate]);
-  if (focusInterval && isPhone() && !isResults) {
+  if (interval && isPhone() && !isResults) {
     return (
       <div className={cx('timeclicker')}>
         <div className={cx('time-slider')}>
@@ -31,7 +36,7 @@ function TimeClicker(props: Props) {
           </button>
           <div className={cx('time-div')}>
             <span className={cx('time-span')}>
-              {getClockFace(getHours(focusInterval?.start || new Date()))}
+              {getClockFace(getHours(interval?.start || new Date()))}
             </span>
           </div>
           <button
@@ -53,7 +58,7 @@ function TimeClicker(props: Props) {
           </button>
           <div className={cx('time-div')}>
             <span className={cx('time-span')}>
-              {getClockFace(getHours(focusInterval?.end || new Date()))}
+              {getClockFace(getHours(interval?.end || new Date()))}
             </span>
           </div>
           <button
@@ -63,7 +68,7 @@ function TimeClicker(props: Props) {
             <ChevronRight size="1rem" />
           </button>
         </div>
-        <Cross onClick={() => setFocusInterval(undefined)} className={s.cross} />
+        <Cross onClick={() => setInterval(undefined)} className={s.cross} />
       </div>
     );
   }

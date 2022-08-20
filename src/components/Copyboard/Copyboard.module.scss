@@ -2,6 +2,8 @@
   border: var(--border);
   border-radius: var(--radius);
   overflow: hidden;
+  display: flex;
+  //width: 300px;
   p {
     margin: 0;
     white-space: nowrap;
@@ -10,8 +12,16 @@
   .urlWrapper {
     display: inline-block;
     width: calc(100% - 71px);
-    padding: 10px;
     border-right: var(--border);
+    input {
+      padding: 10px 0 10px 10px;
+      font-size: 16px;
+      margin: 0;
+      outline: 0;
+      height: 100%;
+      width: 100%;
+      border: none;
+    }
   }
   .copyClick {
     padding: 10px;

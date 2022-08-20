@@ -15,6 +15,10 @@ import { MS_IN_HOUR } from '../../../consts';
 import { IntervalClass } from '../../../utils';
 import { AppContext } from '../../../App/App';
 import internal from 'stream';
+import { useAppSelector } from '../../../hooks/redux';
+import { useActions } from '../../../hooks/actions';
+import { selectChangeableIntervals } from '../../../store/selectors';
+import { useResultsQuery } from '../../../store/api';
 
 interface Props {
   day: Date;
@@ -28,25 +32,15 @@ export const MS_IN_CELL = MS_IN_HOUR * HOURS_IN_CELL;
 
 function DayTimeline(props: Props) {
   const { day } = props;
-  const {
-    adminIntervals,
-    myIntervals,
-    draggingElement,
-    setIntervals,
-    isAdmin,
-    isResults,
-    resultsIntervals,
-    focusDate,
-  } = useContext(AppContext)!;
-
-  const isTodayIncludesInterval = ({ start, end }: Interval) =>
-    isEqualDays(start, day) ||
-    isEqualDays(end, day) ||
-    (!isBefore(end, day) && isBefore(start, day));
+  const { draggingElement } = useContext(AppContext)!;
+  const { adminIntervals, myIntervals, isAdmin, isResults, focusDate, resultsIntervals } =
+    useAppSelector((state) => state.store);
+  const { setIntervals } = useActions();
+  const isTodayIncludesInterval = ({ start, end }: Interval) => isEqualDays(start, day);
   const myIntervalsToday = myIntervals.filter(isTodayIncludesInterval);
   const adminIntervalsToday = adminIntervals.filter(isTodayIncludesInterval);
   const resultsIntervalsToday = resultsIntervals.filter(isTodayIncludesInterval);
-  const changeableIntervals = isAdmin ? adminIntervals : myIntervals;
+  const changeableIntervals = useAppSelector(selectChangeableIntervals);
 
   function deleteInterval(id: number) {
     setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
@@ -93,8 +87,7 @@ function DayTimeline(props: Props) {
     }
     document.body.classList.add('dragInterval');
     draggingElement.current = { id: newInterval.id, part: 'end' };
-    changeableIntervals.push(newInterval);
-    setIntervals([...changeableIntervals]);
+    setIntervals([newInterval, ...changeableIntervals]);
   };
 
   return (
@@ -122,7 +115,7 @@ function DayTimeline(props: Props) {
       {isResults ? (
         <Intervals
           focusDate={focusDate}
-          intervals={resultsIntervalsToday}
+          intervals={resultsIntervalsToday!}
           color={'#63adb7'}
           margin={1}
           draggingElement={draggingElement}

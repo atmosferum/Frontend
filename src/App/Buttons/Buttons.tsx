@@ -13,27 +13,34 @@ import { Participant, User } from '../../types';
 import { isPhone } from '../../utils';
 import { App, AppContext } from '../App';
 import ParticipantsLine from '../../components/ParticipantsLine/ParticipantsLine';
+import { useAppSelector } from '../../hooks/redux';
+import { useActions } from '../../hooks/actions';
+import { postEventThunk, setResultThunk } from '../../store/store.slice';
+import { useDispatch } from 'react-redux';
+import { AnyAction } from 'redux';
+import { AppDispatch } from '../../store';
 export function Buttons() {
+  const { name, titleInput } = useContext(AppContext)!;
   const {
-    login,
-    isResults,
     isAdmin,
-    name,
-    createEvent,
-    goToVoting,
-    goToResults,
-    saveIntervals,
-    setIsLoginModalOpen,
-    isLoginModalOpen,
-    eventId,
-    titleInput,
+    isResults,
     adminIntervals,
     myIntervals,
-    loginAndSaveIntervals,
     isLoading,
-    setResults,
+    isLoginModalOpen,
+    eventId,
     participants,
-  } = useContext(AppContext)!;
+  } = useAppSelector((s) => s.store);
+  const {
+    saveIntervals,
+    loginAndSaveIntervals,
+    setState,
+    login,
+    goToVoting,
+    goToResultsThunk,
+    postEventThunk,
+    setResultThunk,
+  } = useActions();
   const getHost = () => {
     if (typeof window !== 'undefined') {
       return `${window.location.protocol}//${window.location.host}/`;
@@ -42,19 +49,20 @@ export function Buttons() {
   };
 
   if (isAdmin) {
+    // @ts-ignore
     return (
       <>
         {isResults ? (
           <>
-            <ReloadButton onClick={() => setResults(eventId)} isLoading={isLoading} />
+            <ReloadButton onClick={setResultThunk} isLoading={isLoading} />
             <ParticipantButton participants={participants} />
-            <Button onClick={() => setIsLoginModalOpen(true)}>Копировать ссылку</Button>
+            <Button onClick={() => setState({ isLoginModalOpen: true })}>Копировать ссылку</Button>
           </>
         ) : (
           <>
             <Button
               disabled={isLoading || !titleInput.value || !adminIntervals.length}
-              onClick={createEvent}
+              onClick={() => postEventThunk({ title: titleInput.value, description: '' })}
               isStretch={isPhone()}
             >
               Создать событие
@@ -62,7 +70,7 @@ export function Buttons() {
           </>
         )}
         <Dialog
-          close={() => setIsLoginModalOpen(false)}
+          close={() => setState({ isLoginModalOpen: false })}
           open={isLoginModalOpen}
           title={isResults ? 'Событие создано' : 'Введите имя'}
         >
@@ -77,8 +85,12 @@ export function Buttons() {
               />
               <br />
               <Button
-                onClick={() => {
-                  login(name.value).then(createEvent);
+                onClick={async () => {
+                  await login(name.value);
+                  postEventThunk({
+                    title: titleInput.value,
+                    description: '',
+                  });
                 }}
                 disabled={!name.value}
                 className={s.stretch}
@@ -101,7 +113,7 @@ export function Buttons() {
   if (isResults) {
     return (
       <>
-        <ReloadButton onClick={() => setResults(eventId)} isLoading={isLoading} />
+        <ReloadButton onClick={setResultThunk} isLoading={isLoading} />
         <ParticipantButton participants={participants} />
         <Button onClick={goToVoting}>К голосованию</Button>
       </>
@@ -110,7 +122,7 @@ export function Buttons() {
   return (
     <>
       <div className={s.headerControls}>
-        <Button onClick={goToResults} variant="ghost">
+        <Button onClick={goToResultsThunk} variant="ghost">
           Результаты
         </Button>
         <ParticipantButton participants={participants} />
@@ -119,10 +131,10 @@ export function Buttons() {
         </Button>
       </div>
       <LoginModal
-        close={() => setIsLoginModalOpen(false)}
+        close={() => setState({ isLoginModalOpen: false })}
         isLoginModalOpen={isLoginModalOpen}
         name={name}
-        loginAndSaveIntervals={loginAndSaveIntervals}
+        loginAndSaveIntervals={() => loginAndSaveIntervals(name.value)}
       />
     </>
   );
