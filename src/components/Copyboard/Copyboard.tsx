@@ -9,14 +9,8 @@ function Copyboard({ url }: { url: string }) {
   }
   return (
     <div className={s.wrapper}>
-      <input
-        type="text"
-        defaultValue={url}
-        style={{ height: 0, position: 'absolute', left: 100000000 }}
-        ref={ref}
-      />
       <div className={s.urlWrapper}>
-        <p>{url}</p>
+        <input type="text" value={url} ref={ref}></input>
       </div>
       <div onClick={copyHandler} className={s.copyClick}>
         <p>Copy</p>
