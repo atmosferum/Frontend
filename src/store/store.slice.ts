@@ -113,7 +113,7 @@ export const saveIntervals = createAsyncThunk(
       await postIntervals(myIntervals, eventId);
       dispatch(goToResultsThunk());
     } catch (e) {
-      setState({ isLoginModalOpen: true });
+      dispatch(setState({ isLoginModalOpen: true }));
     }
   },
 );
@@ -121,8 +121,8 @@ export const loginAndSaveIntervals = createAsyncThunk(
   'loginAndSaveIntervals',
   async (name: string, { dispatch }: any) => {
     await dispatch(login(name));
-    saveIntervals();
-    setState({ isLoginModalOpen: false });
+    dispatch(saveIntervals());
+    dispatch(setState({ isLoginModalOpen: false }));
   },
 );
 

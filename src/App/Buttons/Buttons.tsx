@@ -131,10 +131,10 @@ export function Buttons() {
         </Button>
       </div>
       <LoginModal
-        close={() => setState({ isLoginModalOpen: true })}
+        close={() => setState({ isLoginModalOpen: false })}
         isLoginModalOpen={isLoginModalOpen}
         name={name}
-        loginAndSaveIntervals={() => loginAndSaveIntervals(name)}
+        loginAndSaveIntervals={() => loginAndSaveIntervals(name.value)}
       />
     </>
   );
