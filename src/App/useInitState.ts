@@ -6,16 +6,6 @@ import { useAppSelector } from '../hooks/redux';
 import { getAllIntervalsThunk, initState, setResultThunk } from '../store/store.slice';
 
 export function useInitState() {
-  const {
-    isAdmin,
-    isResults,
-    focusDate,
-    resultsIntervals,
-    isLoginModalOpen,
-    adminIntervals,
-    myIntervals,
-    eventId,
-  } = useAppSelector((state) => state.store);
   const name = useInput('');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
@@ -31,16 +21,8 @@ export function useInitState() {
   }
 
   return {
-    resultsIntervals,
-    adminIntervals,
-    myIntervals,
     draggingElement,
-    setIntervals: isAdmin,
-    isResults,
-    focusDate,
     name,
-    isLoginModalOpen,
-    eventId,
     titleInput,
   };
 }

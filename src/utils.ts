@@ -18,3 +18,15 @@ export function isPhone() {
     window.navigator.userAgent.toLowerCase(),
   );
 }
+export function customAlert(msg: string, duration: number = 2000) {
+  const el = document.createElement('div');
+  el.classList.add('alert');
+  el.innerHTML = msg;
+  setTimeout(() => {
+    el.classList.add('fade');
+  }, duration);
+  setTimeout(() => {
+    el.parentNode!.removeChild(el);
+  }, duration + 210);
+  document.body.appendChild(el);
+}

@@ -9,10 +9,13 @@ import {
   isNextToOrInIntervals,
   getCellDate,
   isIntervalInIntervals,
+  isToday,
+  getClockFace,
+  getHours,
 } from '../../../dateUtils';
 import { Intervals } from './Intervals';
 import { MS_IN_HOUR } from '../../../consts';
-import { IntervalClass } from '../../../utils';
+import { IntervalClass, customAlert } from '../../../utils';
 import { AppContext } from '../../../App/App';
 import internal from 'stream';
 import { useAppSelector } from '../../../hooks/redux';
@@ -76,6 +79,9 @@ function DayTimeline(props: Props) {
     }
   };
   const onCellClickHandler = (cellDate: Date) => {
+    if (+cellDate < +new Date()) {
+      return customAlert('Нельзя выделить время в прошлом');
+    }
     const newInterval = new IntervalClass(cellDate, new Date(+cellDate + MS_IN_CELL * 2));
     if (
       isResults ||
@@ -83,7 +89,10 @@ function DayTimeline(props: Props) {
       isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_HOUR)) ||
       (!isAdmin && !isIntervalInIntervals(adminIntervals, newInterval))
     ) {
-      return;
+      return customAlert(
+        'Нельзя выделять интервалы вне интервалов создателя (синих интервалов)',
+        6000,
+      );
     }
     document.body.classList.add('dragInterval');
     draggingElement.current = { id: newInterval.id, part: 'end' };
@@ -111,7 +120,14 @@ function DayTimeline(props: Props) {
             );
           })}
       </div>
-
+      {isToday(day) && (
+        <div
+          className={s.nowLine}
+          style={{ top: (getHours(new Date()) * HEIGHT_OF_CELL) / HOURS_IN_CELL }}
+        >
+          <p>{getClockFace(getHours(new Date()))}</p>
+        </div>
+      )}
       {isResults ? (
         <Intervals
           focusDate={focusDate}
