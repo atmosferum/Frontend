@@ -12,6 +12,7 @@ import {
   saveIntervals,
   initState,
 } from '../store/store.slice';
+import { deleteInterval } from '../store/intervalsActions';
 
 const actions = {
   ...storeActions,
@@ -24,6 +25,7 @@ const actions = {
   saveIntervals,
   goToResultsThunk,
   initState,
+  deleteInterval,
 };
 
 export const useActions = () => {

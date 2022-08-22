@@ -22,6 +22,7 @@ import { useAppSelector } from '../../../hooks/redux';
 import { useActions } from '../../../hooks/actions';
 import { selectChangeableIntervals } from '../../../store/selectors';
 import { useResultsQuery } from '../../../store/api';
+import { interval } from 'rxjs';
 
 interface Props {
   day: Date;
@@ -38,16 +39,12 @@ function DayTimeline(props: Props) {
   const { draggingElement } = useContext(AppContext)!;
   const { adminIntervals, myIntervals, isAdmin, isResults, focusDate, resultsIntervals } =
     useAppSelector((state) => state.store);
-  const { setIntervals } = useActions();
+  const { setIntervals, deleteInterval } = useActions();
   const isTodayIncludesInterval = ({ start, end }: Interval) => isEqualDays(start, day);
   const myIntervalsToday = myIntervals.filter(isTodayIncludesInterval);
   const adminIntervalsToday = adminIntervals.filter(isTodayIncludesInterval);
   const resultsIntervalsToday = resultsIntervals.filter(isTodayIncludesInterval);
   const changeableIntervals = useAppSelector(selectChangeableIntervals);
-
-  function deleteInterval(id: number) {
-    setIntervals(changeableIntervals.filter((interval) => interval.id !== id));
-  }
 
   const touchMoveHandler = (e: any) => {
     const cellElem = document.elementFromPoint(e.touches[0].pageX, e.touches[0].pageY);
@@ -73,22 +70,25 @@ function DayTimeline(props: Props) {
       !isNextToOrInIntervals(copyOfIntervalsWithoutNewInterval, date) &&
       !(!isAdmin && adminIntervals.length && !isIntervalInIntervals(adminIntervals, newInterval)) &&
       !(+newInterval.end - +newInterval.start < MS_IN_CELL) &&
-      !isThereIntersections(copyOfIntervalsWithoutNewInterval, newInterval)
+      !isThereIntersections(copyOfIntervalsWithoutNewInterval, newInterval) &&
+      isEqualDays(newInterval.start, newInterval.end)
     ) {
       setIntervals(copyOfIntervals);
     }
   };
   const onCellClickHandler = (cellDate: Date) => {
-    if (+cellDate < +new Date()) {
+    if (isResults) return;
+    if (+cellDate < +new Date() && isAdmin) {
       return customAlert('Нельзя выделить время в прошлом');
     }
     const newInterval = new IntervalClass(cellDate, new Date(+cellDate + MS_IN_CELL * 2));
     if (
-      isResults ||
       isNextToOrInIntervals(changeableIntervals, cellDate) ||
-      isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_HOUR)) ||
-      (!isAdmin && !isIntervalInIntervals(adminIntervals, newInterval))
+      isNextToOrInIntervals(changeableIntervals, new Date(+cellDate + MS_IN_HOUR))
     ) {
+      return;
+    }
+    if (!isAdmin && !isIntervalInIntervals(adminIntervals, newInterval)) {
       return customAlert(
         'Нельзя выделять интервалы вне интервалов создателя (синих интервалов)',
         6000,
@@ -125,7 +125,7 @@ function DayTimeline(props: Props) {
           className={s.nowLine}
           style={{ top: (getHours(new Date()) * HEIGHT_OF_CELL) / HOURS_IN_CELL }}
         >
-          <p>{getClockFace(getHours(new Date()))}</p>
+          <p>Сейчас</p>
         </div>
       )}
       {isResults ? (

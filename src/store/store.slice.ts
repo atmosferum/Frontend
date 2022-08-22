@@ -17,6 +17,7 @@ import { MS_IN_DAY, MS_IN_HOUR } from '../consts';
 import { isDateInIntervals, isNextToOrInIntervals } from '../dateUtils';
 import { MS_IN_CELL } from '../components/Calendar/DayTimeline/DayTimeline';
 import { store } from './index';
+import { selectChangeableIntervals } from './selectors';
 
 // @ts-ignore
 
@@ -61,7 +62,7 @@ export const initState = createAsyncThunk('initState', async (eventId: string, {
   const { owner, title } = await getEventById(eventId);
   const user = await getCurrentUser().catch(console.log);
   dispatch(
-    setState({
+    setUser({
       owner,
       eventId,
       currentUser: user || null,
@@ -125,12 +126,10 @@ export const loginAndSaveIntervals = createAsyncThunk(
     dispatch(setState({ isLoginModalOpen: false }));
   },
 );
-
 export const getAllIntervalsThunk = createAsyncThunk(
   'getAllIntervalsThunk',
   (_, { getState }: any) => getAllIntervals(getState().store.eventId),
 );
-// export const getEventByIdThunk = createAsyncThunk('intervals/getEventByIdThunk', getEventById);
 export const login = createAsyncThunk('login', async (name: string) => {
   await postLogin({ name });
   return await getCurrentUser();
@@ -215,6 +214,11 @@ export const storeSlice = createSlice({
       state.isResults = true;
       window.history.pushState('data', 'Time manager', '/' + state.eventId);
     },
+    setUser: (state, action) => {
+      state.owner = action.payload.owner;
+      state.eventId = action.payload.eventId;
+      state.currentUser = action.payload.currentUser;
+    },
   },
   extraReducers: {
     [postEventThunk.rejected.toString()]: (state) => {
@@ -251,5 +255,16 @@ export const storeSlice = createSlice({
 });
 
 export const storeActions = storeSlice.actions;
-const { saveEvent, setState, goToResults, setAdmin } = storeActions;
+export const {
+  setUser,
+  saveEvent,
+  setState,
+  goToResults,
+  setAdmin,
+  setIntervals,
+  nextInterval,
+  changeInterval,
+  relativelyTodayGoByDays,
+  goToVoting,
+} = storeActions;
 export const storeReducer = storeSlice.reducer;

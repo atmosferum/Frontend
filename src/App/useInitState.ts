@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Interval, Participant, User } from '../types';
-import { useInput } from '../customHooks';
+import { useInput } from '../hooks/customHooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppSelector } from '../hooks/redux';
 import { getAllIntervalsThunk, initState, setResultThunk } from '../store/store.slice';

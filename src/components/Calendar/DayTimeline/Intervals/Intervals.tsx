@@ -50,7 +50,7 @@ const Intervals = memo((props: Props) => {
     isResults,
     touchMoveHandler,
   } = props;
-  const { isAdmin, adminIntervals, myIntervals } = useAppSelector((state) => state.store);
+  const { isAdmin, myIntervals } = useAppSelector((state) => state.store);
   const { setIntervals, setState } = useActions();
   const fillInterval = (start: Date, end: Date) => {
     const newInterval = new IntervalClass(start, end);
