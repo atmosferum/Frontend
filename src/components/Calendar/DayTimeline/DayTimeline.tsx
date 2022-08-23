@@ -120,14 +120,6 @@ function DayTimeline(props: Props) {
             );
           })}
       </div>
-      {isToday(day) && (
-        <div
-          className={s.nowLine}
-          style={{ top: (getHours(new Date()) * HEIGHT_OF_CELL) / HOURS_IN_CELL }}
-        >
-          <p>Сейчас</p>
-        </div>
-      )}
       {isResults ? (
         <Intervals
           focusDate={focusDate}
