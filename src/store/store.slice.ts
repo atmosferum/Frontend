@@ -160,19 +160,22 @@ export const storeSlice = createSlice({
       }: { payload: { interval: Interval; part: 'start' | 'end'; byHours: number } },
     ) => {
       if (!interval) return;
-      const { adminIntervals, isAdmin } = state;
-      const changeableIntervals = isAdmin ? 'adminIntervals' : 'myIntervals';
+
+      const changeableIntervals = state.isAdmin ? 'adminIntervals' : 'myIntervals';
       const date = new Date(+interval[part] + byHours * MS_IN_HOUR);
       const intervals = state[changeableIntervals].filter((i) => i.id !== interval.id);
       if (
         isNextToOrInIntervals(intervals, date) ||
-        (!isAdmin && adminIntervals.length && !isDateInIntervals(adminIntervals, date)) ||
+        (!state.isAdmin &&
+          state.adminIntervals.length &&
+          !isDateInIntervals(state.adminIntervals, date)) ||
         (part === 'start' && interval!.end.getTime() - date.getTime() < MS_IN_CELL) ||
         (part === 'end' && date.getTime() - interval!.start.getTime() < MS_IN_CELL)
       )
         return;
       interval[part] = date;
-      state[changeableIntervals] = [...intervals, interval];
+      const newInterval = { ...interval, [part]: date };
+      state[changeableIntervals] = [...intervals, newInterval];
     },
     goToVoting: (state) => {
       state.isResults = false;
@@ -263,8 +266,8 @@ export const {
   setAdmin,
   setIntervals,
   nextInterval,
-  changeInterval,
   relativelyTodayGoByDays,
   goToVoting,
+  changeInterval,
 } = storeActions;
 export const storeReducer = storeSlice.reducer;

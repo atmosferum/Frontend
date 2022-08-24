@@ -20,10 +20,10 @@ function Instruction() {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         right: '3%',
         bottom: '3%',
-        zIndex: 1000000,
+        zIndex: 10,
         pointerEvents: 'none',
       }}
     >
