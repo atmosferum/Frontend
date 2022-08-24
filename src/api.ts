@@ -10,17 +10,19 @@ export function convertParticipants(
   owner: User,
 ): Participant[] {
   const hslArr = [0, 180, 90, 270, 30, 210, 300, 60, 240, 330, 15, 195, 105, 285, 45, 225, 315, 75];
-  return participants
-    .sort((a, b) => +a.id - +b.id)
-    .map((participant: User, id) => ({
-      ...participant,
-      name: capitalizeFirstLetter(participant.name),
-      isAdmin: participant.id === owner.id,
-      isCurrentUser: participant.id === currentUser?.id,
-      hslNumber: hslArr[id],
-      color: `hsl(${hslArr[id]}, 60%, 50%)`,
-    }))
-    .sort((a, b) => a.hslNumber - b.hslNumber);
+  return (
+    participants
+      // .sort((a, b) => +a.id - +b.id)
+      .map((participant: User, id) => ({
+        ...participant,
+        name: capitalizeFirstLetter(participant.name),
+        isAdmin: participant.id === owner.id,
+        isCurrentUser: participant.id === currentUser?.id,
+        hslNumber: hslArr[id],
+        color: `hsl(${hslArr[id]}, 60%, 50%)`,
+      }))
+      .sort((a, b) => a.hslNumber - b.hslNumber)
+  );
 }
 export function filterParticipantsByUsers(participants: Participant[], users: User[]) {
   return participants.filter((participant) => users.find((user) => user.id === participant.id));

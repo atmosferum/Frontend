@@ -17,6 +17,7 @@ import { MS_IN_DAY, MS_IN_HOUR } from '../consts';
 import { isDateInIntervals, isNextToOrInIntervals } from '../dateUtils';
 import { MS_IN_CELL } from '../components/Calendar/DayTimeline/DayTimeline';
 import { store } from './index';
+import { selectChangeableIntervals } from './selectors';
 
 // @ts-ignore
 
@@ -33,7 +34,7 @@ export interface Store {
   eventId: string;
   draggingElement: DraggingElement;
   title: string;
-  currentUser: User | null;
+  currentUser: User | null | undefined;
   owner: User | null;
 }
 
@@ -49,7 +50,7 @@ const initialState: Store = {
   isLoading: false,
   participants: [],
   resultsIntervals: [],
-  currentUser: null,
+  currentUser: undefined,
   title: '',
   owner: null,
 };
@@ -61,7 +62,7 @@ export const initState = createAsyncThunk('initState', async (eventId: string, {
   const { owner, title } = await getEventById(eventId);
   const user = await getCurrentUser().catch(console.log);
   dispatch(
-    setState({
+    setUser({
       owner,
       eventId,
       currentUser: user || null,
@@ -95,8 +96,7 @@ export const postEventThunk = createAsyncThunk(
   async (params: any, { dispatch }) => {
     dispatch(setState({ isLoading: true }));
     const eventUrl = await postEvent(params);
-    console.log(eventUrl);
-    dispatch(saveEvent(eventUrl));
+    await dispatch(saveEvent(eventUrl));
     dispatch(setResultThunk());
     dispatch(setState({ isLoading: false }));
   },
@@ -125,12 +125,10 @@ export const loginAndSaveIntervals = createAsyncThunk(
     dispatch(setState({ isLoginModalOpen: false }));
   },
 );
-
 export const getAllIntervalsThunk = createAsyncThunk(
   'getAllIntervalsThunk',
   (_, { getState }: any) => getAllIntervals(getState().store.eventId),
 );
-// export const getEventByIdThunk = createAsyncThunk('intervals/getEventByIdThunk', getEventById);
 export const login = createAsyncThunk('login', async (name: string) => {
   await postLogin({ name });
   return await getCurrentUser();
@@ -161,19 +159,22 @@ export const storeSlice = createSlice({
       }: { payload: { interval: Interval; part: 'start' | 'end'; byHours: number } },
     ) => {
       if (!interval) return;
-      const { adminIntervals, isAdmin } = state;
-      const changeableIntervals = isAdmin ? 'adminIntervals' : 'myIntervals';
+
+      const changeableIntervals = state.isAdmin ? 'adminIntervals' : 'myIntervals';
       const date = new Date(+interval[part] + byHours * MS_IN_HOUR);
       const intervals = state[changeableIntervals].filter((i) => i.id !== interval.id);
       if (
         isNextToOrInIntervals(intervals, date) ||
-        (!isAdmin && adminIntervals.length && !isDateInIntervals(adminIntervals, date)) ||
+        (!state.isAdmin &&
+          state.adminIntervals.length &&
+          !isDateInIntervals(state.adminIntervals, date)) ||
         (part === 'start' && interval!.end.getTime() - date.getTime() < MS_IN_CELL) ||
         (part === 'end' && date.getTime() - interval!.start.getTime() < MS_IN_CELL)
       )
         return;
       interval[part] = date;
-      state[changeableIntervals] = [...intervals, interval];
+      const newInterval = { ...interval, [part]: date };
+      state[changeableIntervals] = [...intervals, newInterval];
     },
     goToVoting: (state) => {
       state.isResults = false;
@@ -215,6 +216,11 @@ export const storeSlice = createSlice({
       state.isResults = true;
       window.history.pushState('data', 'Time manager', '/' + state.eventId);
     },
+    setUser: (state, action) => {
+      state.owner = action.payload.owner;
+      state.eventId = action.payload.eventId;
+      state.currentUser = action.payload.currentUser;
+    },
   },
   extraReducers: {
     [postEventThunk.rejected.toString()]: (state) => {
@@ -251,5 +257,16 @@ export const storeSlice = createSlice({
 });
 
 export const storeActions = storeSlice.actions;
-const { saveEvent, setState, goToResults, setAdmin } = storeActions;
+export const {
+  setUser,
+  saveEvent,
+  setState,
+  goToResults,
+  setAdmin,
+  setIntervals,
+  nextInterval,
+  relativelyTodayGoByDays,
+  goToVoting,
+  changeInterval,
+} = storeActions;
 export const storeReducer = storeSlice.reducer;

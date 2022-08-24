@@ -1,0 +1,81 @@
+// Высота у .carousel и у .carousel-item должны быть одинаковые, иначе не будет работать проценты у .buttons
+
+.carousel {
+  z-index: 1;
+  pointer-events: all;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 10px;
+  max-width: 94vw;
+  width: 500px;
+  height: 450px;
+  box-shadow: -3px 3px 20px 0px #00000040;
+  transition: 0.5s;
+
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  &.hide {
+    opacity: 0;
+    visibility: hidden;
+    width: 50px;
+    height: 50px;
+    pointer-events: none;
+  }
+  .inner {
+    white-space: nowrap;
+    transition: transform 0.3s;
+    height: 100%;
+
+    .carousel-item {
+      display: inline-flex;
+      color: black;
+      padding: 20px 30px;
+
+      div > div {
+        border-radius: 5px;
+        overflow: hidden;
+        background-size: cover;
+        object-fit: fill;
+        height: 330px;
+        background-position: center;
+      }
+    }
+
+    p {
+      margin-top: 0;
+      white-space: normal;
+      padding: 5px;
+      width: 100%;
+      display: block;
+    }
+  }
+  .buttons {
+    position: absolute;
+    transform: translate(0, -50%);
+    width: 97%;
+    top: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.icon {
+  background-image: url('https://cdn-icons-png.flaticon.com/512/41/41943.png');
+  background-size: cover;
+  height: 50px;
+  width: 50px;
+  background-color: white;
+  border-radius: 100px;
+  cursor: pointer;
+  position: fixed;
+  right: 3%;
+  bottom: 3%;
+  z-index: 0;
+  pointer-events: all;
+  opacity: 0.2;
+}

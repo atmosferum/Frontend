@@ -43,3 +43,43 @@ body {
     border-radius: 5px;
   }
 }
+
+.alert {
+  background-color: var(--danger);
+  position: absolute;
+  right: 3%;
+  top: 3%;
+  padding: 10px;
+  border-radius: 5px;
+  animation: appear 0.2s ease-in-out;
+  color: white;
+  z-index: 1000;
+  max-width: 94%;
+  &.fade {
+    animation: disappear 2s ease-in-out;
+  }
+  @keyframes appear {
+    from {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes disappear {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    10% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+  }
+}

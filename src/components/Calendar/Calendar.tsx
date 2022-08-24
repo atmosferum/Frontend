@@ -1,18 +1,17 @@
-import React, { SetStateAction, useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import s from './Calendar.module.scss';
-import { DayTimeline, HOURS_IN_CELL } from './DayTimeline';
+import { DayTimeline } from './DayTimeline';
 import classNames from 'classnames/bind';
 import { getClockFace, getWeek, isBefore, isToday, getDateOfMonday } from '../../dateUtils';
 import { HEIGHT_OF_CELL } from './DayTimeline/DayTimeline';
 import { isPhone } from '../../utils';
 import { daysOfWeek, months } from '../../consts';
 import { AppContext } from '../../App/App';
-import TimeClicker from '../TimeClicker/TimeClicker';
 import { useAppSelector } from '../../hooks/redux';
 
 const cx = classNames.bind(s);
 
-function Calendar() {
+export function Calendar() {
   const { draggingElement } = useContext(AppContext)!;
   const { focusDate, isAdmin, isResults } = useAppSelector((state) => state.store);
   const week = getWeek(getDateOfMonday(focusDate ?? new Date()));
@@ -92,5 +91,3 @@ function Calendar() {
     </div>
   );
 }
-
-export { Calendar };

@@ -77,4 +77,4 @@ export const getHours = (date: Date) => {
   return date.getHours() + date.getMinutes() / 60;
 };
 export const getClockFace = (hours: number) =>
-  `${Math.floor(hours)}:${Math.round((hours % 1) * 60)}${hours % 1 ? '' : '0'}`;
+  `${Math.floor(hours)}:${Math.round((hours % 1) * 60)}${hours % 1 >= 1 / 6 ? '' : '0'}`;

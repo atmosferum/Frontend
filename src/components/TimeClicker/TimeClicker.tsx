@@ -19,8 +19,9 @@ function TimeClicker() {
   const focusInterval = useAppSelector(selectFocusInterval);
 
   const [interval, setInterval] = useState<Interval | undefined>(focusInterval);
-  const changeFocusInterval = (part: any, hour: number) =>
+  const changeFocusInterval = (part: any, hour: number) => {
     changeInterval({ interval: interval!, part, byHours: hour });
+  };
   useEffect(() => {
     setInterval(focusInterval);
   }, [focusDate]);
