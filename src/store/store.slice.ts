@@ -96,8 +96,7 @@ export const postEventThunk = createAsyncThunk(
   async (params: any, { dispatch }) => {
     dispatch(setState({ isLoading: true }));
     const eventUrl = await postEvent(params);
-    console.log(eventUrl);
-    dispatch(saveEvent(eventUrl));
+    await dispatch(saveEvent(eventUrl));
     dispatch(setResultThunk());
     dispatch(setState({ isLoading: false }));
   },
