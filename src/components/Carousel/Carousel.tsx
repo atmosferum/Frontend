@@ -27,28 +27,12 @@ function Carousel(props: any) {
 
   const slide = isResults ? 3 : isAdmin ? 0 : 2;
   const [slideIndex, setSlideIndex] = useState(slide);
-  const [disableLeft, setDisableLeft] = useState(true);
-  const [disableRight, setDisableRight] = useState(false);
   const [show, setShow] = useState(false);
   useEffect(() => {
     if (currentUser !== undefined) setShow(!currentUser);
   }, [currentUser]);
   useEffect(() => setSlideIndex(slide), [slide]);
   const { children } = props;
-  useEffect(() => {
-    updateIndex();
-  }, [slideIndex]);
-
-  function updateIndex(newIndex: number = slideIndex) {
-    if (newIndex === 0) {
-      setDisableLeft(true);
-    } else if (newIndex === React.Children.count(children) - 1) {
-      setDisableRight(true);
-    } else {
-      setDisableRight(false);
-      setDisableLeft(false);
-    }
-  }
 
   return (
     <>
@@ -68,14 +52,14 @@ function Carousel(props: any) {
           <Button
             onClick={() => setSlideIndex(slideIndex - 1)}
             variant="ghost"
-            disabled={disableLeft}
+            disabled={slideIndex === 0}
           >
             <ChevronLeft />
           </Button>
           <Button
             onClick={() => setSlideIndex(slideIndex + 1)}
             variant="ghost"
-            disabled={disableRight}
+            disabled={slideIndex === React.Children.count(children) - 1}
           >
             <ChevronRight />
           </Button>
