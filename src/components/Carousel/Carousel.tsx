@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import { Button } from '../Button';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import { Cross } from '../Calendar/DayTimeline/Intervals/cross';
+import { useAppSelector } from '../../hooks/redux';
 
 const cx = classNames.bind(s);
 
@@ -22,10 +23,17 @@ export function CarouselChild(props: ChildProps) {
 }
 
 function Carousel(props: any) {
-  const [slideIndex, setSlideIndex] = useState(0);
+  const { currentUser, isAdmin, isResults } = useAppSelector((state) => state.store);
+
+  const slide = isResults ? 3 : isAdmin ? 0 : 2;
+  const [slideIndex, setSlideIndex] = useState(slide);
   const [disableLeft, setDisableLeft] = useState(true);
   const [disableRight, setDisableRight] = useState(false);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (currentUser !== undefined) setShow(!currentUser);
+  }, [currentUser]);
+  useEffect(() => setSlideIndex(slide), [slide]);
   const { children } = props;
 
   function updateIndex(newIndex: number) {

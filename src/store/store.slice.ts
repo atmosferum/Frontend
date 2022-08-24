@@ -34,7 +34,7 @@ export interface Store {
   eventId: string;
   draggingElement: DraggingElement;
   title: string;
-  currentUser: User | null;
+  currentUser: User | null | undefined;
   owner: User | null;
 }
 
@@ -50,7 +50,7 @@ const initialState: Store = {
   isLoading: false,
   participants: [],
   resultsIntervals: [],
-  currentUser: null,
+  currentUser: undefined,
   title: '',
   owner: null,
 };
