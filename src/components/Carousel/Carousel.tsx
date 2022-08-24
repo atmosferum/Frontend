@@ -35,8 +35,11 @@ function Carousel(props: any) {
   }, [currentUser]);
   useEffect(() => setSlideIndex(slide), [slide]);
   const { children } = props;
+  useEffect(() => {
+    updateIndex();
+  }, [slideIndex]);
 
-  function updateIndex(newIndex: number) {
+  function updateIndex(newIndex: number = slideIndex) {
     if (newIndex === 0) {
       setDisableLeft(true);
     } else if (newIndex === React.Children.count(children) - 1) {
@@ -45,7 +48,6 @@ function Carousel(props: any) {
       setDisableRight(false);
       setDisableLeft(false);
     }
-    setSlideIndex(newIndex);
   }
 
   return (
@@ -64,14 +66,14 @@ function Carousel(props: any) {
         </div>
         <div className={cx('buttons')}>
           <Button
-            onClick={() => updateIndex(slideIndex - 1)}
+            onClick={() => setSlideIndex(slideIndex - 1)}
             variant="ghost"
             disabled={disableLeft}
           >
             <ChevronLeft />
           </Button>
           <Button
-            onClick={() => updateIndex(slideIndex + 1)}
+            onClick={() => setSlideIndex(slideIndex + 1)}
             variant="ghost"
             disabled={disableRight}
           >
