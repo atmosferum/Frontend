@@ -192,6 +192,7 @@ export const storeSlice = createSlice({
       state.focusDate = focusDate ?? state.focusDate;
     },
     setAdmin: (state) => {
+      state.currentUser = null;
       state.isAdmin = true;
     },
     nextInterval: (state, { payload }: { payload: 'next' | 'previous' }) => {
