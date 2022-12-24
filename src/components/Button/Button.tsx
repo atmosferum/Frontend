@@ -8,6 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'stretch';
   isStretch?: boolean;
   loading?: boolean;
+  onClick?: () => void;
 }
 
 export function Button(props: ButtonProps) {

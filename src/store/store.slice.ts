@@ -69,7 +69,7 @@ export const initState = createAsyncThunk('initState', async (eventId: string, {
     }),
   );
 
-  const isAdminVar = owner.id === user?.id;
+  const isAdminVar = user && user.id === owner.id;
   console.log({ isAdminVar });
   dispatch(setResultThunk());
   dispatch(getAllIntervalsThunk());
