@@ -59,7 +59,16 @@ export const initState = createAsyncThunk('initState', async (eventId: string, {
     dispatch(setAdmin());
     return;
   }
-  const { owner, title } = await getEventById(eventId);
+  let owner, title;
+  try {
+    const obj = await getEventById(eventId);
+    owner = obj.owner;
+    title = obj.title;
+  } catch (e) {
+    window.history.pushState('data', 'Time manager', '/');
+    dispatch(setAdmin());
+    return '';
+  }
   const user = await getCurrentUser().catch(console.log);
   dispatch(
     setUser({
@@ -130,6 +139,7 @@ export const getAllIntervalsThunk = createAsyncThunk(
   (_, { getState }: any) => getAllIntervals(getState().store.eventId),
 );
 export const login = createAsyncThunk('login', async (name: string) => {
+  localStorage.setItem('name', name);
   await postLogin({ name });
   return await getCurrentUser();
 });

@@ -95,5 +95,5 @@
       "prettier"
     ]
   },
-  "proxy": "http://135.181.211.34:25501"
+  "proxy": "https://api.meettime.ru"
 }
