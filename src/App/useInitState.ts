@@ -6,7 +6,7 @@ import { useAppSelector } from '../hooks/redux';
 import { getAllIntervalsThunk, initState, setResultThunk } from '../store/store.slice';
 
 export function useInitState() {
-  const name = useInput('');
+  const name = useInput(localStorage.getItem('name') || '');
   const titleInput = useInput('');
   const draggingElement = useRef(null);
   const queryEventId = location.pathname.substring(1);
