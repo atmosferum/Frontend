@@ -100,6 +100,13 @@ const getResults = async (_: void, { getState, dispatch }: any) => {
   dispatch(setState({ isLoading: false }));
   return { resultsIntervals, participants };
 };
+export const login = createAsyncThunk('login', async (name: string, { getState }) => {
+  localStorage.setItem('name', name);
+  // @ts-ignore
+  localStorage.setItem(getState().store.eventId, 'true');
+  await postLogin({ name });
+  return await getCurrentUser();
+});
 export const postEventThunk = createAsyncThunk(
   'eventId/postEventThunk',
   async (params: any, { dispatch }) => {
@@ -119,6 +126,9 @@ export const saveIntervals = createAsyncThunk(
   async (_, { getState, dispatch }: any) => {
     const { eventId, myIntervals } = getState().store;
     try {
+      if (!localStorage.getItem(eventId)) {
+        throw new Error('not logged in');
+      }
       await postIntervals(myIntervals, eventId);
       dispatch(goToResultsThunk());
     } catch (e) {
@@ -138,11 +148,7 @@ export const getAllIntervalsThunk = createAsyncThunk(
   'getAllIntervalsThunk',
   (_, { getState }: any) => getAllIntervals(getState().store.eventId),
 );
-export const login = createAsyncThunk('login', async (name: string) => {
-  localStorage.setItem('name', name);
-  await postLogin({ name });
-  return await getCurrentUser();
-});
+
 export const setResultThunk = createAsyncThunk('getResult', getResults);
 export const goToResultsThunk = createAsyncThunk('goToResults/...', async (_, params) => {
   params.dispatch(setState({ isResults: true }));

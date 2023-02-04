@@ -15,7 +15,6 @@ import { App, AppContext } from '../App';
 import ParticipantsLine from '../../components/ParticipantsLine/ParticipantsLine';
 import { useAppSelector } from '../../hooks/redux';
 import { useActions } from '../../hooks/actions';
-import { postEventThunk, setResultThunk } from '../../store/store.slice';
 import { useDispatch } from 'react-redux';
 import { AnyAction } from 'redux';
 import { AppDispatch } from '../../store';
@@ -62,7 +61,7 @@ export function Buttons() {
           <>
             <Button
               disabled={isLoading || !titleInput.value || !adminIntervals.length}
-              onClick={() => postEventThunk({ title: titleInput.value, description: '' })}
+              onClick={() => setState({ isLoginModalOpen: true })}
               isStretch={isPhone()}
             >
               Создать событие
