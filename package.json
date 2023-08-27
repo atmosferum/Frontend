@@ -95,5 +95,5 @@
       "prettier"
     ]
   },
-  "proxy": "https://api.meettime.ru"
+  "proxy": "https://meettimeflask.fedor-resh.repl.co"
 }
