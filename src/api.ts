@@ -3,7 +3,7 @@ import { MS_IN_DAY } from './consts';
 import { BackendInterval, Interval, Results, Event, User, Participant } from './types';
 import { capitalizeFirstLetter } from './utils';
 
-const API_PATH = '';
+const API_PATH = 'https://meettimeflask.fedor-resh.repl.co';
 export function convertParticipants(
   participants: User[],
   currentUser: User,

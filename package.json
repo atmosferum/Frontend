@@ -94,6 +94,5 @@
     "plugins": [
       "prettier"
     ]
-  },
-  "proxy": "https://meettimeflask.fedor-resh.repl.co"
+  }
 }
